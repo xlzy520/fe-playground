@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="node_modules/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <input type="" name="" v-model="ParentMsg">
+    <my-component v-show="display" v-bind:parentmsg="ParentMsg">
+    </my-component>
+    <!--<upload-excel-button @click="alert"></upload-excel-button>-->
+    <div class="">
+        <haha></haha>
+    </div>
+
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script src="node_modules/element-ui/lib/index.js"></script>
+<script src="node_modules/axios/dist/axios.min.js"></script>
+<script src="Vue-uploadExcel/VueStore.js"></script>
+<script>
+	new Vue({
+		el: '#app',
+		data:{
+			display:true,
+			ParentMsg:"Hello This is Parent"
+		},
+		components: {
+			'my-component': {
+				template: '<div>\n' +
+				'        <h2 v-show="display">{{msg}}</h2>\n' +
+				'        <p>{{parentmsg}}</p>\n' +
+				'        <p>{{childprops}}</p>\n' +
+				'        <button @click="showMsg">Show Message</button>\n' +
+				'    </div>',
+
+				data: function() {
+					return {
+						msg: 'This is a Component!',
+						childprops:"child:"+this.parentmsg, //可以在data中获取props，并生成新的data
+						display: false //Vue中component的data必须通过function() return
+					}
+				},
+				methods: {
+					showMsg: function() {
+						alert(this.msg);
+					}
+				}
+			},
+            'haha':{
+				template:"<div @click='show'>131</div>",
+                data:function () {
+                    return {
+                    	msg:"dasdasdas"
+                    }
+				},
+                methods:{
+					show:function () {
+                        alert(this.msg)
+					}
+                }
+            }
+		},
+        methods: {
+			alert: function () {
+				console.log(1)
+			}
+		}
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>uploadExcel Demo</title>
+    <link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">
+    <script src="https://js.fundebug.cn/fundebug.0.3.4.min.js"
+            apikey="c368bcbe3ca03fd06c803edc8114ed5ac7fe6aa774e36146353287a25ea3e657"></script>
+    <style>
+        #excel-upload-input{
+            display: none;
+            z-index: -9999;
+        }
+        #anime{
+            position: fixed;
+            bottom: 60px;
+            right: 40px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+<img src="1723.gif" id="anime" ondrag="true">
+<div id="app">
+    <upload-excel-button @on-selected-file='selected'></upload-excel-button>
+    <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
+        <el-table-column v-for='item of tableHeader' :prop="item" :label="item" :key='item'></el-table-column>
+    </el-table>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="../node_modules/element-ui/lib/index.js"></script>
+<script src="../node_modules/js-xlsx/dist/xlsx.full.min.js"></script>
+<script src="../node_modules/axios/dist/axios.min.js"></script>
+<script>
+    new Vue({
+        el:'#app',
+        data:function () {
+            return {
+            	visible:false,
+				tableData: [],
+				tableHeader: []
+            }
+		},
+        methods:{
+			selected:function(data) {
+				this.tableData = data.results
+				this.tableHeader = data.header
+			}
+        },
+        mounted:function () {
+            this.$nextTick(function () {
+
+			})
+		},
+        components:{
+        	'uploadExcelButton':{
+				template:
+                '<div>' +
+				'     <el-button :loading="loading" type="primary" @click="handleUpload">选择excel上传</el-button>' +
+				'     <input id="excel-upload-input" type="file" accept=".xlsx,.xls" class="c-hide" @change="handleFileChange">' +
+				'</div>',
+                data:function () {
+                    return {
+                    	loading:null,
+                        excelData:{
+                    		header:null,
+                            results:null
+                        }
+                    }
+				},
+                methods:{
+					generateDate:function(table) {
+						console.log(table.header)
+                        console.log(table.results)
+						this.excelData.header = table.header
+						this.excelData.results = table.results
+						this.loading = false
+						this.$emit('on-selected-file', this.excelData)
+					},
+					handleUpload:function() {
+						document.getElementById('excel-upload-input').click()
+					},
+					handleFileChange:function(e) {
+						let that=this
+						that.loading = true
+						const files = e.target.files
+						const itemFile = files[0] // only use files[0]
+						const reader = new FileReader()
+						reader.onload =function(e) {
+							const data = e.target.result
+							const fixedData = that.fixdata(data)
+							const workbook = XLSX.read(btoa(fixedData), { type: 'base64' })
+							const firstSheetName = workbook.SheetNames[0]
+							const worksheet = workbook.Sheets[firstSheetName]
+							const header = that.get_header_row(worksheet)
+							const results = XLSX.utils.sheet_to_json(worksheet)
+                            let table_data={header:header,results:results}
+							that.generateDate(table_data)
+						}
+						reader.readAsArrayBuffer(itemFile)
+					},
+					fixdata:function(data) {
+						let o = ''
+						let l = 0
+						const w = 10240
+						for (; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)))
+						o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)))
+						return o
+					},
+					get_header_row:function(sheet) {
+						const headers = []
+						const range = XLSX.utils.decode_range(sheet['!ref'])
+						let C
+						const R = range.s.r /* start in the first row */
+						for (C = range.s.c; C <= range.e.c; ++C) { /* walk every column in the range */
+							let cell = sheet[XLSX.utils.encode_cell({c: C, r: R})];
+							/* find the cell in the first row */
+							let hdr = 'UNKNOWN ' + C; // <-- replace with your desired default
+							if (cell && cell.t) hdr = XLSX.utils.format_cell(cell)
+							headers.push(hdr)
+						}
+						return headers
+					}
+                }
+            }
+        }
+    })
+</script>
+</body>
+
+</html>

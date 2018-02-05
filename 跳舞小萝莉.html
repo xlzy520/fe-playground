@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" href="https://xlzy520.cn/icons/lo.ico">
+    <script src="https://js.fundebug.cn/fundebug.0.3.4.min.js"
+            apikey="c368bcbe3ca03fd06c803edc8114ed5ac7fe6aa774e36146353287a25ea3e657"></script>
+    <title>跳舞小萝莉随意drag到任意处</title>
+    <style>
+        html,body{
+            margin: 0;
+            padding: 0;
+        }
+        .main{
+            display: inline-block;
+        }
+        #dance{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body ondrop="W3C.drop(event)" ondragover="W3C.allowDrop(event)">
+<div class="main">
+    <img src="https://xlzy520.cn/images/2.gif" draggable="true" id="dance" ondragstart="W3C.drag(event)">
+</div>
+
+<script>
+    (function () {
+		document.getElementsByTagName('body')[0].style.height=window.innerHeight+'px'
+		document.getElementsByTagName('body')[0].style.width=window.innerWidth+'px'
+	})()
+    let W3C={
+    	drag(e) {
+			e=event?event:e
+			e.dataTransfer.setData("Text",e.target.id)
+		},
+		drop(e) {
+    		e.preventDefault()
+            let data=e.dataTransfer.getData("Text")
+            e.target.appendChild(document.getElementById(data))
+			console.log(1)
+		},
+		allowDrop(e){
+    		e.lgo()
+        }
+    }
+</script>
+
+</body>
+</html>

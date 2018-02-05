@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../public/header.js"></script>
+</head>
+<body>
+
+<script>
+    let myEcharts=echarts.init(document.getElementById('main1'));
+    let app={};
+    option={
+        title:{
+            text:'基本饼状图'
+        },
+        tooltip:{
+
+        },
+        toolbox:{
+            show:true,
+            orient:'vertical',
+            left:'50',
+            top:'center',
+            itemGap: 15,
+            feature:{
+                dataView:{
+                    show:true,
+                    readOnly:true
+                },
+                saveAsImage:{
+                    show:true
+                }
+            }
+        },
+        legend:{
+            show:true,
+            orient:'horizontal',
+            top:50,
+            data:['视频广告','联盟广告','邮件营销','直接访问','搜索引擎']
+        },
+        series:[
+            {
+                name:'访问来源',
+                type:'pie',
+                radius:'55%',
+                data:[
+                    {value:235, name:'视频广告'},
+                    {value:274, name:'联盟广告'},
+                    {value:310, name:'邮件营销'},
+                    {value:335, name:'直接访问'},
+                    {value:400, name:'搜索引擎'}
+                ]
+            }
+        ],
+    };
+    app.currentIndex=-1;
+    setInterval(function () {
+        let dataLen=option.series[0].data.length;
+        myEcharts.dispatchAction({
+           type:'downplay',
+           seriesIndex:0,
+           dataIndex:app.currentIndex
+       });
+        app.currentIndex=(app.currentIndex+1)%dataLen;
+        myEcharts.dispatchAction({
+            type:'highlight',
+            seriesIndex:0,
+            dataIndex:app.currentIndex
+        });
+        myEcharts.dispatchAction({
+            type:'showTip',
+            seriesIndex:0,
+            dataIndex:app.currentIndex
+        })
+    },1000);  //调用高亮显示
+    myEcharts.setOption(option);
+    myEcharts.on('click',function (params) {
+        console.log(params.componentType+'\t'+params.seriesType+'\t'+params.dataType)
+    });
+    myEcharts.on('legendselectchanged', function (params) {
+        // 获取点击图例的选中状态
+        let isSelected = params.selected[params.name];
+        // 在控制台中打印
+        console.log((isSelected ? '选中了' : '取消选中了') + '图例' + params.name);
+        // 打印所有图例的状态
+        console.log(params.selected);
+    });
+</script>
+</body>
+</html>

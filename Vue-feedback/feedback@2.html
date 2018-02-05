@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>单图反馈</title>
+    <link rel="stylesheet" href="../node_modules/element-ui/packages/theme-chalk/lib/upload.css">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="../node_modules/element-ui/packages/theme-chalk/lib/icon.css">
+    <link rel="stylesheet" href="feedback.css">
+    <!--<link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">-->
+</head>
+<body>
+<div id="app">
+    <el-dialog title="意见反馈" :visible.sync="dialogVisible" width="450px" :top="top">
+        <span class="feedback-type-title" v-if="!feedback_modal_content">请选择问题反馈类型：(必选)</span>
+        <div class="feedback-type-container" v-if="!feedback_modal_content" :class="{ 'type-error':type_error}">
+            <el-radio-group v-model="feedback_type">
+                <el-radio :label="1" border>功能异常</el-radio>
+                <el-radio :label="2" border>产品建议</el-radio>
+                <el-radio :label="3" border>其他问题</el-radio>
+            </el-radio-group>
+            <div class="feedback-modal-error-tip" v-if="type_error">
+                {{feedback_type_error_tip}}
+            </div>
+        </div>
+
+        <div class="feedback-modal-text-container" v-if="!feedback_modal_content">
+                    <textarea placeholder="请填写您的问题或建议（限200字以内）" maxlength="200" spellcheck="false"
+                              class="feedback-modal-text" :class="{ 'text-error':text_error}" v-model="feedback_modal_text">
+                    </textarea>
+            <div class="feedback-modal-text-number" :class="{ 'text-error':text_error}">
+                {{feedback_modal_text_number}}/200
+            </div> <!---->
+            <div class="feedback-modal-error-tip" v-if="text_error">
+                请填写内容
+            </div>
+        </div>
+
+        <el-upload action="https://www.easy-mock.com/mock/5a7289488d0c633b9c4adca2/feedback" list-type="picture-card"
+                   :on-preview="handlePictureCardPreview" :on-remove="handleRemove" accept=".jpg,.png,.jpeg"
+                   v-if="!feedback_modal_content" :on-exceed="upload_box">
+            <i class="el-icon-plus" v-if="!feedback_modal_content" ></i>
+        </el-upload>
+        <el-dialog :visible.sync="outerVisible" append-to-body>
+            <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+        <!--<div class="feedback-modal-upload" @click="trigger_img_upload" v-if="!img_import_success">上传截图</div> &lt;!&ndash;&ndash;&gt;-->
+        <!--<div class="feedback-modal-img-container" v-if="img_import_container">-->
+            <!--<img :src="img_base64" class="feedback-modal-img">-->
+            <!--<div class="feedback-modal-img-del" @click="feedback_modal_img_del">删除</div>-->
+        <!--</div>-->
+
+        <div class="feedback-modal-content" v-if="feedback_modal_content">
+            <div class="feedback-modal-result" >
+                <span class="ai-icon ai-icon-smile"></span>
+                <span class="feedback-modal-thank">感谢您的反馈，我们会继续努力</span>
+            </div>
+            <div class="feedback-modal-btn" @click="feedback_sumit_success">确定</div>
+        </div>
+
+        <!--<input type="file" id="feedback_img_upload" accept="image/png, image/bmp, image/jpg, image/jpeg"-->
+               <!--style="display: none;" @change="handle_img_change">-->
+
+        <div slot="footer" class="feedback-modal-footer">
+            <div class="feedback-modal-btn feedback-modal-submit" @click="feedback_modal_submit" v-if="!feedback_modal_content">提交</div>
+        </div>
+    </el-dialog>
+</div>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="../node_modules/element-ui/lib/index.js"></script>
+<script>
+	new Vue({
+		el:"#app",
+		data:function () {
+			return {
+				dialogVisible:true,
+				outerVisible:false,
+				feedback_modal_text:'',
+				feedback_modal_text_number:0,
+				dialogImageUrl: '',
+				feedback_modal_content:false,
+				img_import_container:false,
+				text_error:false,
+                type_error:false,
+				top:'5vh',
+				feedback_type:"",
+				feedback_type_error_tip:"",
+                feedback_img_count:0
+			}
+		},
+		methods:{
+			upload_box:function (file) {
+				this.handlePictureCardPreview(file)
+			},
+			handleRemove:function(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePictureCardPreview:function(file) {
+				this.dialogImageUrl = file.url
+				this.outerVisible = true
+			},
+			feedback_modal_submit:function () {
+				let that=this
+				if (this.feedback_type===""){
+					this.feedback_type_error_tip="请选择类型"
+                    this.type_error=true
+				}else {
+					this.feedback_type_error_tip=""
+				}
+				if (this.feedback_modal_text.length===0){
+					this.text_error=true
+				}else {
+					$.ajax("https://www.easy-mock.com/mock/5a7289488d0c633b9c4adca2/feedback",{
+						method:'post',
+					}).then(function (res) {
+						if (res){
+							that.feedback_modal_content=true
+							that.img_import_container=false
+							that.top="15vh"
+						}
+					})
+
+				}
+
+			},
+			feedback_sumit_success:function () {
+				document.getElementsByClassName('el-dialog__headerbtn')[0].click()
+			}
+
+		},
+		watch:{
+			feedback_modal_text:function () {
+				this.feedback_modal_text_number=this.feedback_modal_text.length
+				if (this.feedback_modal_text.length!==0){
+					this.text_error=false
+				}
+			},
+			feedback_type:function () {
+				if (this.feedback_type!==""){
+					this.type_error=false
+				}
+			}
+		}
+	})
+</script>
+</body>
+</html>

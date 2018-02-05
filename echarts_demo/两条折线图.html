@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <script src="public/header.js"></script>
+</head>
+<body>
+<script>
+	let mycharts=echarts.init(document.getElementById('main1'));
+	mycharts.setOption({
+        title:{
+        	text:'hahahh'
+        },
+        legend:{
+        	data:['销量','数据']
+        },
+        xAxis:{
+			data:["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋"]
+        },
+        yAxis:{
+			max:100
+        },
+        series:[
+        	{
+        		name:'销量',
+                type:'line',
+        		data:[30,20,30,40,50]
+        	},
+            {
+            	name:'数据',
+                type: 'line',
+                data:[40,30,40,50,60]
+            }
+        ]
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <script src="../public/echarts.min.js"></script>
+    <script src="../public/jquery.min.js"></script>
+</head>
+<body>
+<div id="main" style="width: 1349px;height: 1600px"></div>
+<script>
+	function remove(arr){
+		return arr.filter(function(ele,index,array){
+			return index===array.indexOf(ele)
+		})
+	}
+	function count(a,b) {
+		for (let i=0;i<a.length;i++){
+			b[a[i]]=(b[a[i]]+1)||1
+		}
+	}
+    let mycharts=echarts.init(document.getElementById("main"))
+    mycharts.showLoading()
+    $.get('./qqyundong.json').then(function (data) {
+		console.log(data);
+		mycharts.hideLoading()
+        let appname_all=[]
+		let appname_count_obj={}
+		for (let i=1;i<data.length;i++){
+			for (let j=0;j<data[i].data.list.length;j++){
+				if (data[i].data.list[j].appname===""){
+					data[i].data.list[j].appname="不明设备"
+                }
+				appname_all.push(data[i].data.list[j].appname)
+			}
+		}
+		count(appname_all,appname_count_obj)
+		let appname_type=remove(appname_all)
+        for (let i in appname_count_obj){
+			console.log(i);
+		}
+		let appname_data=[]
+        let aaa={}
+        let j=0
+        for (let i in appname_count_obj){
+			appname_data[j]={}
+            appname_data[j]['value']=appname_count_obj[i]
+            appname_data[j]["name"]=i
+			appname_data.push(appname_data[j])
+            j++
+        }
+		console.log(appname_type);
+		console.log(appname_count_obj)
+		console.log(appname_data);
+		mycharts.setOption({
+            title:{
+            	text:appname_all.length+"位QQ好友中各手机类型占比("+appname_type.length+"种)"
+            },
+            tooltip:{
+            	formatter:function (a) {
+                    return "型号："+a.name+"<br>"+a.value+"人\t"+(a.value/101).toFixed(2)*100+"%"
+				}
+            },
+            legend:{
+            	show:true,
+                top:50,
+                data:appname_type
+            },
+            series:[{
+            	name:"手机型号",
+                type:'pie',
+                radius:"55%",
+				label: {
+					normal: {
+						formatter: '{b|{b}：}{c}  {per|{d}%}  ',
+						backgroundColor: '#eee',
+						borderColor: '#aaa',
+						borderWidth: 1,
+						borderRadius: 4,
+						// shadowBlur:3,
+						// shadowOffsetX: 2,
+						// shadowOffsetY: 2,
+						// shadowColor: '#999',
+						// padding: [0, 7],
+						rich: {
+							b: {
+								fontSize: 10,
+								lineHeight: 10
+							},
+							per: {
+								color: '#eee',
+								backgroundColor: '#334455',
+								padding: [2, 4],
+								borderRadius: 2
+							}
+						}
+					}
+				},
+                data:appname_data
+            }]
+        })
+	})
+</script>
+</body>
+</html>

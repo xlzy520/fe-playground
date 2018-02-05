@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <script src="../node_modules/js-xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+<button onclick="downloadExl(jsonl)">导出</button>
+<!--
+        以下a标签不需要内容
+    -->
+<a href="" download="这里是下载的文件名.xlsx" id="hf"></a>
+<script>
+	var jsono = [{ //测试数据
+		"保质期临期预警(天)": "adventLifecycle",
+		"商品标题": "title",
+		"建议零售价": "defaultPrice",
+		"高(cm)": "height",
+		"商品描述": "Description",
+		"保质期禁售(天)": "lockupLifecycle",
+		"商品名称": "skuName",
+		"商品简介": "brief",
+		"宽(cm)": "width",
+		"阿达": "asdz",
+		"货号": "goodsNo",
+		"商品条码": "skuNo",
+		"商品品牌": "brand",
+		"净容积(cm^3)": "netVolume",
+		"是否保质期管理": "isShelfLifeMgmt",
+		"是否串号管理": "isSNMgmt",
+		"商品颜色": "color",
+		"尺码": "size",
+		"是否批次管理": "isBatchMgmt",
+		"商品编号": "skuCode",
+		"商品简称": "shortName",
+		"毛重(g)": "grossWeight",
+		"长(cm)": "length",
+		"英文名称": "englishName",
+		"净重(g)": "netWeight",
+		"商品分类": "categoryId",
+		"这里超过了": 1111.0,
+		"保质期(天)": "expDate"
+	}];
+	var jsonl = [{"2018年公司年度目标表": "序号", "": ""}, {"2018年公司年度目标表": "1", "": ""}, {
+		"2018年公司年度目标表": "2",
+		"": "挑战目标：\r\n在2018年6月1日之前完成浙江7个城市成型"
+	}, {"2018年公司年度目标表": "3.1", "": ""}, {"2018年公司年度目标表": "3.2", "": ""}, {
+		"2018年公司年度目标表": "3.3",
+		"": ""
+	}, {"2018年公司年度目标表": "4", "": ""}, {"2018年公司年度目标表": "5", "": ""}, {
+		"2018年公司年度目标表": "6",
+		"": ""
+	}, {"2018年公司年度目标表": "7", "": ""}, {
+		"2018年公司年度目标表": "说明：围绕目标，经营计划做到3月底，一个季度调整一次",
+		"": ""
+	}, {"": ""}, {"": "温州、金华、宁波、台州、嘉兴、绍兴、杭州"}, {"": "异地拓展分三个阶段：\r\n\r\n进入阶段：10万平方/天\r\n稳定阶段：市场占有率10%\r\n成熟阶段：市场占有率20%以上\r\n\r\n挑战目标：\r\n\r\n在2018年6月1日之前，实现除温州外其他6个城市：进入阶段、稳定阶段、成熟阶段各2个"}, {"": ""}, {"": ""}, {"": "观点"}, {"": "以快为主，一个城市深入，其他城市全面辅开"}, {"": "以深为主，模式打通"}, {"": "多个城市深耕，一个城市探索"}, {"": "现有3个城市深耕，成功后复制"}, {"": ""}, {"": ""}, {"": "观点"}, {"": "分公司模式"}, {"": "总部直营模式"}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}, {"": ""}]
+	var tmpDown; //导出的二进制对象
+	function downloadExl(json, type) {
+		var tmpdata = json[0];
+		json.unshift({});
+		var keyMap = []; //获取keys
+		for (var k in tmpdata) {
+			keyMap.push(k);
+			json[0][k] = k;
+		}
+		var tmpdata = [];//用来保存转换好的json
+		json.map((v, i) => keyMap.map((k, j) => Object.assign({}, {
+			v: v[k],
+			position: (j > 25 ? getCharCol(j) : String.fromCharCode(65 + j)) + (i + 1)
+		}))).reduce((prev, next) => prev.concat(next)).forEach((v, i) => tmpdata[v.position] = {
+			v: v.v
+		});
+		var outputPos = Object.keys(tmpdata); //设置区域,比如表格从A1到D10
+		var tmpWB = {
+			SheetNames: ['mySheet'], //保存的表标题
+			Sheets: {
+				'mySheet': Object.assign({},
+					tmpdata, //内容
+					{
+						'!ref': outputPos[0] + ':' + outputPos[outputPos.length - 1] //设置填充区域
+					})
+			}
+		};
+		tmpDown = new Blob([s2ab(XLSX.write(tmpWB,
+			{bookType: (type == undefined ? 'xlsx' : type), bookSST: false, type: 'binary'}//这里的数据是用来定义导出的格式类型
+		))], {
+			type: ""
+		}); //创建二进制对象写入转换好的字节流
+		var href = URL.createObjectURL(tmpDown); //创建对象超链接
+		document.getElementById("hf").href = href; //绑定a标签
+		document.getElementById("hf").click(); //模拟点击实现下载
+		setTimeout(function () { //延时释放
+			URL.revokeObjectURL(tmpDown); //用URL.revokeObjectURL()来释放这个object URL
+		}, 100);
+	}
+
+	function s2ab(s) { //字符串转字符流
+		var buf = new ArrayBuffer(s.length);
+		var view = new Uint8Array(buf);
+		for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+		return buf;
+	}
+
+	// 将指定的自然数转换为26进制表示。映射关系：[0-25] -> [A-Z]。
+	function getCharCol(n) {
+		let temCol = '',
+			s = '',
+			m = 0
+		while (n > 0) {
+			m = n % 26 + 1
+			s = String.fromCharCode(m + 64) + s
+			n = (n - m) / 26
+		}
+		return s
+	}
+</script>
+
+作者：关爱单身狗成长协会
+链接：https://www.jianshu.com/p/74d405940305
+來源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+</body>
+</html>

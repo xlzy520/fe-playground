@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="feedback.css">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">
+    <title>意见反馈后台管理</title>
+</head>
+<body>
+<div id="app">
+    <el-header class="feedback-manage-header">
+        <span>问题类型</span>
+        <el-select v-model="value" placeholder="全部">
+            <el-option v-for="item in question_types" :key="item.value" :label="item.label"
+                       :value="item.value">
+            </el-option>
+        </el-select>
+        <span> 反馈日期：</span>
+        <el-date-picker
+                v-model="value6"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期">
+        </el-date-picker>
+        <span> 反馈用户:</span>
+        <el-input v-model="user_uid" clearable="" placeholder="请输入用户名/手机号"></el-input>
+        <el-button type="primary" icon="el-icon-search">查询</el-button>
+    </el-header>
+    <div class="feedback_phone_model">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="全部" name="first"></el-tab-pane>
+            <el-tab-pane label="Android" name="second"></el-tab-pane>
+            <el-tab-pane label="iOS" name="third"></el-tab-pane>
+            <el-tab-pane label="WEB" name="fourth"></el-tab-pane>
+        </el-tabs>
+    </div>
+    <el-button @click="get">获取数据</el-button>
+    <el-main>
+        <el-table :data="feedbackData" style="width: 120%" border highlight-current-row>
+            <el-table-column prop="number" label="序号" width="60" align="center"></el-table-column>
+            <el-table-column prop="platform" label="平台" width="90" align="center"></el-table-column>
+            <el-table-column prop="version" label="版本号" width="120" align="center"></el-table-column>
+            <el-table-column prop="type" label="问题类型" width="120" align="center"></el-table-column>
+            <el-table-column prop="detail_description" label="详细描述" width="300" align="center"></el-table-column>
+            <el-table-column prop="img" label="图片" width="145" align="center" ></el-table-column>
+            <el-table-column prop="username" label="反馈用户" width="150" align="center"></el-table-column>
+            <el-table-column prop="user_phone" label="联系方式" width="160" align="center"></el-table-column>
+            <el-table-column prop="date" label="反馈时间" width="160" align="center"></el-table-column>
+        </el-table>
+    </el-main>
+    <el-footer>
+        <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="1000">
+        </el-pagination>
+    </el-footer>
+</div>
+<script>
+	new Vue({
+		el: '#app',
+		data: function () {
+			return {
+				question_types: [
+					{label: "da", value: 20},
+					{label: "dad", value: 200},
+					{label: "daa", value: 201},
+				],
+				value: "",
+				value6: "",
+				user_uid:"",
+				activeName: 'second',
+				feedbackData:null
+			}
+		},
+		methods: {
+			handleClick:function(tab, event) {
+				console.log(tab, event);
+			},
+            get:function () {
+				let that=this
+                $.get('https://www.easy-mock.com/mock/5a7289488d0c633b9c4adca2/feedback').then(function (res) {
+                    that.feedbackData=res.data
+                    console.log(res.data)
+				})
+			}
+		}
+	})
+</script>
+</body>
+</html>

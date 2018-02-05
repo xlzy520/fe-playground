@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../public/jquery.min.js"></script>
+    <style>
+        .triangle{
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="triangle"><span>▼</span></div>
+<script>
+    $(function () {
+        $('.triangle').css('transform','rotate(-90deg)')
+    })
+</script>
+</body>
+</html>
