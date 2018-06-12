@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>uploadExcel Demo</title>
-    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">
     <!--<script src="https://js.fundebug.cn/fundebug.0.3.4.min.js"-->
             <!--apikey="c368bcbe3ca03fd06c803edc8114ed5ac7fe6aa774e36146353287a25ea3e657"></script>-->
     <style>
@@ -56,7 +56,6 @@
 				this.tableHeader=this.AllTableHeader[i]
 			},
 			selected:function(data,i) {
-
 				this.AllTableData[i] = data[i].results
 				this.AllTableHeader[i] = data[i].header
                 this.SheetNames=data[i].SheetName
@@ -105,14 +104,33 @@
 						const reader = new FileReader()
 						reader.onload =function(e) {
 							const data = e.target.result
-							const fixedData = that.fixdata(data)
+                            const fixedData = that.fixdata(data)
 							const workbook = XLSX.read(btoa(fixedData), { type: 'base64' })
+                            console.log(workbook);
 							for (let i in workbook.SheetNames){
 								const firstSheetName = workbook.SheetNames[i]
 								const worksheet = workbook.Sheets[firstSheetName]
-								const header = that.get_header_row(worksheet)
-								const results = XLSX.utils.sheet_to_json(worksheet)
-								let table_data={header:header,results:results,SheetName:workbook.SheetNames}
+                                let words=["B","C","D","E","F","G","H","I","J"]
+                                worksheet[words[0]+"1"]= worksheet[words[0]+"4"]
+                                worksheet[words[1]+"1"]= worksheet[words[1]+"4"]
+                                worksheet[words[2]+"1"]= worksheet[words[2]+"4"]
+                                worksheet[words[3]+"1"]= worksheet[words[3]+"3"]
+                                worksheet[words[4]+"1"]= worksheet[words[4]+"3"]
+                                rowsCount=((Object.getOwnPropertyNames(worksheet).length-2)/10)-5
+                                for (let i in words) {
+                                    for (let j=2;j<rowsCount;j++){
+                                        k=j+3
+                                        worksheet[words[i]+j]=worksheet[words[i]+k]
+                                    }
+                                }
+                                for (let j=2;j<rowsCount;j++){
+                                    k=j+3
+                                    worksheet["A"+j]=worksheet["A"+k]
+                                }
+                                delete worksheet["A"+(rowsCount+5)]
+                                const header = that.get_header_row(worksheet)
+                                const results = XLSX.utils.sheet_to_json(worksheet)
+                                let table_data={header:header,results:results,SheetName:workbook.SheetNames}
 								that.generateDate(i,table_data)
                             }
 
