@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #chart1:after {
+            content: ' ';
+            display: block;
+            background-image: linear-gradient(44deg, rgba(0, 255, 51, 0) 50%, #00ff33 100%);
+            width: 210px;
+            height: 210px;
+            position: absolute;
+            top: 13%;
+            left: 19.8%;
+            animation: radar-beam 4s infinite;
+            animation-timing-function: linear;
+            transform-origin: bottom right;
+            border-radius: 100% 0 0 0;
+        }
+        @keyframes radar-beam {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script src="../node_modules/echarts/dist/echarts.min.js"></script>
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="echarts.min.js"></script>
+</head>
+<body>
+<div id="chart1" style="position: relative;width: 700px;height: 576px;margin: 0px auto;"></div>
+<script>
+
+    let chart1=echarts.init(document.getElementById('chart1'))
+    const uploadedDataURL = "广东.json";
+    $.getJSON(uploadedDataURL, function(geoJson) {
+        echarts.registerMap('gd', geoJson);
+        var data = [];
+        let dataYue=[]
+        for (var i = 0; i <= 20; i++) {
+            var theta=(i / 20 * 360).toFixed(0)
+            var r = ((Math.random()+1)*150).toFixed(0)
+            if (r<200){
+                if (dataYue.length<5){
+                    dataYue.push([r,theta])
+                    data.push([r, theta])
+                }
+            }else {
+                data.push([r, theta])
+            }
+
+        }
+        let option = {
+            title: {
+                left:'center',
+                text: '雷达监测船舶是否越界',
+                subtext:'以200海里为船舶界线，灯泡标志为越界',
+                padding: [0,0,10,0],
+                subtextStyle:{
+
+                    color:'#cc0033'
+                }
+            },
+            legend: {
+                right:'right',
+                data: ['船舶']
+            },
+            polar: {
+                tooltip:{
+                    show:true,
+                    trigger:'item'
+                }
+            },
+            geo: {
+                show: true,
+                map: 'gd',
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: false,
+                    }
+                },
+                nameMap:{
+                    'gd':"某小岛"
+                },
+                roam: false,
+                scaleLimit:{
+                    min:0.1,
+                    max:0.2
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: '#006633',
+                        borderColor: '#ffffff',
+                    },
+                    emphasis: {
+                        areaColor: '#1296db',
+                    }
+                },
+                silent:true
+            },
+            tooltip: {
+                trigger: 'item',
+                axisPointer: {
+                    type: 'cross'
+                },
+                formatter:function (params) {
+                    return "距离："+params.data[0]+"海里<br>方向："+params.data[1]+"°"
+                }
+            },
+            angleAxis: {
+                type: 'value',
+                startAngle: 0,
+                axisLine: {
+                    lineStyle:{
+                        color:'#0000cc'
+                    }
+                },
+                axisLabel:{
+                    formatter:function (value) {
+                        if (value===0){
+                            return value+'°东'
+                        } else if (value===90){
+                            return value+'°南'
+                        } else if (value===180) {
+                            return value+'°西'
+                        }else if (value===270){
+                            return value+'°北'
+                        }
+                        return value+'°'
+                    }
+                },
+            },
+            radiusAxis: {
+                name:"距离（km）",
+                nameLocation:'end',
+                nameGap:50,
+                nameTextStyle: {
+                    color:'#cc00cc'
+                },
+                boundaryGap: ['20%', '20%'],
+                axisLine: {
+                    lineStyle:{
+                        width:2,
+                        color:'#cc00cc'
+                    }
+                },
+                axisLabel:{
+                    color:'#1296db'
+                },
+                splitLine:{
+                    lineStyle:{
+                        color:['#009900','#009900','#009900','#009900','#990000'],
+                        width: 2
+                    }
+                }
+            },
+            backgroundColor:'#99ff10',
+            series: [
+                {
+                coordinateSystem: 'polar',
+                name: 'line',
+                type: 'scatter',
+                data: data,
+                tooltip:{
+                    show:true
+                },
+                animationDelay: function (idx) {
+                    return idx * 5;
+                },
+                symbolSize:25,
+                symbol:'image://data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTI4MzExODg5MjcwIiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjI4MzAiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PC9zdHlsZT48L2RlZnM+PHBhdGggZD0iTTIyNCA0NTMuNWwxMy40LTExNy44aDE1Mi41di00NS41aDEwMC40VjEzNC45aDg3djMxOC42SDIyNCIgZmlsbD0iI0I2Q0RFRiIgcC1pZD0iMjgzMSI+PC9wYXRoPjxwYXRoIGQ9Ik01NzcuMyA0NjguNUgyMjRjLTQuMyAwLTguMy0xLjgtMTEuMi01LTIuOC0zLjItNC4yLTcuNC0zLjctMTEuN0wyMjIuNSAzMzRjMC45LTcuNiA3LjMtMTMuMyAxNC45LTEzLjNIMzc1di0zMC41YzAtOC4zIDYuNy0xNSAxNS0xNWg4NS40VjEzNC45YzAtOC4zIDYuNy0xNSAxNS0xNWg4N2M4LjMgMCAxNSA2LjcgMTUgMTV2MzE4LjVjLTAuMSA4LjMtNi44IDE1LjEtMTUuMSAxNS4xeiBtLTMzNi41LTMwaDMyMS41VjE0OS45aC01N3YxNDAuMmMwIDguMy02LjcgMTUtMTUgMTVoLTg1LjR2MzAuNWMwIDguMy02LjcgMTUtMTUgMTVIMjUwLjhsLTEwIDg3Ljl6IiBmaWxsPSIjMEY1M0E4IiBwLWlkPSIyODMyIj48L3BhdGg+PHBhdGggZD0iTTc4OC43IDYxOS40SDEzMC4zVjQ5MC43YzAtMzUuMyAyOC42LTY0IDY0LTY0aDUwMy41bDkwLjkgMTkyLjd6IiBmaWxsPSIjQjZDREVGIiBwLWlkPSIyODMzIj48L3BhdGg+PHBhdGggZD0iTTc4OC43IDYzNC40SDEzMC4zYy04LjMgMC0xNS02LjctMTUtMTVWNDkwLjdjMC00My41IDM1LjQtNzkgNzktNzloNTAzLjVjNS44IDAgMTEuMSAzLjMgMTMuNiA4LjZsOTEgMTkyLjdjMi4yIDQuNiAxLjkgMTAuMS0wLjkgMTQuNC0yLjggNC40LTcuNiA3LTEyLjggN3ogbS02NDMuNC0zMGg2MTkuOGwtNzYuOC0xNjIuN2gtNDk0Yy0yNyAwLTQ5IDIyLTQ5IDQ5djExMy43eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjgzNCI+PC9wYXRoPjxwYXRoIGQ9Ik0xNDEgODY1LjZoNjM3czExNi40LTIxMi44IDIyNC44LTI4My43SDI4LjZTMTA5LjMgNzA5IDE0MSA4NjUuNnoiIGZpbGw9IiNCNkNERUYiIHAtaWQ9IjI4MzUiPjwvcGF0aD48cGF0aCBkPSJNNzc4IDg4MC42SDE0MWMtNy4xIDAtMTMuMy01LTE0LjctMTJDOTUuNiA3MTYuNyAxNi43IDU5MS4yIDE1LjkgNTkwYy0yLjktNC42LTMuMS0xMC41LTAuNS0xNS4zIDIuNi00LjggNy43LTcuOCAxMy4xLTcuOGg5NzQuM2M2LjYgMCAxMi41IDQuNCAxNC40IDEwLjcgMS45IDYuNC0wLjYgMTMuMi02LjIgMTYuOC0xMDQgNjguMi0yMTguNyAyNzYuMy0yMTkuOCAyNzguNC0yLjYgNC44LTcuNyA3LjgtMTMuMiA3Ljh6IG0tNjI0LjgtMzBoNjE2LjFjOS44LTE3LjIgMzUuMS02MC42IDY4LjItMTA4LjggNDMuNS02My4zIDg0LjItMTExLjggMTIxLjYtMTQ1SDU0LjhjOC4yIDE0LjYgMTkuNCAzNS42IDMxLjcgNjEuNyAyMS4zIDQ1LjQgNDkuNiAxMTQuNiA2Ni43IDE5Mi4xeiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjgzNiI+PC9wYXRoPjxwYXRoIGQ9Ik03NDMuMiA1MjNIMjM3LjR2LTQ0LjZoNDg0Ljh6IiBmaWxsPSIjODlCN0Y1IiBwLWlkPSIyODM3Ij48L3BhdGg+PHBhdGggZD0iTTc0My4yIDUzOEgyMzcuNGMtOC4zIDAtMTUtNi43LTE1LTE1di00NC42YzAtOC4zIDYuNy0xNSAxNS0xNWg0ODQuOGM1LjggMCAxMS4xIDMuMyAxMy42IDguNmwyMS4xIDQ0LjZjMi4yIDQuNiAxLjkgMTAuMS0wLjkgMTQuNC0yLjggNC40LTcuNiA3LTEyLjggN3ogbS00OTAuOC0zMGg0NjcuMmwtNi45LTE0LjZIMjUyLjRWNTA4eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjgzOCI+PC9wYXRoPjxwYXRoIGQ9Ik00OTcgMzI3LjdoMTM2LjV2OTlINDk3eiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjgzOSI+PC9wYXRoPjxwYXRoIGQ9Ik02MzMuNSA0NDEuN0g0OTdjLTguMyAwLTE1LTYuNy0xNS0xNXYtOTljMC04LjMgNi43LTE1IDE1LTE1aDEzNi41YzguMyAwIDE1IDYuNyAxNSAxNXY5OWMwIDguMy02LjcgMTUtMTUgMTV6IG0tMTIxLjUtMzBoMTA2LjV2LTY5SDUxMnY2OXoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDAiPjwvcGF0aD48cGF0aCBkPSJNMTg1LjYgNzA1bS0xOS42IDBhMTkuNiAxOS42IDAgMSAwIDM5LjIgMCAxOS42IDE5LjYgMCAxIDAtMzkuMiAwWiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjg0MSI+PC9wYXRoPjxwYXRoIGQ9Ik0xODUuNiA3MzQuN2MtMTYuMyAwLTI5LjYtMTMuMy0yOS42LTI5LjZzMTMuMy0yOS42IDI5LjYtMjkuNiAyOS42IDEzLjMgMjkuNiAyOS42LTEzLjIgMjkuNi0yOS42IDI5LjZ6IG0wLTM5LjNjLTUuMyAwLTkuNiA0LjMtOS42IDkuNnM0LjMgOS42IDkuNiA5LjYgOS42LTQuMyA5LjYtOS42LTQuMy05LjYtOS42LTkuNnoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDIiPjwvcGF0aD48cGF0aCBkPSJNMjY4LjcgNzA1bS0xOS42IDBhMTkuNiAxOS42IDAgMSAwIDM5LjIgMCAxOS42IDE5LjYgMCAxIDAtMzkuMiAwWiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjg0MyI+PC9wYXRoPjxwYXRoIGQ9Ik0yNjguNyA3MzQuN2MtMTYuMyAwLTI5LjYtMTMuMy0yOS42LTI5LjZzMTMuMy0yOS42IDI5LjYtMjkuNiAyOS42IDEzLjMgMjkuNiAyOS42LTEzLjIgMjkuNi0yOS42IDI5LjZ6IG0wLTM5LjNjLTUuMyAwLTkuNiA0LjMtOS42IDkuNnM0LjMgOS42IDkuNiA5LjYgOS42LTQuMyA5LjYtOS42LTQuMy05LjYtOS42LTkuNnoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDQiPjwvcGF0aD48cGF0aCBkPSJNMzUxLjggNzA1bS0xOS42IDBhMTkuNiAxOS42IDAgMSAwIDM5LjIgMCAxOS42IDE5LjYgMCAxIDAtMzkuMiAwWiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjg0NSI+PC9wYXRoPjxwYXRoIGQ9Ik0zNTEuOCA3MzQuN2MtMTYuMyAwLTI5LjYtMTMuMy0yOS42LTI5LjZzMTMuMy0yOS42IDI5LjYtMjkuNiAyOS42IDEzLjMgMjkuNiAyOS42LTEzLjIgMjkuNi0yOS42IDI5LjZ6IG0wLTM5LjNjLTUuMyAwLTkuNiA0LjMtOS42IDkuNnM0LjMgOS42IDkuNiA5LjYgOS42LTQuMyA5LjYtOS42LTQuMy05LjYtOS42LTkuNnoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDYiPjwvcGF0aD48cGF0aCBkPSJNNDM0LjkgNzA1bS0xOS42IDBhMTkuNiAxOS42IDAgMSAwIDM5LjIgMCAxOS42IDE5LjYgMCAxIDAtMzkuMiAwWiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjg0NyI+PC9wYXRoPjxwYXRoIGQ9Ik00MzQuOSA3MzQuN2MtMTYuMyAwLTI5LjYtMTMuMy0yOS42LTI5LjZzMTMuMy0yOS42IDI5LjYtMjkuNiAyOS42IDEzLjMgMjkuNiAyOS42LTEzLjIgMjkuNi0yOS42IDI5LjZ6IG0wLTM5LjNjLTUuMyAwLTkuNiA0LjMtOS42IDkuNnM0LjMgOS42IDkuNiA5LjYgOS42LTQuMyA5LjYtOS42LTQuMy05LjYtOS42LTkuNnoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDgiPjwvcGF0aD48cGF0aCBkPSJNNTE4IDcwNW0tMTkuNiAwYTE5LjYgMTkuNiAwIDEgMCAzOS4yIDAgMTkuNiAxOS42IDAgMSAwLTM5LjIgMFoiIGZpbGw9IiM4OUI3RjUiIHAtaWQ9IjI4NDkiPjwvcGF0aD48cGF0aCBkPSJNNTE4IDczNC43Yy0xNi4zIDAtMjkuNi0xMy4zLTI5LjYtMjkuNnMxMy4zLTI5LjYgMjkuNi0yOS42IDI5LjYgMTMuMyAyOS42IDI5LjYtMTMuMiAyOS42LTI5LjYgMjkuNnogbTAtMzkuM2MtNS4zIDAtOS42IDQuMy05LjYgOS42czQuMyA5LjYgOS42IDkuNiA5LjYtNC4zIDkuNi05LjYtNC4zLTkuNi05LjYtOS42eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjg1MCI+PC9wYXRoPjxwYXRoIGQ9Ik02MDEuMSA3MDVtLTE5LjYgMGExOS42IDE5LjYgMCAxIDAgMzkuMiAwIDE5LjYgMTkuNiAwIDEgMC0zOS4yIDBaIiBmaWxsPSIjODlCN0Y1IiBwLWlkPSIyODUxIj48L3BhdGg+PHBhdGggZD0iTTYwMS4xIDczNC43Yy0xNi4zIDAtMjkuNi0xMy4zLTI5LjYtMjkuNnMxMy4zLTI5LjYgMjkuNi0yOS42IDI5LjYgMTMuMyAyOS42IDI5LjYtMTMuMiAyOS42LTI5LjYgMjkuNnogbTAtMzkuM2MtNS4zIDAtOS42IDQuMy05LjYgOS42czQuMyA5LjYgOS42IDkuNiA5LjYtNC4zIDkuNi05LjYtNC4zLTkuNi05LjYtOS42eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjg1MiI+PC9wYXRoPjxwYXRoIGQ9Ik02ODQuMiA3MDVtLTE5LjYgMGExOS42IDE5LjYgMCAxIDAgMzkuMiAwIDE5LjYgMTkuNiAwIDEgMC0zOS4yIDBaIiBmaWxsPSIjODlCN0Y1IiBwLWlkPSIyODUzIj48L3BhdGg+PHBhdGggZD0iTTY4NC4yIDczNC43Yy0xNi4zIDAtMjkuNi0xMy4zLTI5LjYtMjkuNnMxMy4zLTI5LjYgMjkuNi0yOS42IDI5LjYgMTMuMyAyOS42IDI5LjYtMTMuMiAyOS42LTI5LjYgMjkuNnogbTAtMzkuM2MtNS4zIDAtOS42IDQuMy05LjYgOS42czQuMyA5LjYgOS42IDkuNiA5LjYtNC4zIDkuNi05LjYtNC4zLTkuNi05LjYtOS42eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjg1NCI+PC9wYXRoPjxwYXRoIGQ9Ik03NjcuMyA3MDVtLTE5LjYgMGExOS42IDE5LjYgMCAxIDAgMzkuMiAwIDE5LjYgMTkuNiAwIDEgMC0zOS4yIDBaIiBmaWxsPSIjODlCN0Y1IiBwLWlkPSIyODU1Ij48L3BhdGg+PHBhdGggZD0iTTc2Ny4zIDczNC43Yy0xNi4zIDAtMjkuNi0xMy4zLTI5LjYtMjkuNnMxMy4zLTI5LjYgMjkuNi0yOS42Uzc5NyA2ODguNyA3OTcgNzA1cy0xMy4zIDI5LjctMjkuNyAyOS43eiBtMC0zOS4zYy01LjMgMC05LjYgNC4zLTkuNiA5LjZzNC4zIDkuNiA5LjYgOS42IDkuNi00LjMgOS42LTkuNi00LjMtOS42LTkuNi05LjZ6IiBmaWxsPSIjMEY1M0E4IiBwLWlkPSIyODU2Ij48L3BhdGg+PC9zdmc+'},
+                {
+                    name: '点',
+                    type: 'scatter',
+                    coordinateSystem: 'polar',
+                    symbol: 'pin',
+                    symbolSize: function (val) {
+                        return 50
+                    },
+                    label: {
+                        normal: {
+                            formatter:function(params){
+                                return params.data[0]
+                            },
+                            show: true,
+                            textStyle: {
+                                color: '#fff',
+                                fontSize: 10
+                            }
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#F62157' //标志颜色
+                        }
+                    },
+                    zlevel: 6,
+                    data: dataYue
+                }
+                ]
+        };
+        chart1.setOption(option)
+        setInterval(function () {
+            var data = [];
+            let dataYue=[]
+            for (var i = 0; i <= 20; i++) {
+                var theta=(i / 20 * 360).toFixed(0)
+                var r = ((Math.random()+1)*150).toFixed(0)
+                if (r<200){
+                    if (dataYue.length<5){
+                        dataYue.push([r,theta])
+                        data.push([r, theta])
+                    }
+                }else {
+                    data.push([r, theta])
+                }
+            }
+            let option = {
+                title: {
+                    left:'center',
+                    text: '雷达监测船舶是否越界',
+                    subtext:'以200海里为船舶界线，灯泡标志为越界',
+                    padding: [0,0,10,0],
+                    subtextStyle:{
+
+                        color:'#cc0033'
+                    }
+                },
+                legend: {
+                    right:'right',
+                    data: ['船舶']
+                },
+                polar: {
+                    tooltip:{
+                        show:true,
+                        trigger:'item'
+                    }
+                },
+                geo: {
+                    show: true,
+                    map: 'gd',
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false,
+                        }
+                    },
+                    nameMap:{
+                        'gd':"某小岛"
+                    },
+                    roam: false,
+                    scaleLimit:{
+                        min:0.1,
+                        max:0.2
+                    },
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#006633',
+                            borderColor: '#ffffff',
+                        },
+                        emphasis: {
+                            areaColor: '#1296db',
+                        }
+                    },
+                    silent:true
+                },
+                tooltip: {
+                    trigger: 'item',
+                    axisPointer: {
+                        type: 'cross'
+                    },
+                    formatter:function (params) {
+                        return "距离："+params.data[0]+"海里<br>方向："+params.data[1]+"°"
+                    }
+                },
+                angleAxis: {
+                    type: 'value',
+                    startAngle: 0,
+                    axisLine: {
+                        lineStyle:{
+                            color:'#0000cc'
+                        }
+                    },
+                    axisLabel:{
+                        formatter:function (value) {
+                            if (value===0){
+                                return value+'°东'
+                            } else if (value===90){
+                                return value+'°南'
+                            } else if (value===180) {
+                                return value+'°西'
+                            }else if (value===270){
+                                return value+'°北'
+                            }
+                            return value+'°'
+                        }
+                    },
+                },
+                radiusAxis: {
+                    name:"距离（km）",
+                    nameLocation:'end',
+                    nameGap:50,
+                    nameTextStyle: {
+                        color:'#cc00cc'
+                    },
+                    boundaryGap: ['20%', '20%'],
+                    axisLine: {
+                        lineStyle:{
+                            width:2,
+                            color:'#cc00cc'
+                        }
+                    },
+                    axisLabel:{
+                        color:'#1296db'
+                    },
+                    splitLine:{
+                        lineStyle:{
+                            color:['#009900','#009900','#009900','#009900','#990000'],
+                            width: 2
+                        }
+                    }
+                },
+                backgroundColor:'#99ff10',
+                series: [
+                    {
+                        coordinateSystem: 'polar',
+                        name: 'line',
+                        type: 'scatter',
+                        data: data,
+                        tooltip:{
+                            show:true
+                        },
+                        animationDelay: function (idx) {
+                            return idx * 5;
+                        },
+                        symbolSize:25,
+                        symbol:'image://data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTI4MzExODg5MjcwIiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjI4MzAiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PC9zdHlsZT48L2RlZnM+PHBhdGggZD0iTTIyNCA0NTMuNWwxMy40LTExNy44aDE1Mi41di00NS41aDEwMC40VjEzNC45aDg3djMxOC42SDIyNCIgZmlsbD0iI0I2Q0RFRiIgcC1pZD0iMjgzMSI+PC9wYXRoPjxwYXRoIGQ9Ik01NzcuMyA0NjguNUgyMjRjLTQuMyAwLTguMy0xLjgtMTEuMi01LTIuOC0zLjItNC4yLTcuNC0zLjctMTEuN0wyMjIuNSAzMzRjMC45LTcuNiA3LjMtMTMuMyAxNC45LTEzLjNIMzc1di0zMC41YzAtOC4zIDYuNy0xNSAxNS0xNWg4NS40VjEzNC45YzAtOC4zIDYuNy0xNSAxNS0xNWg4N2M4LjMgMCAxNSA2LjcgMTUgMTV2MzE4LjVjLTAuMSA4LjMtNi44IDE1LjEtMTUuMSAxNS4xeiBtLTMzNi41LTMwaDMyMS41VjE0OS45aC01N3YxNDAuMmMwIDguMy02LjcgMTUtMTUgMTVoLTg1LjR2MzAuNWMwIDguMy02LjcgMTUtMTUgMTVIMjUwLjhsLTEwIDg3Ljl6IiBmaWxsPSIjMEY1M0E4IiBwLWlkPSIyODMyIj48L3BhdGg+PHBhdGggZD0iTTc4OC43IDYxOS40SDEzMC4zVjQ5MC43YzAtMzUuMyAyOC42LTY0IDY0LTY0aDUwMy41bDkwLjkgMTkyLjd6IiBmaWxsPSIjQjZDREVGIiBwLWlkPSIyODMzIj48L3BhdGg+PHBhdGggZD0iTTc4OC43IDYzNC40SDEzMC4zYy04LjMgMC0xNS02LjctMTUtMTVWNDkwLjdjMC00My41IDM1LjQtNzkgNzktNzloNTAzLjVjNS44IDAgMTEuMSAzLjMgMTMuNiA4LjZsOTEgMTkyLjdjMi4yIDQuNiAxLjkgMTAuMS0wLjkgMTQuNC0yLjggNC40LTcuNiA3LTEyLjggN3ogbS02NDMuNC0zMGg2MTkuOGwtNzYuOC0xNjIuN2gtNDk0Yy0yNyAwLTQ5IDIyLTQ5IDQ5djExMy43eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjgzNCI+PC9wYXRoPjxwYXRoIGQ9Ik0xNDEgODY1LjZoNjM3czExNi40LTIxMi44IDIyNC44LTI4My43SDI4LjZTMTA5LjMgNzA5IDE0MSA4NjUuNnoiIGZpbGw9IiNCNkNERUYiIHAtaWQ9IjI4MzUiPjwvcGF0aD48cGF0aCBkPSJNNzc4IDg4MC42SDE0MWMtNy4xIDAtMTMuMy01LTE0LjctMTJDOTUuNiA3MTYuNyAxNi43IDU5MS4yIDE1LjkgNTkwYy0yLjktNC42LTMuMS0xMC41LTAuNS0xNS4zIDIuNi00LjggNy43LTcuOCAxMy4xLTcuOGg5NzQuM2M2LjYgMCAxMi41IDQuNCAxNC40IDEwLjcgMS45IDYuNC0wLjYgMTMuMi02LjIgMTYuOC0xMDQgNjguMi0yMTguNyAyNzYuMy0yMTkuOCAyNzguNC0yLjYgNC44LTcuNyA3LjgtMTMuMiA3Ljh6IG0tNjI0LjgtMzBoNjE2LjFjOS44LTE3LjIgMzUuMS02MC42IDY4LjItMTA4LjggNDMuNS02My4zIDg0LjItMTExLjggMTIxLjYtMTQ1SDU0LjhjOC4yIDE0LjYgMTkuNCAzNS42IDMxLjcgNjEuNyAyMS4zIDQ1LjQgNDkuNiAxMTQuNiA2Ni43IDE5Mi4xeiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjgzNiI+PC9wYXRoPjxwYXRoIGQ9Ik03NDMuMiA1MjNIMjM3LjR2LTQ0LjZoNDg0Ljh6IiBmaWxsPSIjODlCN0Y1IiBwLWlkPSIyODM3Ij48L3BhdGg+PHBhdGggZD0iTTc0My4yIDUzOEgyMzcuNGMtOC4zIDAtMTUtNi43LTE1LTE1di00NC42YzAtOC4zIDYuNy0xNSAxNS0xNWg0ODQuOGM1LjggMCAxMS4xIDMuMyAxMy42IDguNmwyMS4xIDQ0LjZjMi4yIDQuNiAxLjkgMTAuMS0wLjkgMTQuNC0yLjggNC40LTcuNiA3LTEyLjggN3ogbS00OTAuOC0zMGg0NjcuMmwtNi45LTE0LjZIMjUyLjRWNTA4eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjgzOCI+PC9wYXRoPjxwYXRoIGQ9Ik00OTcgMzI3LjdoMTM2LjV2OTlINDk3eiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjgzOSI+PC9wYXRoPjxwYXRoIGQ9Ik02MzMuNSA0NDEuN0g0OTdjLTguMyAwLTE1LTYuNy0xNS0xNXYtOTljMC04LjMgNi43LTE1IDE1LTE1aDEzNi41YzguMyAwIDE1IDYuNyAxNSAxNXY5OWMwIDguMy02LjcgMTUtMTUgMTV6IG0tMTIxLjUtMzBoMTA2LjV2LTY5SDUxMnY2OXoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDAiPjwvcGF0aD48cGF0aCBkPSJNMTg1LjYgNzA1bS0xOS42IDBhMTkuNiAxOS42IDAgMSAwIDM5LjIgMCAxOS42IDE5LjYgMCAxIDAtMzkuMiAwWiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjg0MSI+PC9wYXRoPjxwYXRoIGQ9Ik0xODUuNiA3MzQuN2MtMTYuMyAwLTI5LjYtMTMuMy0yOS42LTI5LjZzMTMuMy0yOS42IDI5LjYtMjkuNiAyOS42IDEzLjMgMjkuNiAyOS42LTEzLjIgMjkuNi0yOS42IDI5LjZ6IG0wLTM5LjNjLTUuMyAwLTkuNiA0LjMtOS42IDkuNnM0LjMgOS42IDkuNiA5LjYgOS42LTQuMyA5LjYtOS42LTQuMy05LjYtOS42LTkuNnoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDIiPjwvcGF0aD48cGF0aCBkPSJNMjY4LjcgNzA1bS0xOS42IDBhMTkuNiAxOS42IDAgMSAwIDM5LjIgMCAxOS42IDE5LjYgMCAxIDAtMzkuMiAwWiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjg0MyI+PC9wYXRoPjxwYXRoIGQ9Ik0yNjguNyA3MzQuN2MtMTYuMyAwLTI5LjYtMTMuMy0yOS42LTI5LjZzMTMuMy0yOS42IDI5LjYtMjkuNiAyOS42IDEzLjMgMjkuNiAyOS42LTEzLjIgMjkuNi0yOS42IDI5LjZ6IG0wLTM5LjNjLTUuMyAwLTkuNiA0LjMtOS42IDkuNnM0LjMgOS42IDkuNiA5LjYgOS42LTQuMyA5LjYtOS42LTQuMy05LjYtOS42LTkuNnoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDQiPjwvcGF0aD48cGF0aCBkPSJNMzUxLjggNzA1bS0xOS42IDBhMTkuNiAxOS42IDAgMSAwIDM5LjIgMCAxOS42IDE5LjYgMCAxIDAtMzkuMiAwWiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjg0NSI+PC9wYXRoPjxwYXRoIGQ9Ik0zNTEuOCA3MzQuN2MtMTYuMyAwLTI5LjYtMTMuMy0yOS42LTI5LjZzMTMuMy0yOS42IDI5LjYtMjkuNiAyOS42IDEzLjMgMjkuNiAyOS42LTEzLjIgMjkuNi0yOS42IDI5LjZ6IG0wLTM5LjNjLTUuMyAwLTkuNiA0LjMtOS42IDkuNnM0LjMgOS42IDkuNiA5LjYgOS42LTQuMyA5LjYtOS42LTQuMy05LjYtOS42LTkuNnoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDYiPjwvcGF0aD48cGF0aCBkPSJNNDM0LjkgNzA1bS0xOS42IDBhMTkuNiAxOS42IDAgMSAwIDM5LjIgMCAxOS42IDE5LjYgMCAxIDAtMzkuMiAwWiIgZmlsbD0iIzg5QjdGNSIgcC1pZD0iMjg0NyI+PC9wYXRoPjxwYXRoIGQ9Ik00MzQuOSA3MzQuN2MtMTYuMyAwLTI5LjYtMTMuMy0yOS42LTI5LjZzMTMuMy0yOS42IDI5LjYtMjkuNiAyOS42IDEzLjMgMjkuNiAyOS42LTEzLjIgMjkuNi0yOS42IDI5LjZ6IG0wLTM5LjNjLTUuMyAwLTkuNiA0LjMtOS42IDkuNnM0LjMgOS42IDkuNiA5LjYgOS42LTQuMyA5LjYtOS42LTQuMy05LjYtOS42LTkuNnoiIGZpbGw9IiMwRjUzQTgiIHAtaWQ9IjI4NDgiPjwvcGF0aD48cGF0aCBkPSJNNTE4IDcwNW0tMTkuNiAwYTE5LjYgMTkuNiAwIDEgMCAzOS4yIDAgMTkuNiAxOS42IDAgMSAwLTM5LjIgMFoiIGZpbGw9IiM4OUI3RjUiIHAtaWQ9IjI4NDkiPjwvcGF0aD48cGF0aCBkPSJNNTE4IDczNC43Yy0xNi4zIDAtMjkuNi0xMy4zLTI5LjYtMjkuNnMxMy4zLTI5LjYgMjkuNi0yOS42IDI5LjYgMTMuMyAyOS42IDI5LjYtMTMuMiAyOS42LTI5LjYgMjkuNnogbTAtMzkuM2MtNS4zIDAtOS42IDQuMy05LjYgOS42czQuMyA5LjYgOS42IDkuNiA5LjYtNC4zIDkuNi05LjYtNC4zLTkuNi05LjYtOS42eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjg1MCI+PC9wYXRoPjxwYXRoIGQ9Ik02MDEuMSA3MDVtLTE5LjYgMGExOS42IDE5LjYgMCAxIDAgMzkuMiAwIDE5LjYgMTkuNiAwIDEgMC0zOS4yIDBaIiBmaWxsPSIjODlCN0Y1IiBwLWlkPSIyODUxIj48L3BhdGg+PHBhdGggZD0iTTYwMS4xIDczNC43Yy0xNi4zIDAtMjkuNi0xMy4zLTI5LjYtMjkuNnMxMy4zLTI5LjYgMjkuNi0yOS42IDI5LjYgMTMuMyAyOS42IDI5LjYtMTMuMiAyOS42LTI5LjYgMjkuNnogbTAtMzkuM2MtNS4zIDAtOS42IDQuMy05LjYgOS42czQuMyA5LjYgOS42IDkuNiA5LjYtNC4zIDkuNi05LjYtNC4zLTkuNi05LjYtOS42eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjg1MiI+PC9wYXRoPjxwYXRoIGQ9Ik02ODQuMiA3MDVtLTE5LjYgMGExOS42IDE5LjYgMCAxIDAgMzkuMiAwIDE5LjYgMTkuNiAwIDEgMC0zOS4yIDBaIiBmaWxsPSIjODlCN0Y1IiBwLWlkPSIyODUzIj48L3BhdGg+PHBhdGggZD0iTTY4NC4yIDczNC43Yy0xNi4zIDAtMjkuNi0xMy4zLTI5LjYtMjkuNnMxMy4zLTI5LjYgMjkuNi0yOS42IDI5LjYgMTMuMyAyOS42IDI5LjYtMTMuMiAyOS42LTI5LjYgMjkuNnogbTAtMzkuM2MtNS4zIDAtOS42IDQuMy05LjYgOS42czQuMyA5LjYgOS42IDkuNiA5LjYtNC4zIDkuNi05LjYtNC4zLTkuNi05LjYtOS42eiIgZmlsbD0iIzBGNTNBOCIgcC1pZD0iMjg1NCI+PC9wYXRoPjxwYXRoIGQ9Ik03NjcuMyA3MDVtLTE5LjYgMGExOS42IDE5LjYgMCAxIDAgMzkuMiAwIDE5LjYgMTkuNiAwIDEgMC0zOS4yIDBaIiBmaWxsPSIjODlCN0Y1IiBwLWlkPSIyODU1Ij48L3BhdGg+PHBhdGggZD0iTTc2Ny4zIDczNC43Yy0xNi4zIDAtMjkuNi0xMy4zLTI5LjYtMjkuNnMxMy4zLTI5LjYgMjkuNi0yOS42Uzc5NyA2ODguNyA3OTcgNzA1cy0xMy4zIDI5LjctMjkuNyAyOS43eiBtMC0zOS4zYy01LjMgMC05LjYgNC4zLTkuNiA5LjZzNC4zIDkuNiA5LjYgOS42IDkuNi00LjMgOS42LTkuNi00LjMtOS42LTkuNi05LjZ6IiBmaWxsPSIjMEY1M0E4IiBwLWlkPSIyODU2Ij48L3BhdGg+PC9zdmc+'},
+                    {
+                        name: '点',
+                        type: 'scatter',
+                        coordinateSystem: 'polar',
+                        symbol: 'pin',
+                        symbolSize: function (val) {
+                            return 50
+                        },
+                        label: {
+                            normal: {
+                                formatter:function(params){
+                                    return params.data[0]
+                                },
+                                show: true,
+                                textStyle: {
+                                    color: '#fff',
+                                    fontSize: 10
+                                }
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#F62157' //标志颜色
+                            }
+                        },
+                        zlevel: 6,
+                        data: dataYue
+                    }
+                ]
+            };
+            chart1.setOption(option)
+        },5000)
+    });
+</script>
+</div>
+</body>
+</html>
