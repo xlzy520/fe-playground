@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>槽点</title>
+    <link rel="shortcut icon" href="./favicon.ico">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        video{
+            border: none;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body style="text-align: center;background: #0e0e0e;">
+<img src="页面jpg/1开始页面.jpg" width="336" height="599" usemap="#map" onclick="nextImg(this)">
+<video width="336" height="599" class="hidden" autoplay="autoplay" onclick="nextImg(this)">
+    <source src="start.mp4" type="video/mp4">
+</video>
+<img class="hidden" src="页面jpg/2引导页一.jpg" width="336" height="599" usemap="#map" onclick="nextImg(this)">
+<img class="hidden" src="页面jpg/3引导页二.jpg" width="336" height="599" usemap="#map" onclick="nextImg(this)">
+<img class="hidden" src="页面jpg/4引导页三.jpg" width="336" height="599" usemap="#map"
+     onclick="window.open('./登录注册.html','_self')">
+
+<map name="map" id="map">
+
+</map>
+<script>
+    function nextImg(e){
+        $(e).addClass('hidden').next().removeClass('hidden');
+    }
+
+</script>
+</body>
+</html>
