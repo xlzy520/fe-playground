@@ -2,22 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="vodka_prod-185869010.css">
-
+    <title>Word导出原生方法</title>
+    <style>
+        a{
+            display: inline-block;
+            background-color: rgba(18,150,219,.2);
+            color: #0e0e0e;
+            padding: 10px 20px;
+            border: 1px solid #20a0ff;
+            border-radius: 14px;
+            text-decoration: none;
+        }
+        a:hover{
+            color: #ffffff;
+            background-color: rgba(18,150,219,.5);
+        }
+        input{
+            outline: none;
+            width: 20%%;
+        }
+        div{
+            margin-bottom: 66px;
+        }
+    </style>
 </head>
-<body style="overflow: scroll">
-<a style="position: absolute;" id="export" href="void(0)" onclick="f()">daochu</a>
+<body style="text-align: center">
+<div>
+    <label for="wordName">请输入要导出文档的名称：</label>
+    <input type="text" id="wordName" value="">
+</div>
 
+<div id="word">
+    <span style="color: #c7254e">我是测试Word导出的一句话，你将在导出的Word文档中看到我。（这句话只能用Word格式）</span>
+</div>
+<div id="excel">
+    
+</div>
+<a id="export" href="void(0)" onclick="WordExport()">Word导出</a>
 <script>
-    function f() {
+    function WordExport() {
+      let wordName=getInputValue()
       const html = "<html><head><meta charset='utf-8' /></head><body>" + document.getElementById('ceshi').outerHTML + '</body></html>'
       // 实例化一个Blob对象，其构造函数的第一个参数是包含文件内容的数组，第二个参数是包含文件类型属性的对象
       const blob = new Blob([html], { type: 'application/vnd.ms-word' })
       document.getElementById('export').href = URL.createObjectURL(blob)
-      document.getElementById('export').download = '试卷分析.doc'
+      document.getElementById('export').download = wordName+'.doc'
     }
-
+    function getInputValue() {
+      let wordName=document.getElementById('wordName')
+      return wordName.value
+    }
 </script>
 </body>
 </html>
