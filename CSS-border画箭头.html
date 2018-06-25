@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <style>
+        #app::before{
+            display: inline-block;
+            position: absolute;
+            content: "";
+            border: 100px solid transparent;
+            border-bottom-color: #26d007;
+            border-left-color: #1296db;
+            border-right-color: #ccddcc;
+            border-top-color: orangered;
+            top: 14px;
+            right: 42.67%;
+            left: auto;
+        }
+        .code{
+            width: 200px;
+            position: absolute;
+            top: 240px;
+            right: 42.67%;
+            left: auto;
+            background-color: #f9f2f4;
+            border-radius: 2px;
+        }
+        code{
+            font-family: Consolas,Inconsolata,Courier,monospace;
+            font-size: 14px;
+            line-height: 22px;
+            color: #c7254e;
+            padding: 4px 2px 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="code">
+        <code>
+            div容器大小为0，边框完全填充之后，边框内只有一个原点，所以四个点变成了三个点，即成为三角形！
+        </code>
+    </div>
+</div>
+</body>
+</html>
