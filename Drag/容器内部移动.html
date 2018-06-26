@@ -10,15 +10,16 @@
             margin: 0;
             padding: 0;
         }
+
         #dance {
             cursor: pointer;
         }
     </style>
 </head>
-<body ondrop="drop(event)" ondragover="allowDrop(event)">
+<body ondrop="drop(event)" ondragover="allowDrop(event)" ontouchmove="touch_drop(event)">
 <div class="main">
     <img style="position: absolute;left: 0;top: 0;" src="https://xlzy520.cn/images/2.gif" draggable="true" id="dance"
-         ondragstart="drag(event)">
+         ondragstart="drag(event)" ontouchstart="touch_drag(event)">
 </div>
 <script>
   (function () {
@@ -27,8 +28,9 @@
   })()
   let dance = document.getElementById('dance')
   let X1, Y1;
-  function drag(e)
-  {
+
+  // PC端
+  function drag(e) {
     e = event ? event : e
     X1 = e.clientX - parseInt(dance.style.left)
     Y1 = e.clientY - parseInt(dance.style.top)
@@ -36,8 +38,9 @@
     // 鼠标点击的位置在图片的位置坐标为（X1，Y1）
   }
 
-  function drop(e)
-  {
+
+
+  function drop(e) {
     e = event ? event : e
     e.preventDefault()
     dance.style.left = e.clientX - X1 + 'px'
@@ -45,20 +48,48 @@
     // 根据鼠标点击的位置在整个页面上的坐标和在图片上的坐标来确定整个图片的坐标
   }
 
-  function allowDrop(e)
-  {
+
+  function allowDrop(e) {
     e = event ? event : e
     // 移动过程中触发
   }
 
-  document.ondragover = function (evt) {
+  document.ondragover = function () {
     //取消事件的默认行为
     return false;
   }
-  document.ondrop = function (evt) {
+  document.ondrop = function () {
     //取消事件的默认行为
     return false
   }
+
+  // 移动端
+  function touch_drag(event) {
+    let touch;
+    if (event.touches) {
+      touch = event.touches[0];
+    } else {
+      touch = event;
+    }
+    X1 = touch.clientX - parseInt(dance.style.left)
+    Y1 = touch.clientY - parseInt(dance.style.top)
+    // 鼠标点击的位置在整个页面上的坐标是（e.clientX，e.clientY）
+    // 鼠标点击的位置在图片的位置坐标为（X1，Y1）
+  }
+  
+  function touch_drop(event) {
+    let touch;
+    if (event.touches) {
+      touch = event.touches[0];
+    } else {
+      touch = event;
+    }
+    dance.style.left = touch.clientX - X1 + 'px'
+    dance.style.top = touch.clientY - Y1 + 'px'
+    // 根据鼠标点击的位置在整个页面上的坐标和在图片上的坐标来确定整个图片的坐标
+  }
+
+
 </script>
 
 </body>
