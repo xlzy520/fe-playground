@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh_CN">
 <head>
     <meta charset="UTF-8">
     <title>Word导出原生方法</title>
+    <link rel="icon" href="https://xlzy520.cn/icons/lo.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <style>
         a{
             display: inline-block;
@@ -18,8 +20,9 @@
             background-color: rgba(18,150,219,.5);
         }
         input{
+            font-size: 21px;
             outline: none;
-            width: 20%%;
+            width: 10%;
         }
         div{
             margin-bottom: 66px;
@@ -28,29 +31,69 @@
 </head>
 <body style="text-align: center">
 <div>
-    <label for="wordName">请输入要导出文档的名称：</label>
-    <input type="text" id="wordName" value="">
+    <label for="docName">请输入要导出文档的名称：</label>
+    <input type="text" id="docName" value="example">
 </div>
 
 <div id="word">
     <span style="color: #c7254e">我是测试Word导出的一句话，你将在导出的Word文档中看到我。（这句话只能用Word格式）</span>
+    <a id="export_word" href="#" onclick="Export(this,'word')">导出</a>
 </div>
 <div id="excel">
-    
+    <table border="1" cellspacing="0" align="center">
+        <thead>
+        <tr>
+            <td>姓名</td>
+            <td>学号</td>
+            <td>是否毕业</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>lzy</td>
+            <td>14011316</td>
+            <td>是</td>
+        </tr>
+        <tr><td colspan="3" style="color: #c7254e">我是一个表格，既可以导出Word，也可以导出excel</td></tr>
+        </tbody>
+    </table>
 </div>
-<a id="export" href="void(0)" onclick="WordExport()">Word导出</a>
+<div>
+    <label for="export_format">请选择导出文档格式(默认为Excel)：</label>
+    <select value="" id="export_format">
+        <option>Excel</option>
+        <option>Word</option>
+    </select>
+    <a id="export_excel" href="#" onclick="Export(this,'excel')">导出</a>
+</div>
+
 <script>
-    function WordExport() {
-      let wordName=getInputValue()
-      const html = "<html><head><meta charset='utf-8' /></head><body>" + document.getElementById('ceshi').outerHTML + '</body></html>'
+    function Export(e,contentId) {
+      let docName=document.getElementById('docName').value
+      // let index=e.id.indexOf('_')
+      // let docFormat=e.id.toLocaleString().substr(index+1)
+      // console.log(docFormat);
+      const html = "<html><head><meta charset='utf-8' /></head><body>" + document.getElementById(contentId).outerHTML + '</body></html>'
       // 实例化一个Blob对象，其构造函数的第一个参数是包含文件内容的数组，第二个参数是包含文件类型属性的对象
-      const blob = new Blob([html], { type: 'application/vnd.ms-word' })
-      document.getElementById('export').href = URL.createObjectURL(blob)
-      document.getElementById('export').download = wordName+'.doc'
-    }
-    function getInputValue() {
-      let wordName=document.getElementById('wordName')
-      return wordName.value
+      switch (contentId){
+        case 'word':
+          e.download = docName+'.doc'
+          break
+        case 'excel':
+          if (document.getElementById('export_format').value==='Word'){
+            contentId='word'
+            e.download = docName+'.doc'
+          }else {
+            e.download = docName+'.xlsx'
+          }
+          break
+        default:
+          e.download = docName+'.doc'
+          break
+      }
+
+      const blob = new Blob([html], { type: 'application/vnd.ms-'+contentId })
+      e.href = URL.createObjectURL(blob)
     }
 </script>
 </body>
