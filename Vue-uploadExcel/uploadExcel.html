@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>uploadExcel Demo</title>
     <link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">
-    <!--<script src="https://js.fundebug.cn/fundebug.0.3.4.min.js"-->
-            <!--apikey="c368bcbe3ca03fd06c803edc8114ed5ac7fe6aa774e36146353287a25ea3e657"></script>-->
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/element-ui/lib/index.js"></script>
+    <script src="../node_modules/js-xlsx/dist/xlsx.full.min.js"></script>
     <style>
         #excel-upload-input{
             display: none;
@@ -31,10 +32,6 @@
         <el-table-column v-for='item of tableHeader' :prop="item" :label="item" :key='item' show-overflow-tooltip></el-table-column>
     </el-table>
 </div>
-<script src="../node_modules/vue/dist/vue.js"></script>
-<script src="../node_modules/element-ui/lib/index.js"></script>
-<script src="../node_modules/js-xlsx/dist/xlsx.full.min.js"></script>
-<script src="../node_modules/axios/dist/axios.min.js"></script>
 <script>
     new Vue({
         el:'#app',
@@ -45,7 +42,6 @@
 				AllTableHeader: [],
                 tableData: [],
 				tableHeader: [],
-
 				Sheets: 0,
                 SheetNames:[]
             }
@@ -106,34 +102,14 @@
 							const data = e.target.result
                             const fixedData = that.fixdata(data)
 							const workbook = XLSX.read(btoa(fixedData), { type: 'base64' })
-                            console.log(workbook);
 							for (let i in workbook.SheetNames){
 								const firstSheetName = workbook.SheetNames[i]
 								const worksheet = workbook.Sheets[firstSheetName]
-                                let words=["B","C","D","E","F","G","H","I","J"]
-                                worksheet[words[0]+"1"]= worksheet[words[0]+"4"]
-                                worksheet[words[1]+"1"]= worksheet[words[1]+"4"]
-                                worksheet[words[2]+"1"]= worksheet[words[2]+"4"]
-                                worksheet[words[3]+"1"]= worksheet[words[3]+"3"]
-                                worksheet[words[4]+"1"]= worksheet[words[4]+"3"]
-                                rowsCount=((Object.getOwnPropertyNames(worksheet).length-2)/10)-5
-                                for (let i in words) {
-                                    for (let j=2;j<rowsCount;j++){
-                                        k=j+3
-                                        worksheet[words[i]+j]=worksheet[words[i]+k]
-                                    }
-                                }
-                                for (let j=2;j<rowsCount;j++){
-                                    k=j+3
-                                    worksheet["A"+j]=worksheet["A"+k]
-                                }
-                                delete worksheet["A"+(rowsCount+5)]
                                 const header = that.get_header_row(worksheet)
                                 const results = XLSX.utils.sheet_to_json(worksheet)
                                 let table_data={header:header,results:results,SheetName:workbook.SheetNames}
 								that.generateDate(i,table_data)
                             }
-
 						}
 						reader.readAsArrayBuffer(itemFile)
 					},
