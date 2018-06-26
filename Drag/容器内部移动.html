@@ -27,20 +27,21 @@
     document.getElementsByTagName('body')[0].style.width = window.innerWidth + 'px'
   })()
   let dance = document.getElementById('dance')
-  let X1, Y1;
+  let dragOffset={
+    X1:null,
+    Y1:null
+  }
 
   function drag(e) {
     if (e.type === 'dragstart') {
       e = event ? event : e
     }else {
       if (event.touches) {
-        e = event.touches[0];
-      } else {
-        e = event;
+        e = event.touches[0]?event.touches[0]:event;
       }
     }
-    X1 = e.clientX - parseInt(dance.style.left)
-    Y1 = e.clientY - parseInt(dance.style.top)
+    dragOffset.X1 = e.clientX - parseInt(dance.style.left)
+    dragOffset.Y1 = e.clientY - parseInt(dance.style.top)
     // 鼠标点击的位置在整个页面上的坐标是（e.clientX，e.clientY）
     // 鼠标点击的位置在图片的位置坐标为（X1，Y1）
   }
@@ -53,13 +54,11 @@
       e.preventDefault()
     } else {
       if (event.touches) {
-        e = event.touches[0];
-      } else {
-        e = event;
+        e = event.touches[0]?event.touches[0]:event;
       }
     }
-    dance.style.left = e.clientX - X1 + 'px'
-    dance.style.top = e.clientY - Y1 + 'px'
+    dance.style.left = e.clientX - dragOffset.X1 + 'px'
+    dance.style.top = e.clientY - dragOffset.Y1 + 'px'
     // 根据鼠标点击的位置在整个页面上的坐标和在图片上的坐标来确定整个图片的坐标
   }
 
