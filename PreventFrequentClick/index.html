@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="index.js"></script>
+</head>
+<body>
+<input type="submit" class="submit" id="submit" value="购买1">
+<input type="submit" class="submit" value="购买2">
+<a class="submit">购买</a>
+<div id="chart"></div>
+<script>
+    var submit=document.getElementById('submit')
+    var submitClass=document.getElementsByClassName('submit')
+    console.log(submit)
+    console.log(typeof submit);
+    console.log(submitClass)
+    console.log(typeof submitClass)
+    pfc.init(submitClass,{duration:200,durationDisable:1000})
+</script>
+</body>
+</html>
