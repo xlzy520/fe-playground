@@ -3,9 +3,12 @@
         typeof define === 'function' && define.amd ? define(['exports'], factory) :
             (factory((global.pfc = {})));
 }(this, (function (exports) {
-    var firstClickTime=0,secondClickTime=0,dValue=0
+    var submit=document.getElementById('submit')
+    var submitClass=document.getElementsByClassName('submit')
+    init(submitClass,{duration:200,durationDisable:1000})
+    var firstClickTime=0,secondClickTime=0  //  全局点击时间记录
 
-    function isDom(v) {    //判断是否为Dom
+    function isDom(v) {
         if (v.length===undefined){    //一个Dom
             return v instanceof HTMLElement
         }
@@ -15,7 +18,7 @@
             if (v[v.length-1] instanceof HTMLElement===true) return true
             i++
         }
-    }
+    } //判断一个或者多个节点是否为Dom
 
     function init(dom,opts) {
         if (dom){
@@ -42,10 +45,10 @@
         }
         firstClickTime= new Date().getTime()
         return firstClickTime-secondClickTime
-    }
+    }  //得到连续点击两次之间的时间差
 
     function main(dom,opts) {
-        dValue=timeDifference()
+        var dValue=timeDifference()
         if ( dValue<opts.duration) {
             dom.disabled=true
             console.log(dValue,'小于'+opts.duration+'毫秒')
@@ -65,7 +68,7 @@
         dom.addEventListener('click',function () {
                main(dom,opts)
             },false)
-        }
+        }  //给按钮绑定点击事件
 
     exports.init=init
 })))
