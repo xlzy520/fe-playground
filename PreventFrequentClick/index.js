@@ -15,13 +15,11 @@
     function getOptions(dom) {
         var duration=dom.getAttribute('data-duration')
         var durationDisable=dom.getAttribute('data-durationDisable')
-        this.duration=200
-        this.durationDisable=1000
-        if (typeof duration==='string'&&duration!==""){
-            this.duration=duration
+        if (typeof duration==='string'){
+            this.duration=duration||200
         }
-        if (typeof durationDisable==='string'&&durationDisable!=="") {
-            this.durationDisable=durationDisable
+        if (typeof durationDisable==='string') {
+            this.durationDisable=durationDisable||1000
         }
         return {
             duration: this.duration,
