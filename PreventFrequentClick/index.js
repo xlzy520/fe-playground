@@ -4,19 +4,28 @@
             (factory((global.pfc = {})));
 }(this, (function (exports) {
     var firstClickTime=0,secondClickTime=0,dValue=0
-    function isObject(v) {
-        return typeof v ==='object'
+
+    function isDom(v) {    //判断是否为Dom
+        if (v.length===undefined){    //一个Dom
+            return v instanceof HTMLElement
+        }
+        var i=0
+        while (i<v.length){     //多个Dom
+            if (v[i] instanceof HTMLElement===false) return false
+            if (v[v.length-1] instanceof HTMLElement===true) return true
+            i++
+        }
     }
 
     function init(dom,opts) {
         if (dom){
-            if (isObject(dom)){
+            if (isDom(dom)){
                 if (dom.length===undefined){
-                    bind(dom,opts)
+                    bindEvent(dom,opts)
                 }
                 else if (dom.length>1){
                     for (var i=0;i<dom.length;i++){
-                        bind(dom[i],opts)
+                        bindEvent(dom[i],opts)
                     }
                 }
             }else {
@@ -27,52 +36,36 @@
         }
     }
 
-    function difference(a,b) {
-        return a-b
+    function timeDifference() {
+        if (firstClickTime!==undefined){
+            secondClickTime=firstClickTime
+        }
+        firstClickTime= new Date().getTime()
+        return firstClickTime-secondClickTime
     }
 
-    function bind(dom,opts){
-        if (dom.attachEvent){
-            dom.attachEvent('onclick',function () {
-                if (firstClickTime!==undefined){
-                    secondClickTime=firstClickTime
-                }
-                firstClickTime= new Date().getTime()
-                dValue=difference(firstClickTime,secondClickTime)
-
-                if ( dValue<opts.duration) {
-                    dom.disabled=true
-                    console.log(dValue,'小于'+opts.duration+'毫秒')
-                    setTimeout(function () {
-                        dom.disabled=false
-                    },500)
-                }else {
-                    console.log(dValue,'大于200毫秒')
-                }
-                console.log(firstClickTime,secondClickTime)
-            })
-        }  //兼容IE事件
-        else {
-            dom.addEventListener('click',function () {
-                if (firstClickTime!==undefined){
-                    secondClickTime=firstClickTime
-                }
-                firstClickTime= new Date().getTime()
-                dValue=difference(firstClickTime,secondClickTime)
-
-                if ( dValue<opts.duration) {
-                    dom.disabled=true
-                    console.log(dValue,'小于'+opts.duration+'毫秒')
-                    setTimeout(function () {
-                        dom.disabled=false
-                    },1000)
-                }else {
-                    console.log(dValue,'大于200毫秒')
-                }
-                console.log(firstClickTime,secondClickTime)
-            },false)
+    function main(dom,opts) {
+        dValue=timeDifference()
+        if ( dValue<opts.duration) {
+            dom.disabled=true
+            console.log(dValue,'小于'+opts.duration+'毫秒')
+            setTimeout(function () {
+                dom.disabled=false
+            },opts.durationDisable)
+        }else {
+            console.log(dValue,'大于200毫秒')
         }
     }
+    function bindEvent(dom,opts){
+        if (dom.attachEvent){
+            dom.attachEvent('onclick',function () {
+                main(dom,opts)
+            })
+        }  //兼容IE事件
+        dom.addEventListener('click',function () {
+               main(dom,opts)
+            },false)
+        }
 
     exports.init=init
 })))
