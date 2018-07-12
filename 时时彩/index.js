@@ -1,5 +1,5 @@
 const fs=require('fs')
-// const axios=require('axios')
+const axios=require('axios')
 // const AV = require('leancloud-storage');
 // const { Query, User } = AV;
 // // 实时消息服务
@@ -53,22 +53,23 @@ function isArray(arr) {
 function main(arr) {
     isArray(arr)
     let newArray=[],repeatCount=[]
-    arr.forEach((item,i)=>{
-        newArray.push(item.haoma)
+    arr.forEach((item)=>{
+        newArray.push(item.haoMa.substring(0,1))
         console.log("push,此时数组为："+newArray)
         if (Deduplication(newArray).length > 5) {
             let popNum=newArray.shift()
-            console.log("出现六个不同的数字，把数组第一个数抛出,抛出"+popNum)
-            console.log("此时数组为："+newArray)
+            // console.log("出现六个不同的数字，把数组第一个数抛出,抛出"+popNum)
+            // console.log("此时数组为："+newArray)
             while (newArray[0]===popNum||Deduplication(newArray).length > 5){
                 let popSecNum=newArray.shift()
-                console.log("继续抛出"+popSecNum)
-                console.log("此时数组为："+newArray)
+                // console.log("继续抛出"+popSecNum)
+                // console.log("此时数组为："+newArray)
             }
         }
         if (Deduplication(newArray).length<=5&&newArray.length>9) {
-            console.log("此时数组为："+newArray)
-            console.log('----------------------连续'+newArray.length+"期,重复的五个数字为："+Deduplication(newArray).toLocaleString()+"数组为："+newArray+"期数："+item.qishu)
+            console.log('----------------------连续'+newArray.length+"期,重复的五个数字为："
+                +Deduplication(newArray).toLocaleString()+"\t数组为："+newArray+"\t期数："
+                +item.qiHao+"\t时间"+new Date(item.openTime).toLocaleString()+"--------------------")
             repeatCount.push(newArray.length)
 
         }else {
@@ -78,19 +79,55 @@ function main(arr) {
     return repeatCount
 }
 
-const file='CQSSC.json'
-fs.readFile(file,'utf8',function (err,res) {
-    if(err) console.log(err);
-    res=JSON.parse(res)
-    let arr=[]
-    for (let x of res){
-        arr.push({
-            haoma:x.haoMa.substring(0,1),
-            qishu:x.qiHao
-        })
-    }
-    console.log("连续重复超过9次："+main(arr))
-})
+// 一千条数据
+// const file='CQSSC.json'
+// fs.readFile(file,'utf8',function (err,res) {
+//     if(err) console.log(err);
+//     res=JSON.parse(res)
+//     let arr=[]
+//     for (let x of res){
+//         arr.push({
+//             haoma:x.haoMa.substring(0,1),
+//             qishu:x.qiHao
+//         })
+//     }
+//     console.log("连续重复超过9次："+main(arr))
+// })
 
+//一万条数据
+let oneDayData=[]
+let allData=[]
+const base_url='https://6y12.com/lottery/trendChart/lotteryOpenNum.do'
+const rows=200
+// for (let i=4;i<11;){
+//     axios.get(base_url,{
+//         recentDay: i,
+//         rows: rows
+//     }).then(function (res) {
+//         console.log(res.data.length)
+//         allData=allData.concat(res.data)
+//         console.log(allData.length)
+//     })
+// }
 
+function xunhuan(i,end) {
+    axios.get(base_url,{
+        params:{
+            lotCode:'CQSSC',
+            recentDay: i,
+            rows: rows
+        }
+    }).then(function (res) {
+        allData=allData.concat(res.data)
+        console.log(allData.length)
+        i=i+1
+        if (i < end) {
+            xunhuan(i,end)
+        }else {
+            console.log("超过9期以上的次数："+main(allData.reverse()))
+        }
 
+    })
+}
+
+xunhuan(1,1)
