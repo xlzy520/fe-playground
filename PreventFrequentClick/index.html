@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="index.js"></script>
+    <script src="index.js" defer></script>
+    <style>
+        .similar{
+            cursor: default;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-appearance: button;
+            margin: 0;
+            padding: 2px 7px;
+            border: 1px solid #eee;
+            font-size: 13.3333px;
+        }
+    </style>
+    <!--//延迟加载方案-->
 </head>
 <body>
-<input type="submit" class="submit" id="submit" value="购买1">
+<input type="submit" class="submit" id="submit" value="购买1" onclick="console.log('hohoho')">
 <input type="submit" class="submit" value="购买2">
-<a class="submit">购买</a>
-<div id="chart"></div>
-<script>
-    var submit=document.getElementById('submit')
-    var submitClass=document.getElementsByClassName('submit')
-    console.log(submit)
-    console.log(typeof submit);
-    console.log(submitClass)
-    console.log(typeof submitClass)
-    pfc.init(submitClass,{duration:200,durationDisable:1000})
-</script>
+<a class="submit similar">购买3</a>
+<!--<script src="index.js"></script>   尾部加载，此时文档流已经加载结束-->
 </body>
 </html>
