@@ -58,12 +58,10 @@ function main(arr) {
         console.log("push,此时数组为："+newArray)
         if (Deduplication(newArray).length > 5) {
             let popNum=newArray.shift()
-            // console.log("出现六个不同的数字，把数组第一个数抛出,抛出"+popNum)
-            // console.log("此时数组为："+newArray)
+            // console.log("出现六个不同的数字，把数组第一个数抛出,抛出"+popNum,"此时数组为："+newArray)
             while (newArray[0]===popNum||Deduplication(newArray).length > 5){
                 let popSecNum=newArray.shift()
-                // console.log("继续抛出"+popSecNum)
-                // console.log("此时数组为："+newArray)
+                // console.log("继续抛出"+popSecNum,"此时数组为："+newArray)
             }
         }
         if (Deduplication(newArray).length<=5&&newArray.length>9) {
@@ -95,34 +93,22 @@ function main(arr) {
 // })
 
 //一万条数据
-let oneDayData=[]
 let allData=[]
 const base_url='https://6y12.com/lottery/trendChart/lotteryOpenNum.do'
-const rows=200
-// for (let i=4;i<11;){
-//     axios.get(base_url,{
-//         recentDay: i,
-//         rows: rows
-//     }).then(function (res) {
-//         console.log(res.data.length)
-//         allData=allData.concat(res.data)
-//         console.log(allData.length)
-//     })
-// }
 
-function xunhuan(i,end) {
+function di_gui_tong_ji(i,end) {
     axios.get(base_url,{
         params:{
             lotCode:'CQSSC',
             recentDay: i,
-            rows: rows
+            rows: 200
         }
     }).then(function (res) {
         allData=allData.concat(res.data)
         console.log(allData.length)
         i=i+1
         if (i < end) {
-            xunhuan(i,end)
+            di_gui_tong_ji(i,end)
         }else {
             console.log("超过9期以上的次数："+main(allData.reverse()))
         }
@@ -130,4 +116,4 @@ function xunhuan(i,end) {
     })
 }
 
-xunhuan(1,1)
+di_gui_tong_ji(1,1)
