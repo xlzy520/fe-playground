@@ -3,10 +3,31 @@
         typeof define === 'function' && define.amd ? define(['exports'], factory) :
             (factory((global.pfc = {})));
 }(this, (function (exports) {
+
+    var opts={}
     var submit=document.getElementById('submit')
     var submitClass=document.getElementsByClassName('submit')
-    init(submitClass,{duration:200,durationDisable:1000})
-    var firstClickTime=0,secondClickTime=0  //  全局点击时间记录
+
+    init(submitClass)
+
+    var firstClickTime = 0, secondClickTime = 0;  //  全局点击时间记录
+
+    function getOptions(dom) {
+        var duration=dom.getAttribute('data-duration')
+        var durationDisable=dom.getAttribute('data-durationDisable')
+        this.duration=200
+        this.durationDisable=1000
+        if (typeof duration==='string'&&duration!==""){
+            this.duration=duration
+        }
+        if (typeof durationDisable==='string'&&durationDisable!=="") {
+            this.durationDisable=durationDisable
+        }
+        return {
+            duration: this.duration,
+            durationDisable: this.durationDisable
+        }
+    }
 
     function isDom(v) {
         if (v.length===undefined){    //一个Dom
@@ -20,22 +41,24 @@
         }
     } //判断一个或者多个节点是否为Dom
 
-    function init(dom,opts) {
+    function init(dom) {
         if (dom){
             if (isDom(dom)){
                 if (dom.length===undefined){
+                    opts=getOptions(dom)
                     bindEvent(dom,opts)
                 }
                 else if (dom.length>1){
                     for (var i=0;i<dom.length;i++){
+                        opts=getOptions(dom[i])
                         bindEvent(dom[i],opts)
                     }
                 }
             }else {
-                throw "该参数不为DOM对象"
+                throw new Error("该参数不为DOM对象")
             }
         }else {
-            throw "该DOM对象不存在"
+            throw new Error("该DOM对象不存在")
         }
     }
 

@@ -9,6 +9,7 @@
             cursor: default;
             user-select: none;
             -webkit-user-select: none;
+            -ms-user-select: none;
             -webkit-appearance: button;
             margin: 0;
             padding: 2px 7px;
@@ -19,9 +20,15 @@
     <!--//延迟加载方案-->
 </head>
 <body>
-<input type="submit" class="submit" id="submit" value="购买1" onclick="console.log('hohoho')">
-<input type="submit" class="submit" value="购买2">
-<a class="submit similar">购买3</a>
+<input type="submit" class="submit" id="submit" value="Input购买1" data-duration="200" data-durationDisable="1000" onclick="console.log('hohoho')">
+<button type="submit" class="submit">Button购买2</button>
+<a class="submit similar">我是a标签的购买3</a>
+<script>
+    var h=document.createElement('button')
+    var r=document.createTextNode("动态加载出来的购买4")
+    h.appendChild(r)
+    document.getElementsByTagName('body')[0].appendChild(h)
+</script>
 <!--<script src="index.js"></script>   尾部加载，此时文档流已经加载结束-->
 </body>
 </html>
