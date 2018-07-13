@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>文本域使用输入法时不统计字数，输完之后才统计字数</title>
+</head>
+<body>
+<textarea id="count"></textarea>
+<script>
+    var isCh = false; //用来标识当前输入是否在用输入法输入汉字；
+
+    var ct = document.getElementById('count');
+    ct.addEventListener('keydown', function (e) {
+        console.log(e)
+        e.keyCode === 229 && (isCh = true);
+        //keydown事件的触发：如果keyCode为229，则说明用户正在使用输入法敲入汉字；
+    });
+    ct.addEventListener('keyup', function (e) {
+        if (e.keyCode === 32 && isCh) {
+            //keyup事件会真实获取keyCode，当用户正在敲入汉字，而且用户输入了空格，键入了汉字，则获取此时的长度；
+            isCh = false;
+            console.log( e.target.value.length);
+        } else if (!isCh) {
+            //当用户没有借助输入法，则可直接获取字数
+            console.log( e.target.value.length);
+        }
+    });
+</script>
+</body>
+</html>
