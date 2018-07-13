@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var iii=0
+    var titile=setInterval(function () {
+        document.title="防止按钮频繁点击"+(Math.random()*100).toFixed(0)
+        iii++
+        iii===10?clearInterval(titile):console.log(iii)
+    },1000)
+</script>
+</body>
+</html>
