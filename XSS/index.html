@@ -6,20 +6,10 @@
     <script src="../node_modules/jquery/dist/jquery.js"></script>
     <script src="../node_modules/vue/dist/vue.js"></script>
 </head>
-<body onload="XSS()">
-<label for="xss">
-    <input id="xss" value="" placeholder="XSS" onchange="XSS()">
-</label>
+<body>
 <a id="XSSText" v-html="html">111</a>
-<button onclick="XSS()">测试</button>
 <script src="../node_modules/axios/dist/axios.js"></script>
 <script>
-    // function XSS(){
-    //     axios.get('https://www.easy-mock.com/mock/5a7289488d0c633b9c4adca2/xss').then(res=>{
-    //         $('#XSSText').html("<script/defer='defer'>alert(1)")
-    //         // $('#XSSText').append(res.data.data)
-    //     })
-    // }
     new Vue({
         el: '#XSSText',
         data(){
