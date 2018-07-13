@@ -12,7 +12,7 @@
         submit_btn=document.getElementsByClassName('submit')
         var submit_body=document.getElementsByTagName("body")
         submit_body[0].onclick=function (evt) {
-            if (evt.target.nodeName.toLowerCase() === 'input'||evt.target.nodeName.toLowerCase() ==='button'){
+            if (evt.target.nodeName === 'INPUT'||evt.target.nodeName ==='BUTTON'){
                 if (evt.target.className.includes('submit')){
                     init(evt.target)
                 }
@@ -96,10 +96,16 @@
     function main(dom,opts) {
         var dValue=timeDifference()
         if ( dValue<opts.duration) {
-            dom.disabled=true
+            dom.setAttribute('disabled','true')
+            if (dom.tagName === 'A') {
+                dom.setAttribute('style','border-color: buttonface;background-color: buttonface;color:graytext;pointer-events:none')
+            }
             console.log(dValue,'小于'+opts.duration+'毫秒')
             setTimeout(function () {
-                dom.disabled=false
+                if (dom.tagName === 'A') {
+                    dom.setAttribute('style','border-color: ;background-color: ;color:;pointer-events:')
+                }
+                dom.setAttribute('disabled','false')
             },opts.durationDisable)
         }else {
             console.log(dValue,'大于200毫秒')
