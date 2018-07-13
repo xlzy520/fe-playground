@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button class="btn1" value="Math.random()">按钮</button>
+<script>
+function add(evt) {
+    console.log(evt)
+    var s=confirm('我是'+i+"号，是否生成新按钮")
+    if (s) {
+        console.log(evt)
+        var body=document.getElementsByTagName('body')[0]
+        body.appendChild(document.getElementsByClassName('btn1')[0])
+        i++
+    }
+}
+document.getElementsByTagName('button')[0].onclick=function (e) {
+    add(e.target)
+}
+var i=1
+</script>
+</body>
+</html>
