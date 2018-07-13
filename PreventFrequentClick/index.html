@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="index.js" defer></script>
+    <link rel="icon" href="https://xlzy520.cn/icons/lo.ico">
+    <script src="index.js"></script>
     <style>
         .submit{
             -ms-user-select: none;
@@ -20,19 +21,25 @@
             font-size: 13.3333px;
         }
     </style>
-    <!--//延迟加载方案-->
+    <!--//延迟加载方案:defer；添加在尾部引入；window.onload方法-->
 </head>
 <body>
 <input type="submit" class="submit" id="submit" value="Input购买1" data-duration="" data-durationDisable="" onclick="console.log('hohoho')">
-<button type="submit" class="submit">Button购买2</button>
+<button type="submit" class="submit" data-duration="200" data-durationDisable="1000">Button购买2</button>
 <a class="submit similar">我是a标签的购买3</a>
 <script>
     var h=document.createElement('button')
     var r=document.createTextNode("动态加载出来的购买4")
     h.appendChild(r)
+    h.setAttribute('class','submit')
     document.getElementsByTagName('body')[0].appendChild(h)
-    var a=document.getElementById('submit').getAttribute('data-duration')||100
-    console.log(a)
+    var iii=0
+    var titile=setInterval(function () {
+        document.title="防止按钮频繁点击"+(Math.random()*100).toFixed(0)
+        iii++
+        iii===10?clearInterval(titile):console.log(iii)
+    },1000)
+
 </script>
 <!--<script src="index.js"></script>   尾部加载，此时文档流已经加载结束-->
 </body>
