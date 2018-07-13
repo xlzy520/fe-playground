@@ -57,10 +57,10 @@ function main(arr) {
         newArray.push(item.haoMa.substring(0,1))
         if (Deduplication(newArray).length > 5) {
             let popNum=newArray.shift()
-            // console.log("出现六个不同的数字，把数组第一个数抛出,抛出"+popNum,"此时数组为："+newArray)
+            console.log("出现六个不同的数字，把数组第一个数抛出,抛出"+popNum,"此时数组为："+newArray)
             while (newArray[0]===popNum||Deduplication(newArray).length > 5){
                 let popSecNum=newArray.shift()
-                // console.log("继续抛出"+popSecNum,"此时数组为："+newArray)
+                console.log("继续抛出"+popSecNum,"此时数组为："+newArray)
             }
         }
         if (Deduplication(newArray).length<=5&&newArray.length>10) {
@@ -114,4 +114,4 @@ function di_gui_tong_ji(i,end) {
     })
 }
 
-di_gui_tong_ji(1,1)
+di_gui_tong_ji(1,3)
