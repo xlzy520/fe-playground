@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>polyfill</title>
+    <!--<script src="../node_modules/babel-polyfill/dist/polyfill.js"></script>-->
+</head>
+<body>
+<script type="text/babel">
+    const arr1=[1,2,3]
+    const arr2=[...arr1]
+    console.log(arr2);
+    let arr3=arr2.map((x)=>x*2)
+    console.log(arr3);
+    const [x,y,z]=[[...arr3]]
+    console.log(x);
+
+    class Point {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        toString() {
+            return '(' + this.x + ', ' + this.y + ')';
+        }
+    }
+    console.log(new Point(1, 2).toString());
+</script>
+<script src="browser.min.js"></script>
+</body>
+</html>
