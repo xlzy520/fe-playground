@@ -97,13 +97,13 @@
         var dValue=timeDifference()
         if ( dValue<opts.duration) {
             dom.disabled=true
-            if (dom.tagName === 'A') {
-                dom.setAttribute('style','border-color: buttonface;background-color: buttonface;color:graytext;pointer-events:none')
+            if (dom.tagName === 'A'||dom.tagName === 'DIV') {
+                dom.setAttribute('style','display:inline-block;border-color: buttonface;background-color: buttonface;color:graytext;pointer-events:none')
             }
             console.log(dValue,'小于'+opts.duration+'毫秒')
             setTimeout(function () {
-                if (dom.tagName === 'A') {
-                    dom.setAttribute('style','border-color: ;background-color: ;color:;pointer-events:')
+                if (dom.tagName === 'A'||dom.tagName === 'DIV') {
+                    dom.setAttribute('style','display:inline-block;border-color: ;background-color: ;color:;pointer-events:')
                 }
                 dom.disabled=false
             },opts.durationDisable)

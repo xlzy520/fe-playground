@@ -26,11 +26,12 @@
 <input type="submit" class="submit" id="submit" value="Input购买1" data-duration="" data-durationDisable="" onclick="console.log('hohoho')">
 <button type="submit" class="submit" data-duration="200" data-durationDisable="1000">Button购买2</button>
 <a class="submit similar" style="">我是a标签的购买3</a>
+<div class="submit similar" style="display: inline-block">我是div标签的购买4</div>
 <button onclick="dynamicAddButton(this)">新增一个按钮</button>
 <script>
 function dynamicAddButton(self) {
         var buttonElement=document.createElement('button')
-        var dynamicButton=document.createTextNode("动态加载出来的购买4")
+        var dynamicButton=document.createTextNode("动态加载出来的购买5")
         buttonElement.appendChild(dynamicButton)
         buttonElement.setAttribute('class','submit')
         document.getElementsByTagName('body')[0].appendChild(buttonElement)
