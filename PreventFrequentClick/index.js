@@ -96,7 +96,7 @@
     function main(dom,opts) {
         var dValue=timeDifference()
         if ( dValue<opts.duration) {
-            dom.setAttribute('disabled','true')
+            dom.disabled=true
             if (dom.tagName === 'A') {
                 dom.setAttribute('style','border-color: buttonface;background-color: buttonface;color:graytext;pointer-events:none')
             }
@@ -105,7 +105,7 @@
                 if (dom.tagName === 'A') {
                     dom.setAttribute('style','border-color: ;background-color: ;color:;pointer-events:')
                 }
-                dom.setAttribute('disabled','false')
+                dom.disabled=false
             },opts.durationDisable)
         }else {
             console.log(dValue,'大于200毫秒')
