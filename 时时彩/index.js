@@ -1,75 +1,52 @@
 const fs=require('fs')
 const axios=require('axios')
-// const AV = require('leancloud-storage');
-// const { Query, User } = AV;
-// // 实时消息服务
-// const { Realtime, TextMessage } = require('leancloud-realtime');
-//
-//
-// const APP_ID = 'xYQtJbiDo44xLG5JLfzk3eqh-gzGzoHsz';
-// const APP_KEY = 'UrNG3XlppUl09YlhSjEwXLcw';
-//
-// const CQSSC = AV.Object.extend('CQSSC');
-// const CQSSCTest = new CQSSC();
-// const query=new AV.Query(CQSSC).limit(100).descending('qiHao')
-// AV.init({
-//     appId: APP_ID,
-//     appKey: APP_KEY
-// });
-//
-//
-// let recentDay=1
-// let rows=30
-// const host='https://6y12.com/lottery/trendChart/lotteryOpenNum.do?lotCode=CQSSC&recentDay='+recentDay+'&rows='+rows
-// axios.get(host).then(res=>{
-//     res=res.data.map(function (obj) {
-//         return {
-//             qiHao: obj.qiHao,
-//             endTime:new Date(obj.endTime).toLocaleString(),
-//             openTime: new Date(obj.openTime).toLocaleString(),
-//             haoMa: obj.haoMa.substring(0,1)
-//         }
-//     })
-// })
-// let wanWeiArr=[]
-// query.find().then(res=>{
-//     for (let x of res){
-//         wanWeiArr.push(parseInt(x._serverData.haoMa))
-//     }
-//     console.log(wanWeiArr,wanWeiArr.length)
-// })
-/**
- * @return {boolean}
- */
-function Deduplication(arr) {
+
+
+function removeDeduplication(arr) {
     isArray(arr)
     return arr.filter((item,index)=>{
         return arr.indexOf(item)===index
     })
 }
+
 function isArray(arr) {
     return Object.prototype.toString.call(arr)==='[object Array]'
 }
+
+function getCountObj(arr) {
+    let obj={}
+    for (const k of arr) {
+        if (obj[k]){
+            obj[k]++
+        } else {
+            obj[k]=1
+        }
+    }
+    return obj
+}
+
 function main(arr) {
     isArray(arr)
     let newArray=[],repeatCount=[]
     arr.forEach((item)=>{
         newArray.push(item.haoMa.substring(0,1))
-        if (Deduplication(newArray).length > 5) {
+        if (removeDeduplication(newArray).length > 5) {
             let popNum=newArray.shift()
-            console.log("出现六个不同的数字，把数组第一个数抛出,抛出"+popNum,"此时数组为："+newArray)
-            while (newArray[0]===popNum||Deduplication(newArray).length > 5){
+            console.log(`出现六个不同的数字，把数组第一个数抛出,抛出${popNum},此时数组为：${newArray}\t时间`+
+                new Date(item.openTime).toLocaleString())
+            while (newArray[0]===popNum||removeDeduplication(newArray).length > 5){
                 let popSecNum=newArray.shift()
-                console.log("继续抛出"+popSecNum,"此时数组为："+newArray)
+                console.log(`继续抛出${popSecNum},此时数组为：${newArray}`)
             }
         }
-        if (Deduplication(newArray).length<=5&&newArray.length>10) {
-            console.log('----------------------连续'+newArray.length+"期,重复的五个数字为："
-                +Deduplication(newArray).toLocaleString()+"\t数组为："+newArray+"\t期数："
-                +item.qiHao+"\t时间"+new Date(item.openTime).toLocaleString()+"--------------------")
+        if (removeDeduplication(newArray).length<=5&&newArray.length>10) {
+            console.log(`----------------------连续${newArray.length}期,重复的五个数字为：${removeDeduplication(newArray).toLocaleString()}
+            \t数组为：${newArray}\t期数：${item.qiHao}\t时间`+
+                new Date(item.openTime).toLocaleString()+"--------------------")
+            if (newArray.length > 13) {
+               // shortMessage()
+            }
             repeatCount.push(newArray.length)
-
-        }else {
 
         }
     })
@@ -90,11 +67,9 @@ function main(arr) {
 //     }
 //     console.log("连续重复超过9次："+main(arr))
 // })
-
-//一万条数据
 let allData=[]
 const base_url='https://6y12.com/lottery/trendChart/lotteryOpenNum.do'
-
+//一万条数据
 function di_gui_tong_ji(i,end) {
     axios.get(base_url,{
         params:{
@@ -108,10 +83,32 @@ function di_gui_tong_ji(i,end) {
         if (i < end) {
             di_gui_tong_ji(i,end)
         }else {
-            console.log("超过10期以上的次数："+main(allData.reverse()))
+            let arr=main(allData.reverse())
+            let obj=getCountObj(arr)
+            console.log(`超过10期以上的数组：${arr}`)
+            console.log(`超过10期以上的各期数次数：`,obj)
         }
-
     })
 }
 
-di_gui_tong_ji(1,3)
+function shortMessage(){
+    const account_sdk_source='web'
+    const mobile=13588043792
+    const type=24
+    const aid=1305
+    axios.get('https://bcy.net/passport/web/send_code/',{
+        params:{
+            account_sdk_source:account_sdk_source,
+            mobile:mobile,
+            captcha:'',
+            type:type,
+            aid:aid
+        }
+    }).then(res=>{
+        console.log(res.data)
+    })
+    
+}
+
+
+di_gui_tong_ji(0,5)
