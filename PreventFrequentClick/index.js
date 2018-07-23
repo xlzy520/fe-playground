@@ -2,16 +2,15 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
         typeof define === 'function' && define.amd ? define(['exports'], factory) :
             (factory((global.pfc = {})));
-}(this, (function (exports) {
-    var submit_btn
+}(this, (function () {
     var firstClickTime = 0, secondClickTime = 0;  //  全局点击时间记录
     /**
      * 文档加载结束后执行
      */
     window.onload=function () {
-        submit_btn=document.getElementsByClassName('submit')
-        var submit_body=document.getElementsByTagName("body")
-        submit_body[0].onclick=function (evt) {
+        var submit_btn=document.getElementsByClassName('submit')
+        var submit_body=document.getElementsByTagName("body")[0]
+        submit_body.onclick=function (evt) {
             if (evt.target.nodeName === 'INPUT'||evt.target.nodeName ==='BUTTON'){
                 if (evt.target.className.includes('submit')){
                     init(evt.target)
@@ -20,13 +19,13 @@
         }
         init(submit_btn)
     }
-
+    
     /**
      * 返回标签中的配置，如果没有，则返回默认配置
      * @param dom
      * @returns {{duration: *, durationDisable: *}}
      */
-    function getOptions(dom) {
+    function getDelayOptions(dom) {
         var duration=dom.getAttribute('data-duration')
         var durationDisable=dom.getAttribute('data-durationDisable')
         if (typeof duration==='string'){
@@ -57,7 +56,7 @@
             i++
         }
     }
-
+    
     /**
      * 得到连续点击两次之间的时间差
      * @returns {number}
@@ -69,13 +68,13 @@
         firstClickTime= new Date().getTime()
         return firstClickTime-secondClickTime
     }
-
+    
     /**
      * 给按钮绑定点击事件
      * @param dom
      * @param opts
      */
-    function bindEvent(dom,opts){
+    function bindDisabledEvent(dom,opts){
         if (dom.attachEvent){
             dom.attachEvent('onclick',function (evt) {
                 evt.stopPropagation()
@@ -85,8 +84,8 @@
         dom.addEventListener('click',function (evt) {
             evt.stopPropagation()
             main(dom,opts)
-            },false)
-        }
+        },false)
+    }
     
     /**
      * 根据时间差判断是否禁用按钮
@@ -121,13 +120,13 @@
             if (isDom(dom)){
                 var opts={}
                 if (dom.length===undefined){
-                    opts=getOptions(dom)
-                    bindEvent(dom,opts)
+                    opts=getDelayOptions(dom)
+                    bindDisabledEvent(dom,opts)
                 }
                 else if (dom.length>1){
                     for (var i=0;i<dom.length; i++){
-                        opts=getOptions(dom[i])
-                        bindEvent(dom[i],opts)
+                        opts=getDelayOptions(dom[i])
+                        bindDisabledEvent(dom[i],opts)
                     }
                 }
             }else {
