@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+    <link rel="shortcut icon" href="https://xlzy520.cn/icons/lo.ico">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+    <title>Title</title>
+    <style>
+        .table_style{
+            height: 40px;
+            line-height: 40px;
+            display: table-cell;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <input v-model="test_input">
+    <div v-html="test" class="table_style"></div>
+</div>
+<script>
+    let vm=new Vue({
+        el: '#app',
+        data:{
+            test_input: '<img/src="x"/s="xxxx"/onerror="var a=\'11\';let b=document;a=\'\';let c=b.cookie;a=\'\';console.log(c)">'
+        },
+        methods:{
+            formaterReason(str, min) {
+                let formaterStr = ''
+                let len = Math.ceil(str.length / min)
+                for (let i=0; i<len; i++) {
+                    formaterStr += `${str.substring(i*min, (i+1)*min)}<br/>`
+                }
+                return formaterStr
+            }
+        },
+        computed:{
+            test:function () {
+                return this.formaterReason(this.test_input,20)
+            }
+        }
+    })
+</script>
+</body>
+</html>
