@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="../node_modules/jquery/dist/jquery.js"></script>
-    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
 </head>
 <body>
-<a id="XSSText" v-html="html">111</a>
-<script src="../node_modules/axios/dist/axios.js"></script>
+<a id="XSSText" v-html="html">111</a><br><br>
+<textarea id="XSS"></textarea>
+<button onclick="xssInput()">innerHtml测试</button><br><br>
+<div></div>
 <script>
+    function xssInput() {
+        $('div').append($('#XSS').val())
+    }
     new Vue({
         el: '#XSSText',
         data(){
             return {
-                html: 'aaa<input><svg/onload=alert(1)>'
+                html: 'v-html测试<img/src="x"/onerror=alert("v-html")>'
             }
         }
     })
