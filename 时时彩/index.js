@@ -1,7 +1,10 @@
 const fs=require('fs')
 const axios=require('axios')
+const http=require('http')
 
-
+http.createServer(function (req, res) {
+    res.end('2222')
+}).listen(8888)
 function removeDeduplication(arr) {
     isArray(arr)
     return arr.filter((item,index)=>{
@@ -44,7 +47,9 @@ function main(arr) {
             \t数组为：${newArray}\t期数：${item.qiHao}\t时间`+
                 new Date(item.openTime).toLocaleString()+"--------------------")
             if (newArray.length > 13) {
-               // shortMessage()
+                console.log(`短信提醒`)
+               shortMessage()
+               
             }
             repeatCount.push(newArray.length)
 
@@ -109,6 +114,9 @@ function shortMessage(){
     })
     
 }
+di_gui_tong_ji(1,2)
+setInterval(function () {
+    di_gui_tong_ji(1,2)
+},600000)
 
 
-di_gui_tong_ji(0,5)
