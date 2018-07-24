@@ -11,12 +11,13 @@
 
     var ct = document.getElementById('count');
     ct.addEventListener('keydown', function (e) {
-        console.log(e)
+        // console.log(e)
         e.keyCode === 229 && (isCh = true);
         //keydown事件的触发：如果keyCode为229，则说明用户正在使用输入法敲入汉字；
     });
     ct.addEventListener('keyup', function (e) {
-        if (e.keyCode === 32 && isCh) {
+         console.log(e)
+        if ((e.keyCode === 32 && isCh)||(e.keyCode===16&&isCh)) {
             //keyup事件会真实获取keyCode，当用户正在敲入汉字，而且用户输入了空格，键入了汉字，则获取此时的长度；
             isCh = false;
             console.log( e.target.value.length);
