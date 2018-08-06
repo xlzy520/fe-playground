@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "author": "",
   "license": "ISC",
@@ -16,9 +18,12 @@
     "http": "^0.0.0",
     "jquery": "^3.3.1",
     "js-xlsx": "^0.8.22",
+    "marked": "^0.4.0",
     "npm": "^6.1.0",
     "vue": "^2.5.13"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "vuepress": "^0.13.1"
+  },
   "description": ""
 }
