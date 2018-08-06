@@ -1,10 +1,4 @@
-// const fs = require('fs')
 const axios = require('axios')
-// const http = require('http')
-
-// http.createServer(function (req, res) {
-//   res.end('2222')
-// }).listen(8888)
 
 function removeDeduplication(arr) {
   isArray(arr)
@@ -31,32 +25,37 @@ function getCountObj(arr) {
 
 function main(arr) {
   isArray(arr)
-  let newArray = [], repeatCount = []
+  let newArray = [],
+      repeatCount = []
   arr.forEach((item) => {
     newArray.push(item.haoMa.substring(0, 1))
     if (removeDeduplication(newArray).length > 5) {
       let popNum = newArray.shift()
-      console.log(`出现六个不同的数字，把数组第一个数抛出,抛出${popNum},此时数组为：${newArray}\t时间` +
-          new Date(item.openTime).toLocaleString())
       while (newArray[0] === popNum || removeDeduplication(newArray).length > 5) {
-        let popSecNum = newArray.shift()
-        console.log(`继续抛出${popSecNum},此时数组为：${newArray}\t时间` +
-            new Date(item.openTime).toLocaleString())
+        newArray.shift()
       }
     }
     if (removeDeduplication(newArray).length <= 5 && newArray.length > 10) {
       console.log(`----------------------连续${newArray.length}期,重复的五个数字为：${removeDeduplication(newArray).toLocaleString()}
             \t数组为：${newArray}\t期数：${item.qiHao}\t时间` +
           new Date(item.openTime).toLocaleString() + "--------------------")
-      if (newArray.length > 10) {
-        
-        if ((new Date().getTime()-item.openTime)<600000) {
-          console.log(`短信提醒`)
-          // shortMessage()
-        }else {
-          console.log("已经提示过")
+      if ((newArray.length > 13)) {
+        let date = new Date()
+        if (date.getHours()<22&&date.getHours()>3){
+          if ((date.getTime() - item.openTime) < 600000) {
+            console.log(`短信提醒`)
+            shortMessage()
+          } else {
+            console.log("已经提示过")
+          }
+        }else if (date.getHours() > 2 && date.getHours() < 8) {
+          if ((date.getTime() - item.openTime) < 300000) {
+            console.log(`短信提醒`)
+            shortMessage()
+          } else {
+            console.log("已经提示过")
+          }
         }
-        
         
       }
       repeatCount.push(newArray.length)
@@ -66,20 +65,6 @@ function main(arr) {
   return repeatCount
 }
 
-// 读取本地JSON文件一千条数据
-// const file='CQSSC.json'
-// fs.readFile(file,'utf8',function (err,res) {
-//     if(err) console.log(err);
-//     res=JSON.parse(res)
-//     let arr=[]
-//     for (let x of res){
-//         arr.push({
-//             haoma:x.haoMa.substring(0,1),
-//             qishu:x.qiHao
-//         })
-//     }
-//     console.log("连续重复超过9次："+main(arr))
-// })
 let allData = []
 const base_url = 'https://6y12.com/lottery/trendChart/lotteryOpenNum.do'
 
@@ -123,7 +108,14 @@ function shortMessage() {
   })
   
 }
+let date = new Date()
+let Interval=300000
+if (date.getHours()<22&&date.getHours()>3){
+  Interval=600000
+}
 
-di_gui_tong_ji(0, 5)
+setInterval(function () {
+  di_gui_tong_ji(1, 2)
+}, Interval)
 
 
