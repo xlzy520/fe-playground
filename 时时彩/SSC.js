@@ -113,7 +113,7 @@ let Interval=300000
 if (date.getHours()<22&&date.getHours()>3){
   Interval=600000
 }
-
+di_gui_tong_ji(1, 2)
 setInterval(function () {
   di_gui_tong_ji(1, 2)
 }, Interval)
