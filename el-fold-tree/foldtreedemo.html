@@ -44,9 +44,9 @@
       }
     },
     methods: {
-      nodeExpand(data) {
-        this.$refs.tree.append({label: '2',children: []}, data)
-        console.log(data)
+      nodeExpand(data,node) {
+        this.$refs.tree.append({label: '2',children: []}, node)
+        console.log(node)
       }
     },
     mounted: function () {
