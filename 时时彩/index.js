@@ -124,6 +124,6 @@ function shortMessage() {
   
 }
 
-di_gui_tong_ji(0, 5)
+di_gui_tong_ji(0, 4)
 
 
