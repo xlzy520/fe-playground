@@ -7,41 +7,54 @@
     <link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">
     <script src="../node_modules/vue/dist/vue.js"></script>
     <script src="../node_modules/element-ui/lib/index.js"></script>
-    <style>
-        #excel-upload-input{
-            display: none;
-            z-index: -9999;
-        }
-        #anime{
-            position: fixed;
-            bottom: 60px;
-            right: 40px;
-            z-index: 100;
-        }
-    </style>
 </head>
 <body>
-<img src="1723.gif" id="anime" ondrag=true>
 <div id="app">
+    <el-tree
+        :expand-on-click-node="false"
+        :props="defaultProps"
+        ref="tree"
+        @node-expand="nodeExpand"
+        :data="data">
 
+    </el-tree>
 </div>
 <script>
-    new Vue({
-        el:'#app',
-        data:function () {
-            return {
-
+  new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        data: [{
+          label: '一级 1',
+          children: [
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
             }
-		},
-        methods:{
+          ]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
+      }
+    },
+    methods: {
+      nodeExpand(data) {
+        this.$refs.tree.append({label: '2',children: []}, data)
+        console.log(data)
+      }
+    },
+    mounted: function () {
+      this.$nextTick(function () {
 
-        },
-        mounted:function () {
-            this.$nextTick(function () {
-
-			})
-		}
-    })
+      })
+    }
+  })
 </script>
 </body>
 
