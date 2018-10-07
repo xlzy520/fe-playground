@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>foldertree Demo</title>
+    <link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../node_modules/element-ui/lib/index.js"></script>
+    <style>
+        .el-scrollbar__wrap{
+            width: 200px;
+            height: 600px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="treeM">
+        <el-scrollbar style="display: inline-block">
+            <el-tree
+                style="display: inline-block;min-width: 13vw"
+                :expand-on-click-node="false"
+                :props="defaultProps"
+                ref="tree"
+                @node-expand="nodeExpand"
+                :data="data">
+
+            </el-tree>
+        </el-scrollbar>
+
+    </div>
+
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        data: [{
+          label: '一级 1',
+          children: [
+            {
+              label: '二级1111111111111111111111111111111111111111111111111',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级1',
+              children: []
+            },
+            {
+              label: '二级2',
+              children: []
+            }
+          ]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
+      }
+    },
+    methods: {
+      nodeExpand(data,node) {
+        this.$refs.tree.append({label: '2',children: []}, node)
+        console.log(node)
+      }
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+
+      })
+    }
+  })
+</script>
+</body>
+
+</html>

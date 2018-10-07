@@ -70,7 +70,62 @@
     </select>
     <a id="export_excel" href="#" onclick="Export(this,'excel')">导出</a>
 </div>
+<div id="markdown">
+    #文档
+    ###OA端功能
+    ---------
+    >
+    1. 存储方式： 本地文件存储
+    2. 预览：本地服务器将md文件转为html文件，直接打开
+    3. 在线编辑：复制md文件的内容，复制到`马克飞象`编辑器编辑
+    4. 更新：编辑结束之后导出md文件，再上传覆盖
+    5. 导出：使用马克飞象的导出功能，包含`html`,`markdown`,`pdf`三种格式，其中导出`pdf`格式使用的是浏览器的打印功能
+    6. 文档信息：上传文档时填写基本信息及分类
+    7. 搜索：只支持文件名查找，不能搜索文档内容
+    8. 布局：左侧为目录，右侧为内容。目录中没有锚点目录，不能通过锚点跳转。
 
+
+    ### 需求讨论
+    ---------
+    #### 1. markdown渲染器选择：
+
+    - **1、`marked`；[marked](https://github.com/markedjs/marked)**
+    - **2、 `markdown-it`  [markdown-it](https://github.com/markdown-it/markdown-it)**
+    ####2. 布局方式：
+    - **1.左侧目录，右侧内容，锚点目录在左侧目录文档中（如下图）**
+    ![Alt text](./TIM截图20180802154205.jpg)
+    -  **2.左侧目录，中间内容，右侧为当前文档的锚点目录（如下图）**
+    ![Alt text](./TIM截图20180802154409.jpg)
+
+    ####3. 对excel的支持
+    #####在线编辑
+    在这里，我个人认为完全没有必要支持`excel`的的在线编辑功能。
+    原因如下：
+    - 技术原因，我们的技术不足以实现这个复杂的功能。
+    - 简单的编辑功能没有意义，excel存在大量的公式，牵一发而动全身，如果我们的在线编辑不能做到读取某个单元格所使用的公式，并根据用户的修改而自动修改每处相关的单元格内容，那么每处都要自己修改是没有意义的。
+    - 不如线下修改功能齐全。
+    - 不做到这种功能，我认为没有必要实现对excel表格的在线编辑。![Alt text](./TIM截图20180802155121.jpg)
+    #####在线预览
+    通过转换为pdf格式进行预览功能
+
+    ####4.对word的支持
+    #####在线编辑
+    此处是一个难点，是自己做还是购买服务还是不要这功能。
+    #####在线预览
+    通过转换为pdf格式进行预览功能
+
+    ####5.搜索功能
+    **全文档搜索:只会为页面的标题、h2 和 h3 （即锚点）构建搜索索引**
+
+    ####6.版本管理、修改记录
+    **`是否需要集成gitlab。`**
+
+    ####7.文档保存方式
+    直接文件保存到本地的方式，数据库保存文档信息（文件路径、文件分类、修改记录（待定））
+    更新方式：修改之后生成新的文档，存在缓存中，然后删除原先的，再覆盖?
+    使用gitlab，全部保存到gitlab中，是否更加方便？
+</div>
+<a onclick="exportMD(this)">markdown</a>
 <script>
     function Export(e,contentId) {
       let docName=document.getElementById('docName').value
@@ -98,6 +153,12 @@
 
       const blob = new Blob([html], { type: 'application/vnd.ms-'+contentId })
       e.href = URL.createObjectURL(blob)
+    }
+    function exportMD(e) {
+      const content = document.getElementById('markdown').outerHTML
+      const blob= new Blob([content], {type: 'application/md'})
+      e.href = URL.createObjectURL(blob)
+      e.download = 'markdown.md'
     }
 </script>
 </body>
