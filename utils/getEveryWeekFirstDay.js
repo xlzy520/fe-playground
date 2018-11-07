@@ -18,12 +18,13 @@ function getDays(year,month){
 function getWeekArr(year,month){
   var date = new Date(year,month-1)
   var weekDate=[]
-  var firstWeekDays=7-date.getDay()
+  var firstWeekDays=7-date.getDay()  //当月第一周第一天是星期几
   var restDays=getDays(year,month)-firstWeekDays
-  var weeks=Math.ceil(restDays/7)+1
+  var weeks=Math.ceil(restDays/7)+1   //当月周数
   weekDate.push(`${year}-${month}-1`)
   for (var w=2;w<=weeks;w++){
     weekDate.push(`${year}-${month}-${firstWeekDays+7*(w-2)+1}`)
+    //以周日开始到周六结束，每周第一天的日期，数组的下标就是当月的第几周
   }
   return weekDate
 }
