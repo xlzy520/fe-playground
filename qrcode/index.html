@@ -4,17 +4,21 @@
     <title>Javascript 二维码生成库：QRCode</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-    <script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="http://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
 </head>
 <body>
 <input id="text" type="text" value="http://www.runoob.com" style="width:80%" /><br />
 <div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+<img src="logo.png" id="logo">
 
 <script type="text/javascript">
   var qrcode = new QRCode(document.getElementById("qrcode"), {
-    width : 100,
-    height : 100
+    render: "canvas",
+    text: "http://jindo.dev.naver.com/collie",
+    width: 128,
+    height: 128,
+    colorDark : "#000000",
+    colorLight : "#ffffff"
   });
 
   function makeCode () {
@@ -27,19 +31,14 @@
     }
 
     qrcode.makeCode(elText.value);
+
   }
 
   makeCode();
-
-  $("#text").
-  on("blur", function () {
-    makeCode();
-  }).
-  on("keydown", function (e) {
-    if (e.keyCode == 13) {
-      makeCode();
-    }
-  });
+  var qcanvas=document.querySelector('#qrcode canvas')
+  var logo=document.querySelector('#logo')
+  console.log(logo);
+  qcanvas.getContext('2d').drawImage(logo, 0.3*128, 0.3*128, 0.4*128, 0.4*128);
 </script>
 </body>
 </html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+    <link rel="shortcut icon" href="https://xlzy520.cn/icons/lo.ico">
+    <title>Title</title>
+</head>
+<body>
+<div id="cors">
+</div>
+<script>
+    const xhr =new XMLHttpRequest()
+    xhr.open('post', 'http://192.168.13.25:8081/djcpsdocument/category/selectRecycle.do')
+    xhr.send()
+    console.log(xhr)
+    if (xhr.status === 200 && xhr.onreadyState === 4) {
+      alert(xhr.response.msg)
+      document.querySelector('#cors').innerHTML = xhr.response.data
+    }else {
+      alert("跨域")
+    }
+</script>
+</body>
+</html>
