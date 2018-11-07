@@ -1,3 +1,8 @@
+/**
+ * 动态导入多个外部JS
+ * @param urls
+ * @returns {Promise<any[]>}
+ */
 export default function dynamicLoadScripts(...urls) {
   return Promise.all(urls.map(url => new Promise((resolve, reject) => {
     const parent = document.head || document.body || document.documentElement
