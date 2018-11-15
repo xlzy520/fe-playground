@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" href="https://xlzy520.cn/icons/lo.ico">
+    <script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <input ref="input" value="5555dasdad打打" @focus="haha">
+    <button @click="select">选择</button>
+</div>
+
+<script>
+    new Vue({
+      el: '#app',
+      methods:{
+        select(){
+          this.$refs.input.focus()
+        },
+        haha(){
+          this.$nextTick(() =>{
+            this.$refs.input.setSelectionRange(2,6)
+          })
+          // setTimeout(()=>{
+          //   this.$refs.input.setSelectionRange(0,2)
+          // },110)
+        }
+      },
+      mounted(){
+        this.$refs.input.focus()
+      }
+    })
+</script>
+</body>
+</html>
