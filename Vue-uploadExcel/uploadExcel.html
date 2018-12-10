@@ -1,151 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>uploadExcel Demo</title>
-    <link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css">
-    <script src="../node_modules/vue/dist/vue.js"></script>
-    <script src="../node_modules/element-ui/lib/index.js"></script>
-    <script src="../node_modules/js-xlsx/dist/xlsx.full.min.js"></script>
-    <style>
-        #excel-upload-input{
-            display: none;
-            z-index: -9999;
-        }
-        #anime{
-            position: fixed;
-            bottom: 60px;
-            right: 40px;
-            z-index: 100;
-        }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>uploadExcel Demo</title>
+  <link rel="stylesheet" href="../node_modules/element-ui/lib/theme-chalk/index.css"/>
+  <script src="../node_modules/vue/dist/vue.js"></script>
+  <script src="../node_modules/element-ui/lib/index.js"></script>
+  <script src="../node_modules/js-xlsx/dist/xlsx.full.min.js"></script>
+  <style>
+    #excel-upload-input {
+      display: none;
+      z-index: -9999;
+    }
+    #anime {
+      position: fixed;
+      bottom: 60px;
+      right: 40px;
+      z-index: 100;
+    }
+  </style>
 </head>
+
 <body>
-<img src="1723.gif" id="anime" ondrag=true>
+<img src="1723.gif" id="anime" ondrag="true"/>
 <div id="app">
-    <upload-excel-button @on-selected-file='selected'></upload-excel-button>
-    <el-tabs v-model="Sheets" @tab-click="handleClick" type="card">
-        <el-tab-pane v-for="item in SheetNames" :key="item.id" :label="item" :name="item"></el-tab-pane>
-    </el-tabs>
-    <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
-        <el-table-column v-for='item of tableHeader' :prop="item" :label="item" :key='item' show-overflow-tooltip></el-table-column>
-    </el-table>
+  <upload-excel-button @on-selected-file="selected"></upload-excel-button>
+  <!--<el-tabs v-model="Sheets" @tab-click="handleClick" type="card">-->
+  <!--<el-tab-pane v-for="item in SheetNames" :key="item.id" :label="item" :name="item"></el-tab-pane>-->
+  <!--</el-tabs>-->
+
+  <el-table :data="uncount" border highlight-current-row style="width: 100%;margin-top:20px;">
+    <el-table-column v-for='item of tableHeader' :prop="item" :label="item" :key='item' show-overflow-tooltip></el-table-column>
+  </el-table>
 </div>
 <script>
-    new Vue({
-        el:'#app',
-        data:function () {
-            return {
-            	visible:false,
-				AllTableData: [],
-				AllTableHeader: [],
-                tableData: [],
-				tableHeader: [],
-				Sheets: 0,
-                SheetNames:[]
-            }
-		},
-        methods:{
-        	dataMove:function (i) {
-				this.tableData=this.AllTableData[i]
-				this.tableHeader=this.AllTableHeader[i]
-			},
-			selected:function(data,i) {
-				this.AllTableData[i] = data[i].results
-				this.AllTableHeader[i] = data[i].header
-                this.SheetNames=data[i].SheetName
-				this.dataMove(i)
-			},
-			handleClick:function(tab) {
-				this.Sheets=tab.name
-				this.dataMove(tab.index)
-			}
+  new Vue({
+    el: "#app",
+    data: function () {
+      return {
+        visible: false,
+        AllTableData: [],
+        AllTableHeader: [],
+        tableData: [],
+        tableHeader: [],
+        Sheets: 0,
+        SheetNames: [],
+        count: {
+          '亮片': 0,
+          '菱格大': 0,
+          '秋千': 0,
+          '蝴蝶': 0,
+          '酒神': 0,
+          '编织盾牌': 0,
+          '耳朵': 0,
+          '铆钉': 0,
+          '豆豆': 0,
+          '邮差': 0,
+          '菱格小': 0,
+          '流苏': 0,
+          '南瓜圆扣': 0,
+          '剑桥': 0
         },
-        mounted:function () {
-            this.$nextTick(function () {
+        uncount: [],
+        type: [
+          '亮片',
+          '菱格大',
+          '秋千',
+          '蝴蝶',
+          '酒神',
+          '编织盾牌',
+          '耳朵',
+          '铆钉',
+          '豆豆',
+          '邮差',
+          '菱格小',
+          '流苏',
+          '南瓜圆扣',
+          '剑桥'
+        ],
+        flag: false
+      };
+    },
+    methods: {
+      dataMove(i) {
+        this.tableData = this.AllTableData[i];
+        let lv = 0
+        this.tableData.forEach(item => {
+          this.flag = false
+          for (let j = 0; j < 12; j++) {
+            lv++
+            const firstIndex = item.model.indexOf(this.type[j])
+            const lastIndex = item.model.lastIndexOf(this.type[j])
+            if (firstIndex!== -1&&lastIndex!==-1){   // 同个类型存在一个或者多个
+              this.flag = true
+              if (firstIndex === lastIndex){    //  同一个类型只存在一个
+                [1,2,3,4,5,6,7,8,9,10].forEach(num=>{
+                  if (item.model.indexOf(num)!==-1) {
+                    if (item.model.indexOf('包')===item.model.lastIndexOf('包')) {   //只有一种类型的包
+                      if (num === 1){
 
-			})
-		},
-        components:{
-        	'uploadExcelButton':{
-				template:
-                '<div class="el-upload">' +
-				'     <el-button :loading="loading" type="primary" @click="handleUpload">选择excel上传</el-button>' +
-				'     <input id="excel-upload-input" type="file" accept=".xlsx,.xls" class="c-hide" @change="handleFileChange">' +
-				'</div>',
-                data:function () {
-                    return {
-                    	loading:null,
-                        excelData:[]
+                      } else {
+                        console.log(num);
+                        this.count[this.type[j]]=this.count[this.type[j]]+Number(item.count)*num
+                      }
                     }
-				},
-                methods:{
-					generateDate:function(i,table) {
-						this.excelData[i]={}
-						this.excelData[i].SheetName=table.SheetName
-						this.excelData[i].header = table.header
-						this.excelData[i].results = table.results
-						this.loading = false
-						this.$emit('on-selected-file', this.excelData,i)
-					},
-					handleUpload:function() {
-						document.getElementById('excel-upload-input').click()
-					},
-					handleFileChange:function(e) {
-						let that=this
-						that.loading = true
-						const files = e.target.files
-						const itemFile = files[0] // only use files[0]
-						const reader = new FileReader()
-						reader.onload =function(e) {
-							const data = e.target.result
-                            const fixedData = that.fixdata(data)
-							const workbook = XLSX.read(btoa(fixedData), { type: 'base64' })
-							for (let i in workbook.SheetNames){
-								const firstSheetName = workbook.SheetNames[i]
-								const worksheet = workbook.Sheets[firstSheetName]
-                                const header = that.get_header_row(worksheet)
-                                const results = XLSX.utils.sheet_to_json(worksheet)
-                                let table_data={header:header,results:results,SheetName:workbook.SheetNames}
-								that.generateDate(i,table_data)
-                            }
-						}
-						reader.readAsArrayBuffer(itemFile)
-					},
-					fixdata:function(data) {
-						let o = ''
-						let l = 0
-						const w = 10240
-						for (; l < data.byteLength / w; ++l) o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w, l * w + w)))
-						o += String.fromCharCode.apply(null, new Uint8Array(data.slice(l * w)))
-						return o
-					},
-					get_header_row:function(sheet) {
-						const headers = []
-						const range = XLSX.utils.decode_range(sheet['!ref'])
-						let C
-						const R = range.s.r /* start in the first row */
-						for (C = range.s.c; C <= range.e.c; ++C) { /* walk every column in the range */
-							let cell = sheet[XLSX.utils.encode_cell({c: C, r: R})];
-							/* find the cell in the first row */
-							let hdr = 'UNKNOWN ' + C; // <-- replace with your desired default
-							if (cell && cell.t) hdr = XLSX.utils.format_cell(cell)
-							headers.push(hdr)
-						}
-						return headers
-					}
-                }
+                  }
+                })
+                this.count[this.type[j]]=this.count[this.type[j]]+Number(item.count)
+              } else {   //存在多个
+                this.count[this.type[j]]=this.count[this.type[j]]+Number(item.count)+1
+              }
+            } else {
+
             }
+            if (!this.flag&&j===11) {
+              this.uncount.push(item)
+            }
+          }
+        });
+        console.log('统计数据：',JSON.stringify(this.count))
+        console.log('不能归类的数据：',this.uncount);
+        console.log('计算次数：',lv);
+        this.tableHeader = this.AllTableHeader[i];
+      },
+      selected: function (data, i) {
+        this.AllTableData[i] = data[i].results;
+        this.AllTableHeader[i] = data[i].header;
+        this.SheetNames = data[i].SheetName;
+        this.dataMove(i);
+      },
+      handleClick: function (tab) {
+        this.Sheets = tab.name;
+        this.dataMove(tab.index);
+      }
+    },
+    mounted: function () {
+      this.$nextTick(function () {
+      });
+    },
+    components: {
+      uploadExcelButton: {
+        template:
+        '<div class="el-upload">' +
+        '     <el-button :loading="loading" type="primary" @click="handleUpload">选择excel上传</el-button>' +
+        '     <input id="excel-upload-input" type="file" accept=".xlsx,.xls" class="c-hide" @change="handleFileChange">' +
+        "</div>",
+        data: function () {
+          return {
+            loading: null,
+            excelData: []
+          };
+        },
+        methods: {
+          generateDate: function (i, table) {
+            this.excelData[i] = {};
+            this.excelData[i].SheetName = table.SheetName;
+            this.excelData[i].header = table.header;
+            this.excelData[i].results = table.results;
+            this.loading = false;
+            this.$emit("on-selected-file", this.excelData, i);
+          },
+          handleUpload: function () {
+            document.getElementById("excel-upload-input").click();
+          },
+          handleFileChange: function (e) {
+            let that = this;
+            that.loading = true;
+            const files = e.target.files;
+            const itemFile = files[0]; // only use files[0]
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const data = e.target.result;
+              const fixedData = that.fixdata(data);
+              const workbook = XLSX.read(btoa(fixedData), {
+                type: "base64"
+              });
+              for (let i in workbook.SheetNames) {
+                const firstSheetName = workbook.SheetNames[i];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const header = that.get_header_row(worksheet);
+                const results = XLSX.utils.sheet_to_json(worksheet);
+                let table_data = {
+                  header: header,
+                  results: results,
+                  SheetName: workbook.SheetNames
+                };
+                that.generateDate(i, table_data);
+              }
+            };
+            reader.readAsArrayBuffer(itemFile);
+          },
+          fixdata: function (data) {
+            let o = "";
+            let l = 0;
+            const w = 10240;
+            for (; l < data.byteLength / w; ++l)
+              o += String.fromCharCode.apply(
+                  null,
+                  new Uint8Array(data.slice(l * w, l * w + w))
+              );
+            o += String.fromCharCode.apply(
+                null,
+                new Uint8Array(data.slice(l * w))
+            );
+            return o;
+          },
+          get_header_row: function (sheet) {
+            const headers = [];
+            const range = XLSX.utils.decode_range(sheet["!ref"]);
+            let C;
+            const R = range.s.r;
+            /* start in the first row */
+            for (C = range.s.c; C <= range.e.c; ++C) {
+              /* walk every column in the range */
+              let cell =
+                  sheet[
+                      XLSX.utils.encode_cell({
+                        c: C,
+                        r: R
+                      })
+                      ];
+              /* find the cell in the first row */
+              let hdr = "UNKNOWN " + C; // <-- replace with your desired default
+              if (cell && cell.t) hdr = XLSX.utils.format_cell(cell);
+              headers.push(hdr);
+            }
+            return headers;
+          }
         }
-    })
-	Vue.component('uploadExcelButton',{
-		template: '<div>'+
-		'        <el-button :loading="loading" type="primary" @click="handleUpload">选择excel上传</el-button>' +
-		'        <input id="excel-upload-input" type="file" accept=".xls .xlsx" class="c-hide" @change="handleFileChange">' +
-		'    </div>'
-	})
+      }
+    }
+  });
+  Vue.component("uploadExcelButton", {
+    template:
+    "<div>" +
+    '        <el-button :loading="loading" type="primary" @click="handleUpload">选择excel上传</el-button>' +
+    '        <input id="excel-upload-input" type="file" accept=".xls .xlsx" class="c-hide" @change="handleFileChange">' +
+    "    </div>"
+  });
 </script>
 </body>
-
 </html>
