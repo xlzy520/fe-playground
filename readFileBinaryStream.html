@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <script src="./node_modules/axios/dist/axios.js"></script>
+  <title>Title</title>
+</head>
+<body>
+<span id="content"></span>
+<textarea id="textarea"></textarea>
+<script>
+  const baseUrl = 'http://192.168.2.170:8081/djcpsdocument/fileManager/downloadFile.do?id=';
+  // const id = 'd40856a8ec3b4874b4d69e63fdd4ab5a'; // txt
+  // const id = '3a13d69a31ca417bab75ee8339fa2327'; //md
+  // const id = 'bfd52fd32c9248f683e7614e25dd7eac'; //bat
+  // const id = '203b3f1ff47349d4b6b6312939ecee53'; //java
+  // const id = '30d65b3100bc447eb6f134cd0fa83269'; //js
+  // const id = 'fc29be85591c4e30bcf9853bb116c8fb'; //conf
+  // const id = '44b39fabee3740f18128d4fe3571b767'; //lrc
+  const id = 'f8e33350352849f880be131656997c0c'; //img
+  // const id = 'be22894f9b59486899926e72f0e5f966'; //yaml
+  // const id = '6ac1b28e857f49d384fb5afcfd1be7bf'; //class
+  const content = document.querySelector('#textarea');
+  axios.get(baseUrl + id).then(res=>{
+    // content.innerHTML = res.request.responseText;
+    console.log(res);
+  })
+</script>
+</body>
+</html>
