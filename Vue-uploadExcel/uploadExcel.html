@@ -204,18 +204,28 @@
               const workbook = XLSX.read(btoa(fixedData), {
                 type: "base64"
               });
-              for (let i in workbook.SheetNames) {
-                const firstSheetName = workbook.SheetNames[i];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const header = that.get_header_row(worksheet);
-                const results = XLSX.utils.sheet_to_json(worksheet);
-                let table_data = {
-                  header: header,
-                  results: results,
-                  SheetName: workbook.SheetNames
-                };
-                that.generateDate(i, table_data);
-              }
+              const firstSheetName = workbook.SheetNames[0];  //先只取第一个
+              const worksheet = workbook.Sheets[firstSheetName];
+              const header = that.get_header_row(worksheet);
+              const results = XLSX.utils.sheet_to_json(worksheet);
+              let table_data = {
+                header: header,
+                results: results,
+                SheetName: workbook.SheetNames
+              };
+              that.generateDate(firstSheetName, table_data);
+              // for (let i in workbook.SheetNames) {
+              //   const firstSheetName = workbook.SheetNames[i];
+              //   const worksheet = workbook.Sheets[firstSheetName];
+              //   const header = that.get_header_row(worksheet);
+              //   const results = XLSX.utils.sheet_to_json(worksheet);
+              //   let table_data = {
+              //     header: header,
+              //     results: results,
+              //     SheetName: workbook.SheetNames
+              //   };
+              //   that.generateDate(i, table_data);
+              // }
             };
             reader.readAsArrayBuffer(itemFile);
           },

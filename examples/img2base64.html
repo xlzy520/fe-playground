@@ -9,22 +9,24 @@
 <body>
 <script>
   function getBase64Image(img) {
-    var canvas = document.createElement("canvas");
+    const canvas = document.createElement("canvas");
     canvas.width = img.width;
     canvas.height = img.height;
-    var ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0, img.width, img.height);
-    var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
-    var dataURL = canvas.toDataURL("image/"+ext);
+    const ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+    const dataURL = canvas.toDataURL("image/"+ext);
     return dataURL;
   }
-  var imgLink = "https://www.pgyer.com/app/qrcode/6K7C";
-  var tempImage = new Image();
+  const imgLink = "https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-09-21/c92c6edb062cc35b1b51377ff6ab090b.png";
+  const tempImage = new Image();
   tempImage.src = imgLink;
   tempImage.crossOrigin = "*";
   tempImage.onload = function(){
     var base64 = getBase64Image(tempImage);
-    console.log(base64);
+    const base64Img = new Image()
+    base64Img.src = base64
+    document.querySelector('body').appendChild(base64Img)
   }
 
 </script>

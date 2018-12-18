@@ -1,43 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<!DOCTYPE html>
+<html lang="zh_CN">
 <head>
     <title>Javascript 二维码生成库：QRCode</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-    <script type="text/javascript" src="http://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
+    <script src="http://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
 </head>
 <body>
-<input id="text" type="text" value="http://www.runoob.com" style="width:80%" /><br />
-<div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
-<img src="logo.png" id="logo">
+<input id="text" type="text" value="http://www.runoob.com"/>
+<div id="qrcode" style="width:100px; height:100px;"></div>
+<img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-11-19/50549cb5f1134d03f5639c191e535e02.jpg" id="logo">
 
-<script type="text/javascript">
+<script>
   var qrcode = new QRCode(document.getElementById("qrcode"), {
     render: "canvas",
     text: "http://jindo.dev.naver.com/collie",
     width: 128,
     height: 128,
-    colorDark : "#000000",
+    colorDark : "#ff9cd9",
     colorLight : "#ffffff"
   });
 
   function makeCode () {
     var elText = document.getElementById("text");
-
     if (!elText.value) {
       alert("Input a text");
       elText.focus();
       return;
     }
-
     qrcode.makeCode(elText.value);
-
   }
-
   makeCode();
   var qcanvas=document.querySelector('#qrcode canvas')
   var logo=document.querySelector('#logo')
-  console.log(logo);
   qcanvas.getContext('2d').drawImage(logo, 0.3*128, 0.3*128, 0.4*128, 0.4*128);
 </script>
 </body>
