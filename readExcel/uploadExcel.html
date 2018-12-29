@@ -48,37 +48,23 @@
         Sheets: 0,
         SheetNames: [],
         count: {
-          '亮片': 0,
           '菱格大': 0,
-          '秋千': 0,
-          '蝴蝶': 0,
           '酒神': 0,
-          '盾牌': 0,   //编织包手动统计
-          '耳朵': 0,
-          '铆钉': 0,
-          '豆豆': 0,
-          '邮差': 0,
           '菱格小': 0,
-          '流苏': 0,
-          '南瓜': 0,
-          '剑桥': 0
+          '钱包': 0,
+          '信封': 0,
+          '蛇骨': 0,
+          '香风': 0,
         },
         uncount: [],
         type: [
-          '亮片',
           '菱格大',
-          '秋千',
-          '蝴蝶',
           '酒神',
-          '盾牌',
-          '耳朵',
-          '铆钉',
-          '豆豆',
-          '邮差',
           '菱格小',
-          '流苏',
-          '南瓜',
-          '剑桥'
+          '钱包',
+          '信封',
+          '蛇骨',
+          '香风',
         ],
         flag: false,
         numFlag: false,
@@ -86,15 +72,11 @@
     },
     methods: {
       dataMove(i) {
-        // TODO 1、多类型多数字需要分开
-        // TODO 2、移除南瓜色
-        // TODO 3、移除数字1
-        // TODO 4、同一类型多个颜色分开
         this.tableData = this.AllTableData[i];
         let lv = 0
         this.tableData.forEach((item,index) => {
           this.flag = false  //不能判断类型的标志
-          for (let j = 0; j < 14; j++) {
+          for (let j = 0; j < 7; j++) {
             lv++
             const typeIndexArr = this.searchSubStr(item.model, this.type[j])//获取这个类型在这个信息中出现的位置
             if (typeIndexArr.length>0){
@@ -110,7 +92,7 @@
                   }else {
                     // TODO 多个不同类型多个数字
                     this.numFlag = true
-                    console.log(this.type[j]+':'+this.count[this.type[j]],item.model,'k:'+k);
+                    console.log('多个不同类型多个数字:第'+index+'行',this.type[j]+':'+this.count[this.type[j]],item.model,'k:'+k);
                     this.count[this.type[j]]+=Number(item.count||1)*k
                   }
                 }
@@ -161,10 +143,6 @@
         }
         return positions
       }
-    },
-    mounted: function () {
-      this.$nextTick(function () {
-      });
     },
     components: {
       uploadExcelButton: {
