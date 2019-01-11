@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  //判断页面是否可见,result: hidden, visible
+  document.addEventListener('visibilitychange', function () {
+    // 用户离开了当前页面
+    if (document.visibilityState === 'hidden') {
+      alert(1)
+      document.title = '页面不可见';
+    }
+    // 用户打开或回到页面
+    if (document.visibilityState === 'visible') {
+      document.title = '页面可见';
+    }
+  });
+  window.addEventListener("beforeunload", listenClose, false);
+
+  function listenClose(e) {
+
+    alert(1)
+
+    return confirmationMessage;
+
+  }
+</script>
+</body>
+</html>
