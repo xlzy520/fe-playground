@@ -15,9 +15,9 @@ https.get(
     },
     function (res) {
       // 在标准输出中查看运行结果
-      res.pipe(process.stdout);
+      // res.pipe(process.stdout);
       res.on('data', (d) => {
-        process.stdout.write(d);
+        console.log(d.toString());
         fs.writeFile('./a.json', d, function(err) {
           if (err) {
             throw err;

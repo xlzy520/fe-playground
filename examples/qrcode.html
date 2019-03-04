@@ -1,39 +1,50 @@
 <!DOCTYPE html>
 <html lang="zh_CN">
 <head>
-    <title>Javascript 二维码生成库：QRCode</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-    <script src="http://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
+  <title>Javascript 二维码生成库：QRCode</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+  <script src="http://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
 </head>
 <body>
-<input id="text" type="text" value="http://www.runoob.com"/>
-<div id="qrcode" style="width:100px; height:100px;"></div>
-<img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-11-19/50549cb5f1134d03f5639c191e535e02.jpg" id="logo">
-
+<input id="text" type="text" value="https://www.xlzy520.cn"/>
+<button onclick="makeCode()">生成二维码</button>
+<div id="qrcode" style="margin: 5px 0"></div>
+<!--<img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-11-19/50549cb5f1134d03f5639c191e535e02.jpg"-->
+<!--id="logo">-->
+<img src="love.png" id="logo">
 <script>
-  var qrcode = new QRCode(document.getElementById("qrcode"), {
+  const qrcode = new QRCode(document.getElementById("qrcode"), {
     render: "canvas",
-    text: "http://jindo.dev.naver.com/collie",
+    text: "二维码",
     width: 128,
     height: 128,
-    colorDark : "#ff9cd9",
-    colorLight : "#ffffff"
+    colorDark: "#ff9cd9",
+    colorLight: "#ffffff"
   });
+  const qcanvas = document.querySelector('#qrcode canvas');
+  const logo = document.querySelector('#logo');
+  let qrocodeTextRecord = ""
 
-  function makeCode () {
-    var elText = document.getElementById("text");
+  function makeCode() {
+    const elText = document.getElementById("text");
     if (!elText.value) {
       alert("Input a text");
       elText.focus();
       return;
     }
+    if (elText.value === qrocodeTextRecord) {
+      console.log("input text is  not change");
+      elText.focus();
+      return;
+    }
+    qrocodeTextRecord = elText.value
     qrcode.makeCode(elText.value);
+    qcanvas.getContext('2d').drawImage(logo, 0.3 * 128, 0.3 * 128, 0.4 * 128, 0.4 * 128);
   }
+
   makeCode();
-  var qcanvas=document.querySelector('#qrcode canvas')
-  var logo=document.querySelector('#logo')
-  qcanvas.getContext('2d').drawImage(logo, 0.3*128, 0.3*128, 0.4*128, 0.4*128);
+  qcanvas.getContext('2d').drawImage(logo, 0.3 * 128, 0.3 * 128, 0.4 * 128, 0.4 * 128);
 </script>
 </body>
 </html>
