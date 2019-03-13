@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Title</title>
     <style>
-        #app::before{
+        #app::before, .border-arrow{
             display: inline-block;
             position: absolute;
             content: "";
@@ -15,14 +15,17 @@
             border-right-color: #ccddcc;
             border-top-color: orangered;
             top: 14px;
-            right: 42.67%;
+            right: 60%;
             left: auto;
+        }
+        .border-arrow{
+            right: 20%;
         }
         .code{
             width: 200px;
             position: absolute;
             top: 240px;
-            right: 42.67%;
+            right: 40%;
             left: auto;
             background-color: #f9f2f4;
             border-radius: 2px;
@@ -38,6 +41,7 @@
 </head>
 <body>
 <div id="app">
+    <div class="border-arrow"></div>
     <div class="code">
         <code>
             div容器大小为0，边框完全填充之后，边框内只有一个原点，所以四个点变成了三个点，即成为三角形！
