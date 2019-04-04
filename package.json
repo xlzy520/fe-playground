@@ -12,6 +12,7 @@
     "axios": "^0.17.1",
     "echarts": "^4.1.0",
     "element-ui": "^2.0.11",
+    "iconv-lite": "^0.4.24",
     "jquery": "^3.3.1",
     "js-xlsx": "^0.8.22",
     "jszip": "^3.1.5",
@@ -19,8 +20,8 @@
     "vue": "^2.5.13"
   },
   "devDependencies": {
-    "vuepress": "^0.13.1",
-    "babel-polyfill": "^6.26.0"
+    "babel-polyfill": "^6.26.0",
+    "vuepress": "^0.13.1"
   },
   "description": ""
 }
