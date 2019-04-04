@@ -36,7 +36,7 @@ $(document).on('copy', function (){
 
 $.ajax({
 	cache: true,
-	url: "./waifu-tips.json",
+	url: "./kawaii-tips.json",
 	dataType: "json",
 	success: function (result){
 		$.each(result.mouseover, function (index, tips){
@@ -110,13 +110,13 @@ function showHitokoto(){
 function showMessage(text, timeout){
 	if(Array.isArray(text)) text = text[Math.floor(Math.random() * text.length + 1)-1];
 	console.log(text);
-	$('.waifu-tips').stop();
-	$('.waifu-tips').html(text).fadeTo(200, 1);
+	$('.kawaii-tips').stop();
+	$('.kawaii-tips').html(text).fadeTo(200, 1);
 	if (timeout === null) timeout = 5000;
 	hideMessage(timeout);
 }
 function hideMessage(timeout){
-	$('.waifu-tips').stop().css('opacity',1);
+	$('.kawaii-tips').stop().css('opacity',1);
 	if (timeout === null) timeout = 5000;
-	$('.waifu-tips').delay(timeout).fadeTo(200, 0);
+	$('.kawaii-tips').delay(timeout).fadeTo(200, 0);
 }

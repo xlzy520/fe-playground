@@ -12,7 +12,7 @@
       cursor: url('./assets/cursor.cur'), auto !important;
     }
 
-    .waifu {
+    .kawaii {
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
@@ -27,18 +27,18 @@
       transform: translateY(3px);
     }
 
-    .waifu:hover {
+    .kawaii:hover {
       -webkit-transform: translateY(0);
       transform: translateY(0);
     }
 
     @media (max-width: 768px) {
-      .waifu {
+      .kawaii {
         display: none;
       }
     }
 
-    .waifu-tips {
+    .kawaii-tips {
       opacity: 0;
       width: 250px;
       height: 70px;
@@ -59,7 +59,7 @@
       animation-timing-function: ease-in-out;
     }
 
-    .waifu #live2d {
+    .kawaii #live2d {
       position: relative;
     }
 
@@ -267,8 +267,8 @@
   </style>
 </head>
 <body>
-<div class="waifu">
-  <div class="waifu-tips"></div>
+<div class="kawaii">
+  <div class="kawaii-tips"></div>
   <canvas id="live2d" width="280" height="250" class="live2d"></canvas>
 </div>
 <!--
@@ -287,7 +287,7 @@
            ~                   ~
 -->
 
-<script async src="./waifu-tips.js"></script>
+<script async src="./kawaii-tips.js"></script>
 <script src="./lib/live2d.js"></script>
 <script>
   $(function () {

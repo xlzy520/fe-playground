@@ -141,41 +141,41 @@
       "text": ["这里是我家主人最近在追更的动画，有你也在追的嘛"]
     },
     {
-      "selector": ".waifu-tool .fui-home",
+      "selector": ".kawaii-tool .fui-home",
       "text": ["回首页看看吧"]
     },
     {
-      "selector": ".waifu-tool .fui-eye",
+      "selector": ".kawaii-tool .fui-eye",
       "text": ["深夜时要爱护眼睛呀"]
     },
     {
-      "selector": ".waifu-tool .fui-chat",
+      "selector": ".kawaii-tool .fui-chat",
       "text": ["猜猜我要说些什么"]
     },
     {
-      "selector": ".waifu-tool .fui-user",
+      "selector": ".kawaii-tool .fui-user",
       "text": ["喜欢换装PLAY吗？"]
     },
     {
-      "selector": ".waifu-tool .fui-info-circle",
+      "selector": ".kawaii-tool .fui-info-circle",
       "text": ["想要知道更多有关我的事吗？"]
     },
     {
-      "selector": ".waifu-tool .fui-cross",
+      "selector": ".kawaii-tool .fui-cross",
       "text": ["到了要说再见的时候了吗"]
     },
     {
-      "selector": ".waifu-tool .fui-photo",
+      "selector": ".kawaii-tool .fui-photo",
       "text": ["你要给我拍照呀，一二三~茄子~~"]
     },
     {
-      "selector": ".waifu #live2d",
+      "selector": ".kawaii #live2d",
       "text": ["干嘛呢你，快把手拿开", "鼠…鼠标放错地方了！"]
     }
   ],
   "click": [
     {
-      "selector": ".waifu #live2d",
+      "selector": ".kawaii #live2d",
       "text": ["是…是不小心碰到了吧", "萝莉控是什么呀", "你看到我的小熊了吗", "再摸的话我可要报警了！⌇●﹏●⌇", "110吗，这里有个变态一直在摸我(ó﹏ò｡)"]
     }
   ],
