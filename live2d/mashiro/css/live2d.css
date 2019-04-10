@@ -203,6 +203,9 @@
 .live_ico_item.type_youdu{
 	background-image:url(../../assets/images/youdu.png);
 }
+.live_ico_item.type_huanzhuang{
+	background-image:url(../../assets/images/huanzhuang.png);
+}
 .live_ico_item.type_music.play{
 	background-image:url(../../assets/images/pasue.png);
 }

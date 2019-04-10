@@ -446,7 +446,10 @@ if(!norunFlag){
 	}
 	$(document).ready(function() {
 		var AIimgSrc = [
-		  "./model/rem/remu2048/texture_00.png"
+			message_Path + "model/histoire/histoire.1024/texture_00.png",
+			message_Path + "model/histoire/histoire.1024/texture_01.png",
+			message_Path + "model/histoire/histoire.1024/texture_02.png",
+			message_Path + "model/histoire/histoire.1024/texture_03.png"
 		]
 		var images = [];
 		var imgLength = AIimgSrc.length;
@@ -468,7 +471,7 @@ if(!norunFlag){
 						},1300);
 					}
 					setTimeout(function(){
-						loadlive2d("live2d", message_Path+"model/rem/rem.json");
+						loadlive2d("live2d", message_Path+"model/histoire/model.json");
 					},1000);
 					initLive2d ();
 					images = null;

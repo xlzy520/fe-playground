@@ -9,7 +9,8 @@
   <link rel="shortcut icon" href="./favicon.ico">
   <style>
     body {
-      cursor: url('./assets/cursor.cur'), auto !important;
+      height: 100vh;
+      cursor: url('../assets/cursor.cur'), auto !important;
     }
 
     .kawaii {
@@ -287,12 +288,12 @@
            ~                   ~
 -->
 
-<script async src="./kawaii-tips.js"></script>
-<script src="./lib/live2d.js"></script>
+<script src="./kawaii-tips.js"></script>
+<script src="../lib/live2d.js"></script>
 <script>
   $(function () {
     $(document).ready(function () {
-      loadlive2d("live2d", "./assets/pio/pio.model.json", 0.5);
+      loadlive2d("live2d", "./pio.model.json", 0.5);
     })
   })
 </script>

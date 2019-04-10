@@ -246,6 +246,21 @@ if(!norunFlag){
 				$('body').addClass(dataType);
 			}
 		});
+		//获取换装
+		var LoadingModelJson = ["model/Sakurasou/mashiro/seifuku.model.json","model/Sakurasou/mashiro/shifuku.model.json","model/Sakurasou/mashiro/ryoufuku.model.json"]
+		var fukuType = 0;
+		var live2dfuku = localStorage.getItem("live2dfuku");
+		if(live2dfuku !== null){
+			fukuType = parseInt(live2dfuku);
+		}
+		$('#huanzhuangButton').on('click',function(){
+			fukuType++;
+			if(fukuType>=LoadingModelJson.length){
+				fukuType = 0;
+			}
+			localStorage.setItem("live2dfuku" , fukuType);
+			loadlive2d("live2d", message_Path+LoadingModelJson[fukuType]);
+		});
 		if(talkAPI!==""){
 			$('#showInfoBtn').on('click',function(){
 				var live_statu = $('#live_statu_val').val();
@@ -420,9 +435,9 @@ if(!norunFlag){
 				if(moveable){
 					var ent = getEvent();
 					var x = moveLeft + ent.clientX - moveX;
-					var y = moveBottom +  (moveY - ent.clientY);
+					// var y = moveBottom +  (moveY - ent.clientY);
 					obj.style.left = x + "px";
-					obj.style.bottom = y + "px";
+					// obj.style.bottom = y + "px";
 				}
 			};
 			document.onmouseup = function(){
@@ -445,9 +460,31 @@ if(!norunFlag){
 		};
 	}
 	$(document).ready(function() {
-		var AIimgSrc = [
-		  "./model/rem/remu2048/texture_00.png"
+		var fukuType = 0;
+		var live2dfuku = localStorage.getItem("live2dfuku");
+		if(live2dfuku !== null){
+			fukuType = parseInt(live2dfuku);
+		}
+		var LoadingimgList = [
+			[
+				message_Path + "model/Sakurasou/mashiro/seifuku.1024/L2DMSR_U_00.png",
+				message_Path + "model/Sakurasou/mashiro/seifuku.1024/L2DMSR_U_01.png",
+				message_Path + "model/Sakurasou/mashiro/seifuku.1024/L2DMSR_U_02.png"
+			],
+			[
+				message_Path + "model/Sakurasou/mashiro/shifuku.1024/L2DMSR_S_00.png",
+				message_Path + "model/Sakurasou/mashiro/shifuku.1024/L2DMSR_S_01.png",
+				message_Path + "model/Sakurasou/mashiro/shifuku.1024/L2DMSR_S_02.png",
+				message_Path + "model/Sakurasou/mashiro/shifuku.1024/L2DMSR_S_03.png"
+			],
+			[
+				message_Path + "model/Sakurasou/mashiro/ryoufuku.1024/L2DMSR_R_00.png",
+				message_Path + "model/Sakurasou/mashiro/ryoufuku.1024/L2DMSR_R_01.png",
+				message_Path + "model/Sakurasou/mashiro/ryoufuku.1024/L2DMSR_R_02.png"
+			],
 		]
+		var LoadingModelJson = ["model/Sakurasou/mashiro/seifuku.model.json","model/Sakurasou/mashiro/shifuku.model.json","model/Sakurasou/mashiro/ryoufuku.model.json"]
+		var AIimgSrc = LoadingimgList[fukuType];
 		var images = [];
 		var imgLength = AIimgSrc.length;
 		var loadingNum = 0;
@@ -468,7 +505,7 @@ if(!norunFlag){
 						},1300);
 					}
 					setTimeout(function(){
-						loadlive2d("live2d", message_Path+"model/rem/rem.json");
+						loadlive2d("live2d", message_Path+LoadingModelJson[fukuType]);
 					},1000);
 					initLive2d ();
 					images = null;

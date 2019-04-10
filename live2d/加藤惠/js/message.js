@@ -446,7 +446,7 @@ if(!norunFlag){
 	}
 	$(document).ready(function() {
 		var AIimgSrc = [
-		  "./model/rem/remu2048/texture_00.png"
+			message_Path + "model/katou_01/moc/katou.2048/texture_00.png"
 		]
 		var images = [];
 		var imgLength = AIimgSrc.length;
@@ -468,7 +468,7 @@ if(!norunFlag){
 						},1300);
 					}
 					setTimeout(function(){
-						loadlive2d("live2d", message_Path+"model/rem/rem.json");
+						loadlive2d("live2d", message_Path+"model/katou_01/katou_01.model.json");
 					},1000);
 					initLive2d ();
 					images = null;
