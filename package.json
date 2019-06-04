@@ -21,6 +21,8 @@
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
+    "express": "^4.17.1",
+    "multer": "^1.4.1",
     "vuepress": "^0.13.1"
   },
   "description": ""

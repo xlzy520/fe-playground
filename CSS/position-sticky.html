@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <title>关键是需要父级有高宽</title>
+  <style>
+    .app{
+
+    }
+    .box{
+      width: 12000px;
+      height: 2600px;
+      background: #ff001c;
+    }
+    .inner-box{
+      position: sticky;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      right: 10px;
+      width: 50px;
+      height: 50px;
+      background: #ffb259;
+    }
+    * {
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="box">
+    <div class="inner-box"></div>
+  </div>
+</div>
+</body>
+</html>

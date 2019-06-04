@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <link rel="icon" href="http://xlzy520.cn/icons/lo.ico">
+  <title>获取手机屏幕宽高</title>
+</head>
+<body>
+<div class="main">
+  <div class="screen">
+    <div class="screen-item">
+      <span class="screen-label"></span>
+      <span class="value"></span>
+    </div>
+  </div>
+</div>
+<script>
+  const domClassMap = [
+    {label: '屏幕内宽度：', value: innerWidth},
+    {label: '屏幕内高度：', value: innerHeight},
+    {label: '屏幕外宽度：', value: outerWidth},
+    {label: '屏幕外高度：', value: outerHeight},
+  ]
+
+  function setDom(data) {
+    const screenDom = document.querySelector('.screen')
+    data.map(dom => {
+      const item = document.createElement('div')
+      item.className = 'screen-item'
+      const spanLabel = document.createElement('span')
+      const spanValue = document.createElement('span')
+      spanLabel.className = 'screen-label'
+      spanLabel.innerText = dom.label
+      spanValue.className = 'value'
+      spanValue.innerText = dom.value
+      item.appendChild(spanLabel)
+      item.appendChild(spanValue)
+      screenDom.appendChild(item)
+    })
+  }
+
+  window.addEventListener('resize', () => {
+    setDom(domClassMap)
+  })
+  setDom(domClassMap)
+</script>
+</body>
+</html>
