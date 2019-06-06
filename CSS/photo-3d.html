@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <title>Title</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      background: #000;
+    }
+    .content{
+      perspective:800px;
+    }
+    #photos {
+      width: 110px; /*宽度*/
+      height: 180px; /*高度*/
+      margin: 80px auto; /*水平居中，高度距离顶部100px*/
+      transform:rotateY(0deg);
+      transform-style:preserve-3d;/*设置3d环境*/
+
+    }
+    #photos img{
+      width:100%;
+      height:100%;
+      position:absolute;
+      box-shadow:0 0 8px #eaeaea;
+      box-shadow: 1px -1px 6px #666;
+      border-radius:4px;
+      -webkit-box-reflect:below 3px -webkit-linear-gradient(top,rgba(0,0,0,0) 40%,rgba(0,0,0,0.5));
+      cursor:pointer;
+      transform:rotateX(-10deg);
+    }
+    #photos div{
+      width:1200px;
+      height:1200px;
+      border-radius:50%;
+      position:absolute;
+      top:102%;
+      left:50%;
+      margin-left:-600px;
+      margin-top:-600px;
+      transform:rotateX(90deg);
+      background:-webkit-radial-gradient(center center,600px 600px,rgba(158,158,222,0.5),rgba(0,0,0,0));
+    }
+  </style>
+</head>
+<body>
+<div class="content">
+  <div id="photos">
+    <img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-03-14/1160a02b63abe51c5cdb5e20c0897ebd.jpg">
+    <img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-03-14/1160a02b63abe51c5cdb5e20c0897ebd.jpg">
+    <img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-03-14/1160a02b63abe51c5cdb5e20c0897ebd.jpg">
+    <img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-03-14/1160a02b63abe51c5cdb5e20c0897ebd.jpg">
+    <img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-03-14/1160a02b63abe51c5cdb5e20c0897ebd.jpg">
+    <img src="https://gss0.bdstatic.com/5bVWsj_p_tVS5dKfpU_Y_D3/res/r/image/2018-03-14/1160a02b63abe51c5cdb5e20c0897ebd.jpg">
+    <div></div>
+  </div>
+</div>
+
+</body>
+<script>
+  var photosDom = document.getElementById('photos');
+  //获取图片数组
+  var images = photosDom.getElementsByTagName('img');
+  //获取图片数量
+  var len = images.length;
+  //计算每张图片按Y轴旋转的角度
+  var deg = Math.floor(360 / len);
+  for(var i = 0; i < len;i++){
+    images[i].style = 'transform : rotateY(' + deg * i + 'deg) translateZ(380px)'; //deg前面不要加空格
+  }
+  var x = 0;
+  setInterval(function(){
+    photosDom.style.transform = "rotateX(-10deg) rotateY("+ (x++) * 0.2 +"deg)";
+  },30);
+</script>
+</html>
