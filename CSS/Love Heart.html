@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <title>爱心</title>
+  <style>
+    .heart {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+    }
+
+    .heart:before, .heart:after {
+      position: absolute;
+      content: "";
+      top: 24px;
+      width: 50px;
+      height: 80px;
+      background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+      border-radius: 50px 50px 0 0;
+    }
+
+    .heart:before {
+      left: 60px;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+      background-image: linear-gradient(180deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .heart:after{
+      left: 10px;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+      background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+    }
+  </style>
+</head>
+<body>
+<div class="heart"></div>
+</body>
+</html>
