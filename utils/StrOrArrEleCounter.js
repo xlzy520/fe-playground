@@ -16,6 +16,6 @@ export default function arrEleCounter(arr){
  * @param str   if('aabbcc11')
  * @returns {*}  return 2a2b2c21
  */
-export default function strEleCounter(str) {
+export function strEleCounter(str) {
   return str.replace(/(\w)\1*/g,(reg,c)=>reg.length+c)  // \w匹配字母  \1匹配出现第一个一样的数组重复一次
 }
