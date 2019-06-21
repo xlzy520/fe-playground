@@ -1,11 +1,26 @@
-const test1 = [1, 1, 1, 1, 2, 2, 6, 8, 9]
+const test1 = [1, 1, 1, 1, 2, 2, 3, 4, 6, 8, 9]
 const test2 = [1, 1, 1, 6, 6, 6, 8, 8, 9]
 const test3 = [1, 1, 1, 6, 6, 6, 8, 8, 9]
 const resMap = []
 const counter = arrEleCounter(test1)
-const keys = Object.keys(counter)
-const values = Object.values(counter)
-const Length = keys.length
+
+function deepCopy(o) {
+  if (o instanceof Array) { // 先判断Array
+    var n = []
+    for (var i = 0; i < o.length; ++i) {
+      n[i] = deepCopy(o[i])
+    }
+    return n
+  } else if (o instanceof Object) {
+    var n = {}
+    for (var i in o) {
+      n[i] = deepCopy(o[i])
+    }
+    return n
+  } else {
+    return o
+  }
+}
 
 function arrEleCounter(arr) {
   var b = {}
@@ -19,5 +34,11 @@ function arrEleCounter(arr) {
   return b
 }
 
-console.log(arrEleCounter(test1))
+function peer(obj, num, str) {
+
+}
+peer(counter, 10, '')
+console.log(counter)
 console.log(resMap)
+console.log(resMap.length)
+console.log([28, 46, 19, 1234, 136, 118, 11224, 11134, 111223, 11116])
