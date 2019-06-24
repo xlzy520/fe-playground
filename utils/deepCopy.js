@@ -3,7 +3,7 @@
  * @param o
  * @returns {*}
  */
-export function deepCopy(o) {
+function deepCopy(o) {
   if (o instanceof Array) { // 先判断Array
     var n = []
     for (var i = 0; i < o.length; ++i) {
@@ -43,7 +43,7 @@ function find(list, f) {
  * @param {Array<Object>} cache
  * @return {*}
  */
-export function deepCopyV(obj, cache) {
+function deepCopyV(obj, cache) {
   if (cache === void 0) cache = []
 
   // just return if obj is immutable value
@@ -84,3 +84,7 @@ export function deepCopyV(obj, cache) {
 但Array和Object类型的数据通过等号只是起引用作用，指向的是同一块内存地址。
 当源数据改变，引用的数据也同时会发生变化。
 */
+
+module.exports = {
+  deepCopy, deepCopyV
+}
