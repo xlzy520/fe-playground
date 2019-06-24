@@ -3,8 +3,8 @@
  * @param arr
  * @returns Object
  */
-export default function arrEleCounter(arr){
-  var b={}
+function arrEleCounter(arr) {
+  var b = {}
   for (let i = 0; i < arr.length; i++) {
     b[arr[i]] = (b[arr[i]] + 1) || 1
   }
@@ -16,6 +16,20 @@ export default function arrEleCounter(arr){
  * @param str   if('aabbcc11')
  * @returns {*}  return 2a2b2c21
  */
-export function strEleCounter(str) {
-  return str.replace(/(\w)\1*/g,(reg,c)=>reg.length+c)  // \w匹配字母  \1匹配出现第一个一样的数组重复一次
+function strEleCounter(str) {
+  return str.replace(/(\w)\1*/g, (reg, c) => reg.length + c) // \w匹配字母  \1匹配出现第一个一样的数组重复一次
 }
+
+function ArrayUnique(arr) {
+  if (!(arr instanceof Array)) return
+  console.log(Object.prototype.toString.call(arr))
+  const temp = []
+  arr.map((a, index) => {
+    if (arr.indexOf(a) === index) {
+      temp.push(a)
+    }
+  })
+  return temp
+}
+
+console.log(ArrayUnique([1, 2, 2, 2, 3, 3, 8, 8, null]))
