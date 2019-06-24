@@ -3,22 +3,21 @@
  * @param o
  * @returns {*}
  */
-export default function deepCopy(o) {
-  if (o instanceof Array) {  //先判断Array
-    var n = [];
+function deepCopy(o) {
+  if (o instanceof Array) { // 先判断Array
+    var n = []
     for (var i = 0; i < o.length; ++i) {
-      n[i] = deepCopy(o[i]);
+      n[i] = deepCopy(o[i])
     }
-    return n;
-    
+    return n
   } else if (o instanceof Object) {
     var n = {}
     for (var i in o) {
-      n[i] = deepCopy(o[i]);
+      n[i] = deepCopy(o[i])
     }
-    return n;
+    return n
   } else {
-    return o;
+    return o
   }
 }
 
@@ -30,7 +29,7 @@ export default function deepCopy(o) {
  * @param {Function} f
  * @return {*}
  */
-function find (list, f) {
+function find(list, f) {
   return list.filter(f)[0]
 }
 
@@ -44,32 +43,32 @@ function find (list, f) {
  * @param {Array<Object>} cache
  * @return {*}
  */
-export default function deepCopyV (obj, cache) {
-  if ( cache === void 0 ) cache = [];
-  
+function deepCopyV(obj, cache) {
+  if (cache === void 0) cache = []
+
   // just return if obj is immutable value
   if (obj === null || typeof obj !== 'object') {
     return obj
   }
-  
+
   // if obj is hit, it is in circular structure
-  var hit = find(cache, function (c) { return c.original === obj; });
+  var hit = find(cache, function(c) { return c.original === obj })
   if (hit) {
     return hit.copy
   }
-  
-  var copy = Array.isArray(obj) ? [] : {};
+
+  var copy = Array.isArray(obj) ? [] : {}
   // put the copy into cache at first
   // because we want to refer it in recursive deepCopy
   cache.push({
     original: obj,
     copy: copy
-  });
-  
-  Object.keys(obj).forEach(function (key) {
-    copy[key] = deepCopy(obj[key], cache);
-  });
-  
+  })
+
+  Object.keys(obj).forEach(function(key) {
+    copy[key] = deepCopy(obj[key], cache)
+  })
+
   return copy
 }
 
@@ -85,3 +84,7 @@ export default function deepCopyV (obj, cache) {
 但Array和Object类型的数据通过等号只是起引用作用，指向的是同一块内存地址。
 当源数据改变，引用的数据也同时会发生变化。
 */
+
+module.exports = {
+  deepCopy, deepCopyV
+}
