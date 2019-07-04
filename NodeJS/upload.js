@@ -3,19 +3,37 @@ var app = express();
 var fs = require("fs");
 
 var bodyParser = require('body-parser');
-var multer  = require('multer');
+// var multer  = require('multer');
+
+let getClientIp = function (req) {
+  return req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress || '';
+};
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({ dest: '/tmp/'}).array('image'));
+// app.use(multer({ dest: '/tmp/'}).array('image'));
 
-app.get('/uploadTest.html', function (req, res) {
-  res.sendFile( __dirname + "/" + "phone.html" );
+app.get('/', function (req, res) {
+  res.sendFile( __dirname + "/" + "StarParticles.html" );
+})
+app.get('/fire', function (req, res) {
+  res.sendFile( __dirname + "/" + "A-Cool-Flame-Fire-Effect-Using-Particles.html" );
+})
+app.get('/ip', function (req, res) {
+  console.log(req.ip);
+  res.sendFile( __dirname + "/" + "ip.txt" );
 })
 
-app.get('/getInfo', function (req, res) {
+app.post('/addClient', function (req, res) {
+  const {effectiveType,client, width, height } = req.body;
+  let ip = getClientIp(req).match(/\d+.\d+.\d+.\d+/);
+  ip = ip ? ip.join('.') : null;
+  fs.appendFileSync('ip.txt', `${new Date().toLocaleString()} ${ip} ${effectiveType}${width} ${height} ${client}\r`)
   res.send({
-    code: 'ssss'
+    success: true
   })
 })
 
