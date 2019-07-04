@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="icon" href="https://xlzy520.cn/icons/lo.ico">
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link rel="icon" href="http://118.25.178.56/love.png">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
   <title>Love 微尘</title>
   <style>
     @import url(https://fonts.googleapis.com/css?family=Give+You+Glory);
@@ -26,12 +26,15 @@
       text-align: center;
       top: 50%;
       width: 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
     }
   </style>
 </head>
 <body>
 <canvas id="canvas"></canvas>
-<div class="start">移动微尘的手指<div>
+<div class="start">移动微尘老婆的手指</div>
 <script>
   var MAX_PARTICLES = 500,
     MIN_ALPHA = 0.01,
@@ -59,6 +62,8 @@
     idleBurst();
 
     $(window).resize(resize);
+
+    // PC
     $(window).on('mousemove', function(event) {
       if(!active) {
         $('.start').fadeOut(600);
@@ -72,6 +77,27 @@
     })
     $(window).on('mousedown', function(event) {
       createBurst();
+    })
+
+    // Mobile
+    $(window).on('touchmove', function(event) {
+      if(!active) {
+        $('.start').fadeOut(600);
+      }
+      active = true;
+      lastX = mouseX;
+      lastY = mouseY;
+      mouseX = event.changedTouches[0].pageX;
+      mouseY = event.changedTouches[0].pageY;
+      if(particles.length < MAX_PARTICLES) createParticle();
+    })
+    $(window).on('touchend', function(event) {
+      if(active) {
+        console.log(3);
+        $('.start').fadeIn(600);
+      }
+      createBurst();
+      console.log(2);
     })
 
     setInterval(onEnterFrame, 1000 / FPS);
@@ -183,6 +209,15 @@
       }
     }
   }
+  $.ajax('/addClient', {
+    method: 'post',
+    data: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      effectiveType: JSON.stringify(navigator.connection.effectiveType),
+      client: JSON.stringify(navigator.userAgent)
+    }
+  })
 </script>
 </body>
 </html>
