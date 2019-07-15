@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <title>我爱微尘老婆</title>
+  <link rel="icon" href="http://118.25.178.56/love.png">
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <style>
+    .img{
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    *{
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      background-color: #222;
+    }
+    canvas {
+      position: absolute;
+      top: calc( 50% - 250px );
+      left: calc( 50% - 250px );
+      box-shadow: 0 0 5px black;
+    }
+    p {
+      color: #aaa;
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-family: Verdana;
+      top: calc( 50% - 288px );
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+<img class="img" src="./love.png">
+<canvas id=c></canvas>
+<p>在这个圆里面移动鼠标</p>
+<script>
+  var s = c.width = c.height = 500,
+    ctx = c.getContext( '2d' ),
+    w = window.innerWidth,
+    h = window.innerHeight,
+
+    radius = s/2.1,
+    squareRadius = radius*radius,
+    word = '我爱微尘老婆 ♥',
+    wordX = s/2,
+    wordY = s/2,
+
+    inMemCanvas = document.createElement( 'canvas' ),
+    inMemCtx = inMemCanvas.getContext( '2d' ),
+
+    inMemW,
+    inMemH = 40,
+
+    particles = [],
+    spread = 4,
+    attraction = .001,
+
+    particleCanvas = document.createElement( 'canvas' ),
+    particleCtx = particleCanvas.getContext( '2d' ),
+    particleRadius = 2,
+
+    mouseX = 0,
+    mouseY = 0,
+    mouseIn = false,
+    hasHovered = false,
+    tick2 = 0;
+
+  ctx.font = inMemCtx.font = '50px Verdana';
+  inMemW = ctx.measureText( word ).width |0;
+
+  inMemCanvas.width = inMemW;
+  inMemCanvas.height = inMemH;
+
+  inMemCtx.font = ctx.font;
+  inMemCtx.fillText( word, 0, inMemH );
+
+  var data = inMemCtx.getImageData( 0, 0, inMemW, inMemH ).data;
+  for( var x = 0; x < inMemW; x += spread )
+    for( var y = 0; y < inMemH; y += spread )
+      if( data[ ( y * inMemW + x ) * 4 + 3 ] > 0 )
+        particles.push( new Particle( x - inMemW / 2, y - inMemH / 2 ) );
+
+  particleCanvas.width = particleCanvas.height = particleRadius * 2;
+  particleCtx.beginPath();
+  particleCtx.fillStyle = 'rgba(255,255,255,.9)';
+  particleCtx.arc( particleRadius, particleRadius, particleRadius, 0, Math.PI * 2 );
+  particleCtx.fill();
+
+  function Particle( ix, iy ){
+
+    this.ix = ix;
+    this.iy = iy;
+    this.x = ix;
+    this.y = iy;
+    this.vx = 0;
+    this.vy = 0;
+    this.sx = ix;
+    this.sy = iy;
+  }
+  Particle.prototype.draw = function(){
+
+    ctx.drawImage( particleCanvas, s/2 + this.x - particleRadius, s/2 + this.y - particleRadius );
+  }
+  Particle.prototype.updateFree = function(){
+
+    this.x += this.vx += ( mouseX - this.x ) * attraction + ( Math.random() - .5 ) / 10;
+    this.y += this.vy += ( mouseY - this.y ) * attraction + ( Math.random() - .5 ) / 10;
+
+    if( this.x*this.x + this.y*this.y > squareRadius ){
+
+      this.x = this.y = 0
+    }
+  }
+  Particle.prototype.mouseout = function(){
+
+    this.sx = this.x;
+    this.sy = this.y;
+
+    this.dx = this.ix - this.sx;
+    this.dy = this.iy - this.sy;
+
+    this.vx = this.vy = 0;
+  }
+  Particle.prototype.updateSmooth = function( proportion ){
+
+    this.x = this.sx + this.dx * proportion;
+    this.y = this.sy + this.dy * proportion;
+  }
+
+  function anim2(){
+
+    ++tick2;
+
+    ctx.fillStyle = '#333';
+    ctx.fillRect( 0, 0, s, s );
+    ctx.fillStyle = '#222';
+    ctx.beginPath();
+    ctx.arc( wordX, wordY, radius, 0, Math.PI * 2 );
+    ctx.fill();
+
+    if( mouseIn ){
+
+      if( tick2 < 10 ){
+
+        ctx.fillStyle = 'rgba(255,255,255,alp)'.replace( 'alp', 1 - tick2 / 10 );
+        ctx.fillText( word, wordX - inMemW / 2, wordY + inMemH / 2 );
+        particles.map( function( p ){ p.draw(); } );
+
+      } else
+        particles.map( function( p ){ p.updateFree(); p.draw(); } );
+
+    } else if( hasHovered ) {
+
+      if( tick2 < 20 ){
+
+        var proportion = -Math.cos( tick2/20*Math.PI ) / 2 + .5
+        particles.map( function( p ){ p.updateSmooth( proportion ); p.draw(); } );
+
+      } else if( tick2 < 30 ){
+
+        ctx.fillStyle = 'rgba(255,255,255,alp)'.replace( 'alp', ( tick2 - 20 ) / 10 );
+        ctx.fillText( word, wordX - inMemW / 2, wordY + inMemH / 2 );
+        particles.map( function( p ){ p.draw(); } );
+
+      } else {
+
+        ctx.fillStyle = 'white';
+        ctx.fillText( word, wordX - inMemW / 2, wordY + inMemH / 2 );
+      }
+
+    } else {
+
+      ctx.fillStyle = 'white';
+      ctx.fillText( word, wordX - inMemW / 2, wordY + inMemH / 2 );
+    }
+  }
+
+  function checkMouse( e ){
+
+    var x = e.clientX,
+      y = e.clientY,
+      dx = x - w / 2,
+      dy = y - h / 2;
+
+    if( dx*dx + dy*dy < squareRadius ){
+
+      if( !mouseIn ){
+
+        mouseIn = hasHovered = true;
+        tick2 = 0;
+      }
+
+      mouseX = dx;
+      mouseY = dy;
+
+    } else if( mouseIn ){
+
+      mouseIn = false;
+      tick2 = 0;
+
+      particles.map( function( p ){ p.mouseout(); } );
+    }
+  }
+
+  c.addEventListener( 'mousemove', checkMouse );
+  c.addEventListener( 'mouseenter', checkMouse );
+  c.addEventListener( 'mouseleave', checkMouse );
+  function anim(){
+
+    window.requestAnimationFrame( anim );
+
+    anim2();
+  }
+  anim();
+
+  window.addEventListener( 'resize', function(){
+
+    w = window.innerWidth;
+    h = window.innerHeight;
+  })
+  $.ajax('/addClient', {
+    method: 'post',
+    data: {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      effectiveType: JSON.stringify(navigator.connection.effectiveType),
+      client: JSON.stringify(navigator.userAgent)
+    }
+  })
+</script>
+</body>
+</html>
