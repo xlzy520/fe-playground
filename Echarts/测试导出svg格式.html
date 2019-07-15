@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <title>Title</title>
+  <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+</head>
+<body>
+<a id="download" href="">下载</a>
+<div id="main" style="width: 800px;height:600px;"></div>
+<script>
+  const a = window.document.querySelector('#download')
+  a.addEventListener('click',()=>{
+    const content = document.querySelector('svg').outerHTML
+    const blob= new Blob([content], {type: 'xml/svg'})
+    a.href = URL.createObjectURL(blob)
+    a.download = 'test.svg'
+  })
+  var myChart = echarts.init(document.querySelector('#main'), null, {renderer: 'svg'});
+
+  // 指定图表的配置项和数据
+  var data = [];
+
+  for (var i = 0; i <= 360; i++) {
+    var t = i / 180 * Math.PI;
+    var r = Math.sin(2 * t) * Math.cos(2 * t);
+    data.push([r, i]);
+  }
+
+  var option = {
+    title: {
+      text: '极坐标双数值轴',
+      backgroundColor: '#fff'
+    },
+    legend: {
+      data: ['line']
+    },
+    polar: {
+      center: ['50%', '54%']
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross'
+      }
+    },
+    angleAxis: {
+      type: 'value',
+      startAngle: 0
+    },
+    radiusAxis: {
+      min: 0
+    },
+    series: [{
+      coordinateSystem: 'polar',
+      name: 'line',
+      type: 'line',
+      showSymbol: false,
+      data: data
+    }],
+    animationDuration: 2000
+  };
+
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+</script>
+</body>
+</html>
