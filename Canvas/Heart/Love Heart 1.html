@@ -4,14 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
   <title>Love Heart 1</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    #heart{
+      display: block; /*清除canvas、video、audio标签的父级高度会多出4px的问题*/
+    }
+  </style>
 </head>
 <body>
-<canvas id="heart" width="" height=""></canvas>
+<div>
+  <h3>公式：</h3>
+  <label>x=16(sint)<sup>3</sup></label><div></div>
+  <label>y=13cos t-5cos 2t-2cos 3t-cos 4t</label>
+</div>
+<canvas id="heart"></canvas>
 <script>
-  const heart=document.querySelector('#heart')
-  heart.style.width = window.innerWidth
-  heart.style.height = window.innerHeight
+  const cos = (x)=>Math.cos(x)
+  const sin = (x)=>Math.sin(x)
+  class Heart{
+    constructor(ctx, x, y, r){
+      this.ctx = ctx
+      this.x = x
+      this.y = y
+      this.r = r
+    }
+    init(){
+      this.vertices = []
+      for (let i = 0; i < 360; i++) {
+        const step = (i/360)*(Math.PI*2)
+        const vector = {
+          x: this.r * 16*(Math.pow(sin(step),3)),
+          y: this.r * (13*cos(step)-5*cos(2*step)-2*cos(3*step)-cos(4*step))
+        }
+        this.vertices.push(vector);
+      }
+    }
+    draw(){
+      this.init()
+      this.ctx.beginPath()
+      this.ctx.translate(this.x, this.y)
+      this.ctx.rotate(Math.PI) //旋转180°
+      for (let i = 0; i < 360; i++) {
+        const vector = this.vertices[i]
+        this.ctx.lineTo(vector.x,vector.y)
+      }
+      this.ctx.fillStyle = 'red'
+      this.ctx.fill()
+    }
+  }
 
+  const heartCanvas=document.querySelector('#heart')
+  const ctx = heartCanvas.getContext('2d')
+  heartCanvas.width = window.innerWidth - 200
+  heartCanvas.height = window.innerHeight - 200
+  heartCanvas.addEventListener('click',(e)=>{
+    const x = e.offsetX
+    const y = e.offsetY
+    const r = 6
+    const heart = new Heart(ctx,x,y,r)
+    heart.draw()
+    isFirst = false
+  })
 </script>
 </body>
 </html>

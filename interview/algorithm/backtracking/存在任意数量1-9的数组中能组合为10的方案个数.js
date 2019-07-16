@@ -2,9 +2,10 @@
  *  给定一个数组，数组中任意数量1-9的数，可以组合成10的方案有多少个
  */
 const test1 = [1, 1, 1, 1, 2, 2, 3, 4, 5, 5, 6, 8, 9]
+const target = 9
 const resMap = []
 const counter = arrEleCounter(test1)
-peer(counter, 10, '')
+peer(counter, target, '')
 const removeDuplicateResult = resMap.map(allItem => allItem.split('+').map(removeDuplicateItem => Number(removeDuplicateItem)).sort().join('+'))
 const mySet = new Set(removeDuplicateResult)
 
@@ -62,7 +63,7 @@ function peer(obj, num, str) {
         const obj_keys = Object.keys(restObj)
         if (obj_keys.includes(diff.toString())) {
           const compression = `${str}${item}+${diff}`
-          if (eval(compression) === 10) {
+          if (eval(compression) === target) {
             if (compression.substr(0, 1) > 1 && compression.substr(2, 1) < 5) {
               return false
             }
