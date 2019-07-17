@@ -28,10 +28,10 @@ app.get('/ip', function (req, res) {
 })
 
 app.post('/addClient', function (req, res) {
-  const {effectiveType,client, width, height } = req.body;
+  const {client, width, height } = req.body;
   let ip = getClientIp(req).match(/\d+.\d+.\d+.\d+/);
   ip = ip ? ip.join('.') : null;
-  fs.appendFileSync('ip.txt', `${new Date().toLocaleString()} ${ip} ${effectiveType}${width} ${height} ${client}\r`)
+  fs.appendFileSync('ip.txt', `${new Date().toLocaleString()} ${ip} ${width} ${height} ${client}\r`)
   res.send({
     success: true
   })
