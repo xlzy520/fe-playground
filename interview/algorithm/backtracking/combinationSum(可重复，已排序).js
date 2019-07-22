@@ -1,30 +1,31 @@
 /***
  * 从给定有序数组中选取任意个数(可重复)，使其和为给定值
  */
-var Solution = /** @class */ (function () {
-    function Solution(candidates, target) {
+class Solution {
+    constructor(candidates, target) {
         this.candidates = candidates;
         this.target = target;
         this.res = [];
     }
-    Solution.prototype.combinationSum = function () {
+    combinationSum() {
         this.helper(this.candidates, this.target, [], 0);
-        console.log(this.res);
-        // todo 为什么res最终是[[],[],[],[],[],[],[],[],[],[],[]]
         return this.res;
-    };
-    Solution.prototype.helper = function (candidates, target, list, index) {
+    }
+    helper(candidates, target, list, index) {
         if (target < 0) {
             return;
         }
         if (target === 0) {
-            console.log(list);
-            this.res.push(list);
+            /***
+             *  为什么res最终是[[],[],[],[],[],[],[],[],[],[],[]]？
+             *  因为没有DeepCopy list，所以在循环中被pop和push更改了
+             */
+            this.res.push(JSON.parse(JSON.stringify(list)));
             return;
         }
-        for (var i = index; i < candidates.length; i++) {
+        for (let i = index; i < candidates.length; i++) {
             if (candidates[i] <= target) {
-                var kk = target - candidates[i];
+                let kk = target - candidates[i];
                 if (kk < 0)
                     continue;
                 list.push(candidates[i]);
@@ -32,9 +33,8 @@ var Solution = /** @class */ (function () {
                 list.pop();
             }
         }
-    };
-    return Solution;
-}());
-var test = new Solution([1, 2, 3, 4, 5, 6], 10);
-var res = test.combinationSum();
+    }
+}
+const test = new Solution([1, 2, 3], 10);
+const res = test.combinationSum();
 console.log(res);
