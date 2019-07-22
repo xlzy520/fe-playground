@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <link href="https://cdn.bootcss.com/iview/3.4.2/styles/iview.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+  <script src="https://cdn.bootcss.com/iview/3.4.2-rc.1/iview.min.js"></script>
+  <title>Title</title>
+  <style>
+    #app{
+      display: flex;
+      width: 50%;
+      margin: auto;
+      margin-top: 200px;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <i-select v-model="formData.leibie" placeholder="请选择" @on-change="val=>leibieChange(formData, val)">
+    <i-option value="animal">动物</i-option>
+    <i-option value="color">颜色</i-option>
+  </i-select>
+  <i-select v-model="formData.type" placeholder="请选择">
+    <i-option v-for="item in typeOptions" :key="item.value" :value="item.value">{{ item.label }}</i-option>
+  </i-select>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data(){
+      return {
+        typeOptions: [{
+          value: '',
+          label: ''
+        }],
+        formData: {
+          name: '',
+          wuzhengbianhao: '',
+          yancaileixing: '',
+          leibie: '',
+          type: '',
+          fenlei: '',
+          xuandingxuqiu: '',
+          man: '',
+          time: '',
+          buwei: '',
+          beizhu: '',
+          img: 'http://www.005.tv/uploads/allimg/190403/63-1Z403150911P6.JPG'
+        },
+      }
+    },
+    methods: {
+      leibieChange(formData, val) {
+        formData.type = '';
+        if (val === 'color') {
+          this.typeOptions = [
+            {label: '红色', value: 'red'},
+            {label: '绿色', value: 'green'}
+          ];
+        } else {
+          this.typeOptions = [
+            {label: '猫', value: 'cat'},
+            {label: '老鼠', value: 'mouse'}
+          ];
+        }
+      }
+    }
+  })
+</script>
+</body>
+</html>
