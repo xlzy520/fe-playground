@@ -1,15 +1,25 @@
 const express = require('express')
 const app = express()
 const fs = require('fs')
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json({limit: '1mb'}));  //body-parser 解析json格式数据
+app.use(bodyParser.urlencoded({            //此项必须在 bodyParser.json 下面,为参数编码
+  extended: true
+}));
+
 
 const absPath = __dirname + '/'
 const configPath = absPath + 'data.json'
 const fileExists = fs.existsSync(configPath)
 if (!fileExists) {
-  fs.writeFile(configPath, 'zuoyeti', (err) => {
+  fs.writeFile(configPath, '', (err) => {
     console.log(err)
   })
 }
+app.get('/picGo.html', function (req, res) {
+  res.sendFile( __dirname + "/" + "picGo.html" );
+})
 
 app.get('/picGoConfig/download', (req, res) => {
   if (fileExists) {
@@ -23,10 +33,13 @@ app.get('/picGoConfig/download', (req, res) => {
   }
 })
 
-app.post('/picGoConfig/update', (req, res) => {
-  const { client, width, height } = req.body
-  res.send({
-    success: true
+app.post('/picGoConfig/upload', (req, res) => {
+  const { data } = req.body
+  fs.writeFile(configPath, JSON.stringify(data), (err) => {
+    res.send({
+      success: !!err,
+      msg: '上传' + err?'成功':'失败'
+    })
   })
 })
 
