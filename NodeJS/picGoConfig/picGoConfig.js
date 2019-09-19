@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({            //此项必须在 bodyParser.json 下
 }));
 
 
-const absPath = __dirname + '/'
+const absPath = __dirname + '\\'
 const configPath = absPath + 'data.json'
 const fileExists = fs.existsSync(configPath)
 if (!fileExists) {
@@ -17,8 +17,14 @@ if (!fileExists) {
     console.log(err)
   })
 }
+
 app.get('/picGo.html', function (req, res) {
   res.sendFile( __dirname + "/" + "picGo.html" );
+})
+
+app.get('/picGoConfig/info', (req, res) => {
+  const stat = fs.statSync(configPath)
+  res.send(stat.mtime.toLocaleString())
 })
 
 app.get('/picGoConfig/download', (req, res) => {
@@ -38,7 +44,7 @@ app.post('/picGoConfig/upload', (req, res) => {
   fs.writeFile(configPath, JSON.stringify(data), (err) => {
     res.send({
       success: !!err,
-      msg: '上传' + err?'成功':'失败'
+      msg: err?'上传失败':'上传成功'
     })
   })
 })
