@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer"/>
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+  <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
+  <link href="https://cdn.bootcss.com/element-ui/2.12.0/theme-chalk/index.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/element-ui/2.12.0/index.js"></script>
+  <title>Title</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    #app{
+      height: 100vh;
+    }
+    .content{
+      width: 666px;
+      height: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      margin-top: 20px;
+      margin-left: 10px;
+    }
+    .content-item.el-image{
+      width: 200px;
+      height: 200px;
+      margin-right: 20px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border: 3px solid transparent;
+    }
+    .content-item.el-image img{
+      cursor: pointer;
+    }
+    .content-item.checked{
+      border: 3px solid #258aff;
+    }
+    .image-slot {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: #f5f7fa;
+      color: #909399;
+      font-size: 14px;
+    }
+    .err-text{
+      color: #909399;
+      font-size: 24px;
+      text-align: center;
+      text-overflow: ellipsis;
+    }
+    .image-date{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: #f5f7fa;
+      color: #909399;
+      font-size: 14px;
+    }
+    .image-slot{
+      background: rgba(163,202,250,0.05);
+    }
+    .image-slot.date{
+      background: rgba(163,202,250,1);
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="content">
+    <el-image :src="item.pic"
+              :class="['content-item', check === index? 'checked':'' ]"
+              v-for="(item,index) in data"
+              :key="index"
+              @click.native="imgClick(item, index)">
+      <div slot="error" :class="['image-slot', item.showDate?'date': '']">
+        <span class="err-text">{{item.showDate}}</span>
+      </div>
+      <div slot="placeholder" class="image-slot">
+        <span class="err-text">{{item.showDate}}</span>
+      </div>
+    </el-image>
+  </div>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        data: [],
+        check: 1
+      }
+    },
+    methods: {
+      // 点击日期触发的事件
+      handleDateClick(date){
+        console.log(date);
+      },
+      // 点击所有格子触发的事件
+      imgClick(item, index){
+        // 点击的格子是日期
+        if (item.showDate) {
+          this.handleDateClick(item.showDate)
+          return false
+        }
+        // 格子没有图片
+        if (!item.pic) {
+          return false
+        }
+        this.check = index
+      },
+      getData() {
+        const data = {
+          "20190701": [
+            {
+            "flag": "1",
+            "work_object": "",
+            "create_time": "2019-07-01 14:40:03",
+            "org_id": 146,
+            "maintain_account_name": "张龙",
+            "business_type": 1,
+            "name": "消火栓系统-室内消火栓-保养-年-20190529",
+            "task_id": 117,
+            "id": 412,
+            "pic": "http://i0.hdslb.com/bfs/album/5767ce46f24df0d7f9e032dd13b97303130566c1.jpg",
+            "maintain_account": "zhanglong"
+          },
+            {
+            "flag": "2",
+            "work_object": "",
+            "create_time": "2019-07-01 14:40:03",
+            "org_id": 146,
+            "maintain_account_name": "张龙",
+            "business_type": 1,
+            "name": "消火栓系统-室内消火栓-保养-年-20190529",
+            "task_id": 117,
+            "id": 412,
+            "pic": "https://i0.hdslb.com/bfs/album/87caa0b9c9e47e8320ae69c18e5c0add5c96ea93.jpg",
+            "maintain_account": "zhanglong"
+          }],
+          "20190702": [
+            {
+            "flag": "1",
+            "work_object": "",
+            "create_time": "2019-07-02 14:40:07",
+            "org_id": 146,
+            "maintain_account_name": "许一",
+            "business_type": 1,
+            "name": "消火栓系统-室内消火栓-保养-年-20190529",
+            "task_id": 117,
+            "id": 413,
+            "pic": "https://i.loli.net/2019/10/01/Oleip3bMEGrgasZ.jpg",
+            "maintain_account": "x1"
+          },
+            {
+            "flag": "2",
+            "work_object": "",
+            "create_time": "2019-07-02 14:40:07",
+            "org_id": 146,
+            "maintain_account_name": "许一",
+            "business_type": 1,
+            "name": "消火栓系统-室内消火栓-保养-年-20190529",
+            "task_id": 117,
+            "id": 413,
+            "pic": "https://gitee.com/xlzy520/Rem/raw/master/pixiv/69802234.jpg",
+            "maintain_account": "x1"
+          }],
+          "20190703": [
+            {
+            "flag": "1",
+            "work_object": "",
+            "create_time": "2019-07-02 14:40:07",
+            "org_id": 146,
+            "maintain_account_name": "许一",
+            "business_type": 1,
+            "name": "消火栓系统-室内消火栓-保养-年-20190529",
+            "task_id": 117,
+            "id": 413,
+            "pic": "https://gitee.com/xlzy520/Rem/raw/master/pixiv/58956703.jpg",
+            "maintain_account": "x1"
+          },
+            {
+            "flag": "2",
+            "work_object": "",
+            "create_time": "2019-07-02 14:40:07",
+            "org_id": 146,
+            "maintain_account_name": "许一",
+            "business_type": 1,
+            "name": "消火栓系统-室内消火栓-保养-年-20190529",
+            "task_id": 117,
+            "id": 413,
+            "pic": "https://gitee.com/xlzy520/Rem/raw/master/pixiv/67507815.jpg",
+            "maintain_account": "x1"
+          }],
+          "20190704": [
+            {
+            "flag": "1",
+            "work_object": "",
+            "create_time": "2019-07-02 14:40:07",
+            "org_id": 146,
+            "maintain_account_name": "许一",
+            "business_type": 1,
+            "name": "消火栓系统-室内消火栓-保养-年-20190529",
+            "task_id": 117,
+            "id": 413,
+            "pic": "http://file.yx-ilink.com/ilink/JPEG_20190626_161714.jpg",
+            "maintain_account": "x1"
+          }],
+        }
+        const dateArr = Object.keys(data)
+        let flat = []
+        dateArr.map(date=>{
+          flat.push({
+            showDate: date
+          })
+          flat = flat.concat(data[date])
+        })
+        const flatLength = flat.length
+        if (flatLength<9) {
+          flat = flat.concat(new Array(9-flatLength).fill({}))
+        } else if (flatLength>9) {
+          const mod =Math.floor(flatLength/3)
+          const max = (mod +1)*3
+          flat = flat.concat(new Array(max-flatLength).fill({}))
+        }
+        this.data = flat
+      }
+    },
+    mounted() {
+      this.getData()
+    }
+  })
+</script>
+</body>
+</html>
