@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>uploadExcel Demo</title>
+  <link href="https://cdn.bootcss.com/element-ui/2.12.0/theme-chalk/index.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+  <script src="https://cdn.bootcss.com/element-ui/2.12.0/index.js"></script>
+  <script src="https://cdn.bootcss.com/xlsx/0.15.1/xlsx.full.min.js"></script>
+  <style>
+    .excel-upload-input {
+      display: none;
+      z-index: -9999;
+    }
+
+    #anime {
+      position: fixed;
+      bottom: 60px;
+      right: 40px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+<img src="1723.gif" id="anime" ondrag=true>
+<div id="app">
+  <upload-excel-button :on-success="handleSuccess" :before-upload="beforeUpload"></upload-excel-button>
+  <el-tabs v-model="Sheets" @tab-click="handleTabClick" type="card">
+    <el-tab-pane v-for="item in SheetNames" :key="item.id" :label="item" :name="item"></el-tab-pane>
+  </el-tabs>
+  <el-table :data="tableData" border highlight-current-row style="width: 100%;margin-top:20px;">
+    <el-table-column v-for='item of tableHeader' :prop="item" :label="item" :key='item'
+                     show-overflow-tooltip></el-table-column>
+  </el-table>
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        visible: false,
+        AllTableData: [],
+        AllTableHeader: [],
+        tableData: [],
+        tableHeader: [],
+        Sheets: 0,
+        SheetNames: []
+      }
+    },
+    methods: {
+      beforeUpload(file) {
+        const isLt1M = file.size / 1024 / 1024 < 1
+
+        if (isLt1M) {
+          return true
+        }
+
+        this.$message({
+          message: 'Please do not upload files larger than 1m in size.',
+          type: 'warning'
+        })
+        return false
+      },
+      dataMove(i) {
+        if (i === 0) {
+          this.Sheets = this.SheetNames[0]
+        }
+        this.tableData = this.AllTableData[i]
+        this.tableHeader = this.AllTableHeader[i]
+      },
+      handleSuccess(data, i) {
+        this.AllTableData[i] = data[i].results
+        this.AllTableHeader[i] = data[i].header
+        this.SheetNames = data[i].SheetName
+        this.dataMove(0)
+      },
+      handleTabClick(tab) {
+        this.Sheets = tab.name
+        this.dataMove(tab.index)
+      }
+    },
+    components: {
+      'uploadExcelButton': {
+        template:
+          '<div class="el-upload">' +
+          '     <el-button :loading="loading" type="primary" @click="handleUpload">选择excel上传</el-button>' +
+          '     <input ref="excel-upload-input" type="file" accept=".xlsx,.xls" ' +
+          'class="excel-upload-input" @change="handleClick">' +
+          '</div>',
+        props: {
+          beforeUpload: Function, // eslint-disable-line
+          onSuccess: Function// eslint-disable-line
+        },
+        data() {
+          return {
+            loading: null,
+            excelData: []
+          }
+        },
+        methods: {
+          generateDate(i, table) {
+            this.excelData[i] = {}
+            this.excelData[i].SheetName = table.SheetName
+            this.excelData[i].header = table.header
+            this.excelData[i].results = table.results
+            this.loading = false
+            // this.$emit('on-selected-file', this.excelData, i)
+            this.onSuccess && this.onSuccess(this.excelData, i)
+          },
+          handleUpload() {
+            this.$refs['excel-upload-input'].click()
+          },
+          upload(rawFile) {
+            this.$refs['excel-upload-input'].value = null // fix can't select the same excel
+
+            if (!this.beforeUpload) {
+              this.readerData(rawFile)
+              return
+            }
+            const before = this.beforeUpload(rawFile)
+            if (before) {
+              this.readerData(rawFile)
+            }
+          },
+          handleClick(e) {
+            const files = e.target.files
+            const rawFile = files[0] // only use files[0]
+            if (!rawFile) return
+            this.upload(rawFile)
+          },
+          readerData(rawFile) {
+            this.loading = true
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader()
+              reader.onload = (e)=> {
+                const data = e.target.result
+                const workbook = XLSX.read(data, {type: 'array'})
+                console.log(workbook);
+                for (let i in workbook.SheetNames) {
+                  const firstSheetName = workbook.SheetNames[i]
+                  console.log(firstSheetName);
+                  const worksheet = workbook.Sheets[firstSheetName]
+                  console.log(worksheet);
+                  const header = this.get_header_row(worksheet)
+                  console.log(header);
+                  const results = XLSX.utils.sheet_to_json(worksheet)
+                  let table_data = {header: header, results: results, SheetName: workbook.SheetNames}
+                  this.generateDate(i, table_data)
+                  console.log(2);
+                }
+                this.loading = false
+                resolve()
+              }
+              reader.readAsArrayBuffer(rawFile)
+            })
+          },
+          get_header_row(sheet) {
+            const headers = []
+            if (sheet['!ref']) {
+              const range = XLSX.utils.decode_range(sheet['!ref'])
+              let C
+              const R = range.s.r /* start in the first row */
+              for (C = range.s.c; C <= range.e.c; ++C) { /* walk every column in the range */
+                let cell = sheet[XLSX.utils.encode_cell({c: C, r: R})];
+                /* find the cell in the first row */
+                let hdr = 'UNKNOWN ' + C; // <-- replace with your desired default
+                if (cell && cell.t) hdr = XLSX.utils.format_cell(cell)
+                headers.push(hdr)
+              }
+            }
+            return headers
+          }
+        }
+      }
+    }
+  })
+</script>
+</body>
+
+</html>
