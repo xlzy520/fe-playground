@@ -84,7 +84,7 @@
       'uploadExcelButton': {
         template:
           '<div class="el-upload">' +
-          '     <el-button :loading="loading" type="primary" @click="handleUpload">选择excel上传</el-button>' +
+            '     <el-button :loading="loading" type="primary" @click="handleUpload">选择excel上传</el-button>' +
           '     <input ref="excel-upload-input" type="file" accept=".xlsx,.xls" ' +
           'class="excel-upload-input" @change="handleClick">' +
           '</div>',
@@ -144,7 +144,12 @@
                   console.log(worksheet);
                   const header = this.get_header_row(worksheet)
                   console.log(header);
-                  const results = XLSX.utils.sheet_to_json(worksheet)
+                  const results = XLSX.utils.sheet_to_json(worksheet,{
+                    blankrows: false,
+                    header: header,
+                    range: 4
+                  })
+                  console.log(results, '===========打印的 ------ results');
                   let table_data = {header: header, results: results, SheetName: workbook.SheetNames}
                   this.generateDate(i, table_data)
                   console.log(2);
@@ -159,10 +164,11 @@
             const headers = []
             if (sheet['!ref']) {
               const range = XLSX.utils.decode_range(sheet['!ref'])
+              console.log(range, '===========打印的 ------ range');
               let C
               const R = range.s.r /* start in the first row */
               for (C = range.s.c; C <= range.e.c; ++C) { /* walk every column in the range */
-                let cell = sheet[XLSX.utils.encode_cell({c: C, r: R})];
+                let cell = sheet[XLSX.utils.encode_cell({c: C, r: 3})];
                 /* find the cell in the first row */
                 let hdr = 'UNKNOWN ' + C; // <-- replace with your desired default
                 if (cell && cell.t) hdr = XLSX.utils.format_cell(cell)
