@@ -17,6 +17,7 @@
         key;
 
       function iterateIP(ip) {
+        console.log(ip);
         if (!localIPs[ip]) onNewIP(ip);
         localIPs[ip] = true;
       }
