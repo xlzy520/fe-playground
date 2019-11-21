@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<div contenteditable id='tar_box' style="width:300px;height:300px;border:1px solid red">
+
+</div>
+<script>
+  //chromes
+  document.addEventListener('paste', function (event) {
+    console.log(event);
+    //chrome 版本比较新的时候使用event.originalEvent
+    var clipboardData = (event.clipboardData || event.originalEvent.clipboardData),
+      items = clipboardData.items,
+      len = items.length,
+      blob = null;
+
+    //items.length比较有意思，初步判断是根据mime类型来的，即有几种mime类型，长度就是几（待验证）
+    //如果粘贴纯文本，那么len=1，如果粘贴网页图片，len=2, items[0].type = 'text/plain', items[1].type = 'image/*'
+    //如果使用截图工具（eg：qq）粘贴图片，len=1, items[0].type = 'image/png'
+    //如果粘贴纯文本+HTML，len=2, items[0].type = 'text/plain', items[1].type = 'text/html'
+    // console.log('len:' + len);
+    // console.log(items[0]);
+    // console.log(items[1]);
+    // console.log( 'items[0] kind:', items[0].kind );
+    // console.log( 'items[0] MIME type:', items[0].type );
+    // console.log( 'items[1] kind:', items[1].kind );
+    // console.log( 'items[1] MIME type:', items[1].type );
+
+
+    //在items里找粘贴的image,据上面分析,需要循环
+    for (var i = 0; i < len; i++) {
+      if (items[i].type.indexOf("image") !== -1) {
+        console.log(items[i]);
+        console.log( typeof (items[i]));
+        //getAsFile()  此方法只是living standard  firefox ie11 并不支持
+        blob = items[i].getAsFile();
+        console.log(blob);
+        console.log(typeof blob);
+      }
+    }
+    if ( blob !== null ) {
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        // 获取了Base64编码的图片
+        console.log(event.target.result);
+        //可以在这里写上传逻辑 直接将base64编码的字符串上传（或者传blob对象  后台怎么处理  需深入）
+        uploadImgFromPaste(event.target.result, 'paste');
+      }
+      reader.readAsDataURL(blob);
+    }
+  })
+
+
+  function uploadImgFromPaste (file, type) {
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append("mimetype", file.type );
+    formData.append('submission-type', type);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'yourseverClinetAddress');
+    xhr.onload = function () {
+      if ( xhr.readyState === 4 ) {
+        if ( xhr.status === 200 ) {
+          var data = JSON.parse( xhr.responseText );
+          var img = document.createElement('img');
+          img.src = data.store_path;
+          var tarBox = document.getElementById('tar_box');
+          tarBox.appendChild(img);
+        } else {
+          console.log( xhr.statusText );
+        }
+      };
+    };
+    xhr.onerror = function (e) {
+      console.log( xhr.statusText );
+    }
+    xhr.send(formData);
+  }
+
+
+
+  // //firefox,ie11
+  // document.addEventListener('paste', paste_img_handler);
+  // function paste_img_handler (event) {
+  // 	var clipboardData = event.clipboardData || event.originalEvent.clipboardData;
+  // 	if ( clipboardData.items ) {
+  // 		var items = clipboardData.items;
+  // 		for ( var i = 0, len = items.length; i < len; i++ ) {
+  // 			if ( items[i].type.indexOf('image') !== -1 ) {
+
+  // 			}
+  // 		}
+  // 	}
+  // }
+
+
+</script>
+</body>
+</html>
