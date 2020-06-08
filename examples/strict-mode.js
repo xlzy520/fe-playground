@@ -1,3 +1,4 @@
+"use strict";
 var vendor_lib_dsadasdjasjdlasdjasldknasldna = function (e) {
   "use strict";
   var t= {}
