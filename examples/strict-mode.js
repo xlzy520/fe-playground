@@ -1,11 +1,12 @@
 var vendor_lib_dsadasdjasjdlasdjasldknasldna = function (e) {
   var t= {}
   t.sss = '312323'
-  var sss = function () {
+  function sss() {
     "use strict";
     function hhh() {
-      console.log(222);
+      console.log(222, t);
     }
     hhh()
   }
+  sss()
 }
