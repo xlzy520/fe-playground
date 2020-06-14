@@ -24,7 +24,7 @@
     }
     .card{
       width: 45%;
-      height: 160px;
+      height: 30vh;
       margin: 10px;
       background: #eee;
     }
@@ -45,6 +45,19 @@
     }
     .intervalTime{
     }
+    #start-button{
+      color: #fff;
+      height: 35px;
+      border: none;
+      background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+      width: 100%;
+      margin-top: 10px;
+    }
+    #save{
+      width: 100%;
+      margin-top: 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -80,13 +93,16 @@
       <input value="2" type="number" id="intervalTime">
     </div>
     <button id="start-button">执行</button>
+    <button id="save">保存配置</button>
   </div>
 </div>
 <script>
   let interval = null
   let checked = 'yes'
+  setConfig()
   const cardList = document.querySelectorAll('.card')
   const startBtn = document.querySelector('#start-button')
+  const saveBtn = document.querySelector('#save')
   const radios = document.querySelectorAll('.radio')
   radios.forEach(radio=>{
     radio.addEventListener('change', (evt)=>{
@@ -135,6 +151,46 @@
     }
     run(StayTime, intervalTime)
   })
+  saveBtn.addEventListener('click', ()=>{
+    const StayTime = document.querySelector('#stayTime').value
+    const intervalTime = document.querySelector('#intervalTime').value
+    if (!StayTime) {
+      alert('请填写亮度维持时间')
+      return;
+    } else if (StayTime>1) {
+      alert('亮度维持时间不能超过1秒')
+      return;
+    } else if (StayTime < 0) {
+      alert('亮度维持时间不能小于0')
+      return;
+    }
+    if (checked === 'yes' && !intervalTime) {
+      alert('请填写相邻两次间隔时间')
+      return;
+    } else if (intervalTime>2) {
+      alert('相邻两次间隔时间不能超过2秒')
+      return;
+    } else if (intervalTime < 0) {
+      alert('相邻两次间隔时间不能小于0')
+      return;
+    }
+    const config = {
+      StayTime,
+      intervalTime,
+      checked
+    }
+    localStorage.setItem('config', JSON.stringify(config))
+    alert('保存成功')
+  })
+  function run(stayTime, intervalTime) {
+    cardList.forEach(card=> card.classList.remove('active'))
+    clearInterval(interval)
+    console.log(intervalTime, stayTime);
+    one(stayTime)
+    interval = setInterval(()=>{
+      one(stayTime)
+    }, intervalTime * 1000)
+  }
   function one(stayTime) {
     const index = Math.floor(Math.random()*4)
     const classList = cardList[index].classList
@@ -146,13 +202,24 @@
       classList.remove('active')
     }, stayTime * 1000)
   }
-  function run(stayTime, intervalTime) {
-    clearInterval(interval)
-    console.log(intervalTime, stayTime);
-    one(stayTime)
-    interval = setInterval(()=>{
-      one(stayTime)
-    }, intervalTime * 1000)
+  function setConfig() {
+    const configString = localStorage.getItem('config')
+    if (configString) {
+      const config = JSON.parse(configString)
+      const stayTimeDom = document.querySelector('#stayTime')
+      stayTimeDom.value = config.StayTime
+      const intervalTimeDom = document.querySelector('#intervalTime')
+      intervalTimeDom.value = config.intervalTime
+      checked = config.checked
+      const radioDom = document.querySelector('#'+ config.checked)
+      radioDom.checked = 'checked'
+      const intervalTimeContainer = document.querySelector('.intervalTime')
+      if (checked === 'yes') {
+        intervalTimeContainer.classList.remove('hidden')
+      } else {
+        intervalTimeContainer.classList.add('hidden')
+      }
+    }
   }
 </script>
 </body>
