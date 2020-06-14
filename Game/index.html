@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"></script>
+  <title>未命名</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    #app{
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .content{
+      /*display: flex;*/
+    }
+    .row{
+      display: flex;
+      width: 100%;
+    }
+    .card{
+      width: 45%;
+      height: 160px;
+      margin: 10px;
+      background: #eee;
+    }
+    .card.active{
+      background: #00ffd5;
+    }
+    .config{
+      padding: 10px;
+    }
+    .choose{
+      display: flex;
+    }
+    .choose-box{
+      margin-right: 20px;
+    }
+    .hidden{
+      display: none;
+    }
+    .intervalTime{
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="content">
+    <div class="row">
+      <div class="card"></div>
+      <div class="card"></div>
+    </div>
+    <div class="row">
+      <div class="card"></div>
+      <div class="card"></div>
+    </div>
+  </div>
+  <div class="config">
+    <div>
+      亮度维持时间(秒)
+      <input value="1" type="number" id="stayTime">
+    </div>
+    <div>相邻两次间隔时间模式</div>
+    <div class="choose">
+      <div class="choose-box">
+        <input class="radio" type="radio" id="yes" name="choose" checked/>
+        <label for="yes">可调</label>
+      </div>
+      <div class="choose-box">
+        <input class="radio" type="radio" id="no" name="choose" />
+        <label for="no">不可调</label>
+      </div>
+    </div>
+    <div class="intervalTime">
+      相邻两次间隔时间(秒)
+      <input value="2" type="number" id="intervalTime">
+    </div>
+    <button id="start-button">执行</button>
+  </div>
+</div>
+<script>
+  let interval = null
+  let checked = 'yes'
+  const cardList = document.querySelectorAll('.card')
+  const startBtn = document.querySelector('#start-button')
+  const radios = document.querySelectorAll('.radio')
+  radios.forEach(radio=>{
+    radio.addEventListener('change', (evt)=>{
+      const id = evt.target.id
+      const intervalTimeDom = document.querySelectorAll('#intervalTime')
+      const intervalTimeContainer = document.querySelector('.intervalTime')
+      if (id === 'yes') {
+        checked = "yes"
+        intervalTimeDom.value = 2
+        intervalTimeContainer.classList.remove('hidden')
+      } else {
+        intervalTimeDom.value = ''
+        checked = 'no'
+        intervalTimeContainer.classList.add('hidden')
+      }
+    })
+  })
+  startBtn.addEventListener('click', ()=>{
+    const stayTimeDom = document.querySelector('#stayTime')
+    const StayTime = stayTimeDom.value
+    if (!StayTime) {
+      alert('请填写亮度维持时间')
+      return;
+    } else if (StayTime>1) {
+      alert('亮度维持时间不能超过1秒')
+      return;
+    } else if (StayTime < 0) {
+      alert('亮度维持时间不能小于0')
+      return;
+    }
+    const intervalTimeDom = document.querySelector('#intervalTime')
+    const intervalTimeValue = intervalTimeDom.value
+    if (checked === 'yes' && !intervalTimeValue) {
+      alert('请填写相邻两次间隔时间')
+      return;
+    } else if (intervalTimeValue>2) {
+      alert('相邻两次间隔时间不能超过2秒')
+      return;
+    } else if (intervalTimeValue < 0) {
+      alert('相邻两次间隔时间不能小于0')
+      return;
+    }
+    let intervalTime = intervalTimeValue
+    if (checked === 'no') {
+      intervalTime = Math.random() + 1
+    }
+    run(StayTime, intervalTime)
+  })
+  function one(stayTime) {
+    const index = Math.floor(Math.random()*4)
+    const classList = cardList[index].classList
+    const hasActive = classList.contains('active')
+    if (!hasActive) {
+      classList.add('active')
+    }
+    setTimeout(()=>{
+      classList.remove('active')
+    }, stayTime * 1000)
+  }
+  function run(stayTime, intervalTime) {
+    clearInterval(interval)
+    console.log(intervalTime, stayTime);
+    one(stayTime)
+    interval = setInterval(()=>{
+      one(stayTime)
+    }, intervalTime * 1000)
+  }
+</script>
+</body>
+</html>
