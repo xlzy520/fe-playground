@@ -92,6 +92,10 @@
       相邻两次间隔时间(秒)
       <input value="2" type="number" id="intervalTime">
     </div>
+    <div class="no-modify">
+      <span>当前随机间隔时间：</span>
+      <span class="random-time"></span>
+    </div>
     <button id="start-button">执行</button>
     <button id="save">保存配置</button>
   </div>
@@ -109,14 +113,17 @@
       const id = evt.target.id
       const intervalTimeDom = document.querySelectorAll('#intervalTime')
       const intervalTimeContainer = document.querySelector('.intervalTime')
+      const randomTimeContainer = document.querySelector('.no-modify')
       if (id === 'yes') {
         checked = "yes"
         intervalTimeDom.value = 2
         intervalTimeContainer.classList.remove('hidden')
+        randomTimeContainer.classList.add('hidden')
       } else {
         intervalTimeDom.value = ''
         checked = 'no'
         intervalTimeContainer.classList.add('hidden')
+        randomTimeContainer.classList.remove('hidden')
       }
     })
   })
@@ -146,8 +153,12 @@
       return;
     }
     let intervalTime = intervalTimeValue
+    const randomTimeDom= document.querySelector('.random-time')
     if (checked === 'no') {
       intervalTime = Math.random() + 1
+      randomTimeDom.innerHTML = intervalTime
+    } else {
+      randomTimeDom.innerHTML = ''
     }
     run(StayTime, intervalTime)
   })
@@ -214,10 +225,13 @@
       const radioDom = document.querySelector('#'+ config.checked)
       radioDom.checked = 'checked'
       const intervalTimeContainer = document.querySelector('.intervalTime')
+      const randomTimeContainer = document.querySelector('.no-modify')
       if (checked === 'yes') {
         intervalTimeContainer.classList.remove('hidden')
+        randomTimeContainer.classList.add('hidden')
       } else {
         intervalTimeContainer.classList.add('hidden')
+        randomTimeContainer.classList.remove('hidden')
       }
     }
   }
