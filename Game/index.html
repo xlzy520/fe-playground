@@ -153,13 +153,6 @@
       return;
     }
     let intervalTime = intervalTimeValue
-    const randomTimeDom= document.querySelector('.random-time')
-    if (checked === 'no') {
-      intervalTime = Math.random() + 1
-      randomTimeDom.innerHTML = intervalTime
-    } else {
-      randomTimeDom.innerHTML = ''
-    }
     run(StayTime, intervalTime)
   })
   saveBtn.addEventListener('click', ()=>{
@@ -193,14 +186,30 @@
     localStorage.setItem('config', JSON.stringify(config))
     alert('保存成功')
   })
+
   function run(stayTime, intervalTime) {
     cardList.forEach(card=> card.classList.remove('active'))
     clearInterval(interval)
+    const intervalTimeAdapter = () => {
+      const randomTimeDom= document.querySelector('.random-time')
+      if (checked === 'no') {
+        intervalTime = Math.random() + 1
+        randomTimeDom.innerHTML = intervalTime
+        return intervalTime * 1000;
+      } else {
+        randomTimeDom.innerHTML = ''
+        return intervalTime * 1000;
+      }
+    }
     console.log(intervalTime, stayTime);
     one(stayTime)
-    interval = setInterval(()=>{
+    // 动态间隔时间函数
+    function intervalFn() {
       one(stayTime)
-    }, intervalTime * 1000)
+      clearInterval(interval)
+      interval = setInterval(intervalFn, intervalTimeAdapter())
+    }
+    interval = setInterval(intervalFn, intervalTimeAdapter())
   }
   function one(stayTime) {
     const index = Math.floor(Math.random()*4)
