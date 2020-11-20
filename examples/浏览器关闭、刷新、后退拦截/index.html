@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+123123
+<script>
+  const handleBeforeunload = (e) => {
+    e.preventDefault();
+    const needConfirm = true;
+    if (needConfirm) {
+      return (e.returnValue = '您输入的内容尚未保存，确定离开此页面吗？');
+    }
+    return null
+  }
+  const handlePopstate = (e) => {
+    const needConfirm = true;
+    if (needConfirm) {
+      const res = confirm('离开，是否保存?')
+      if (res) {
+        window.removeEventListener('popstate', handlePopstate);
+        history.back();
+      } else {
+        history.pushState(null, null, null);
+      }
+    }
+  }
+  window.addEventListener('load', () => {
+    // 监听浏览器刷新、关闭、后退
+    window.history.pushState(null, null, document.URL);
+    window.addEventListener('beforeunload', handleBeforeunload);
+    window.addEventListener('popstate', handlePopstate);
+  })
+</script>
+</body>
+</html>

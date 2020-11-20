@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+  <link href="https://cdn.bootcdn.net/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
+  <title>电子签名</title>
+  <style>
+    #app {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+    #canvas {
+      border: 1px solid #20a0ff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <canvas id="canvas" ref="canvas" @touchstart.stop="touchStart"
+          @touchmove.stop="touchMove" @touchend.stop="touchEnd"
+          @mousedown.prevent="touchStart" @mousemove.prevent="touchMove"
+          @mouseup.prevent="touchEnd"></canvas>
+
+</div>
+<script>
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        canvasCtx: null,
+        startPoint: {
+          x: 0,
+          y: 0
+        },
+        startX: 0,
+        startY: 0,
+        isDown: false
+      }
+    },
+    methods: {
+      ctxDraw(m, l){
+        const canvasCtx = this.canvasCtx;
+        canvasCtx.beginPath();
+        canvasCtx.moveTo.apply(canvasCtx, m)
+        canvasCtx.lineTo.apply(canvasCtx, l)
+        canvasCtx.stroke();
+        canvasCtx.closePath()
+      },
+      touchStart($event) {
+        let { offsetX: x, offsetY: y} = $event
+        this.startPoint = {x, y}
+        this.ctxDraw([x, y], [x, y])
+        this.isDown = true
+      },
+      touchMove($event) {
+        if (this.isDown) {
+          let { offsetX: x, offsetY: y} = $event
+          const {x: sX, y: sY } = this.startPoint
+          this.ctxDraw([sX, sY], [x, y])
+          this.startPoint = {x, y}
+        }
+      },
+      touchEnd($event) {
+        let { offsetX: x, offsetY: y} = $event
+        this.startPoint = {x, y}
+        this.ctxDraw([x, y], [x, y])
+        this.isDown = false
+      },
+    },
+    mounted() {
+      const canvasCtx = this.$refs.canvas.getContext('2d');
+      canvasCtx.lineWidth = 3
+      canvasCtx.strokeStyle = '#000';
+      canvasCtx.lineCap = 'round'; // 末端线帽
+      canvasCtx.lineJoin = 'round'; // 线条交汇处圆角
+      canvasCtx.shadowBlur = '1'; // 线条锯齿
+      canvasCtx.shadowColor = '#000'; // 线条锯齿
+      this.canvasCtx = canvasCtx
+    },
+  })
+</script>
+</body>
+</html>
