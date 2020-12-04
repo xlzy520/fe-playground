@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>全屏</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+    #target, .post-content{
+      background: #fff;
+      overflow: scroll;
+    }
+
+    img {
+      display: block;
+      margin: 100px auto 0;
+      width: 900px;
+      cursor: pointer;
+    }
+    /* webkit和IE在元素进入全屏后，会保持元素原有的尺寸，所以需要通过css伪类进行设置 */
+    img:-webkit-full-screen{
+      width: 100%;
+      height: 100%;
+    }
+
+    img:-ms-fullscreen {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+<div id="target">
+  <div class="post">
+    <div class="post-title">
+      <!--<div class="post-entry-categories"><a href="/tag/abc" rel="tag">tag</a><a href="/tag/abc" rel="tag">tag2</a></div>-->
+      <h1 class="title">JavaScript 全屏展示</h1>
+      <div class="post_icon">
+        <span class="icon-user-o"> Shapeying</span>
+        <span class="icon-clock-1"> 2018-06-30 </span>
+        <span class="icon-article-1"> <a href="/link/eGw1NmtROTBkcg==" target="_blank" rel="noindex,nofollow,oarchive">原文</a> </span>
+      </div>
+      <div class="post-content">
+        <script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-6527383233809815" data-ad-slot="7460572068"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
+        <p>　　浏览器都有页面全屏的功能 F11 ，那么如何用JavaScript控制页面全屏呢？<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fullscreen_API#Prefixing" rel="external nofollow noreferrer">MDN上提供的的API</a>&nbsp;, 一个小demo验证一下！</p>
+        <div>
+          <pre class="prettyprint linenums prettyprinted" style=""><ol class="linenums"><li class="L0"><span class="dec">&lt;!DOCTYPE html&gt;</span></li><li class="L1"><span class="tag">&lt;html</span><span class="pln"> </span><span class="atn">lang</span><span class="pun">=</span><span class="atv">"en"</span><span class="tag">&gt;</span></li><li class="L2"><span class="tag">&lt;head&gt;</span></li><li class="L3"><span class="pln">    </span><span class="tag">&lt;meta</span><span class="pln"> </span><span class="atn">charset</span><span class="pun">=</span><span class="atv">"UTF-8"</span><span class="tag">&gt;</span></li><li class="L4"><span class="pln">    </span><span class="tag">&lt;meta</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"viewport"</span><span class="pln"> </span><span class="atn">content</span><span class="pun">=</span><span class="atv">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span></li><li class="L5"><span class="pln">    </span><span class="tag">&lt;meta</span><span class="pln"> </span><span class="atn">http-equiv</span><span class="pun">=</span><span class="atv">"X-UA-Compatible"</span><span class="pln"> </span><span class="atn">content</span><span class="pun">=</span><span class="atv">"ie=edge"</span><span class="tag">&gt;</span></li><li class="L6"><span class="pln">    </span><span class="tag">&lt;title&gt;</span><span class="pln">全屏</span><span class="tag">&lt;/title&gt;</span></li><li class="L7"><span class="pln">    </span><span class="tag">&lt;style&gt;</span></li><li class="L8"><span class="pln">        html</span><span class="pun">,</span></li><li class="L9"><span class="pln">        body </span><span class="pun">{</span></li><li class="L0"><span class="pln">            height</span><span class="pun">:</span><span class="pln"> </span><span class="lit">100</span><span class="pun">%;</span></li><li class="L1"><span class="pln">        </span><span class="pun">}</span></li><li class="L2"><span class="pln">&nbsp;</span></li><li class="L3"><span class="pln">        img </span><span class="pun">{</span></li><li class="L4"><span class="pln">            display</span><span class="pun">:</span><span class="pln"> block</span><span class="pun">;</span></li><li class="L5"><span class="pln">            margin</span><span class="pun">:</span><span class="pln"> </span><span class="lit">100px</span><span class="pln"> </span><span class="kwd">auto</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span></li><li class="L6"><span class="pln">            width</span><span class="pun">:</span><span class="pln"> </span><span class="lit">900px</span><span class="pun">;</span></li><li class="L7"><span class="pln">            cursor</span><span class="pun">:</span><span class="pln"> pointer</span><span class="pun">;</span></li><li class="L8"><span class="pln">        </span><span class="pun">}</span></li><li class="L9"><span class="pln">        </span><span class="com">/* webkit和IE在元素进入全屏后，会保持元素原有的尺寸，所以需要通过css伪类进行设置 */</span></li><li class="L0"><span class="pln">        img</span><span class="pun">:-</span><span class="pln">webkit</span><span class="pun">-</span><span class="pln">full</span><span class="pun">-</span><span class="pln">screen</span><span class="pun">{</span></li><li class="L1"><span class="pln">            width</span><span class="pun">:</span><span class="pln"> </span><span class="lit">100</span><span class="pun">%;</span></li><li class="L2"><span class="pln">            height</span><span class="pun">:</span><span class="pln"> </span><span class="lit">100</span><span class="pun">%;</span></li><li class="L3"><span class="pln">        </span><span class="pun">}</span></li><li class="L4"><span class="pln">&nbsp;</span></li><li class="L5"><span class="pln">        img</span><span class="pun">:-</span><span class="pln">ms</span><span class="pun">-</span><span class="pln">fullscreen </span><span class="pun">{</span></li><li class="L6"><span class="pln">            width</span><span class="pun">:</span><span class="pln"> </span><span class="lit">100</span><span class="pun">%;</span></li><li class="L7"><span class="pln">            height</span><span class="pun">:</span><span class="pln"> </span><span class="lit">100</span><span class="pun">%;</span></li><li class="L8"><span class="pln">        </span><span class="pun">}</span></li><li class="L9"><span class="pln">    </span><span class="tag">&lt;/style&gt;</span></li><li class="L0"><span class="tag">&lt;/head&gt;</span></li><li class="L1"><span class="pln">&nbsp;</span></li><li class="L2"><span class="tag">&lt;body&gt;</span></li><li class="L3"><span class="pln">    </span><span class="tag">&lt;img</span><span class="pln"> </span><span class="atn">id</span><span class="pun">=</span><span class="atv">"target"</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1530343927072&amp;di=ba9a25dc1d88a14556abf44106a32a4f&amp;imgtype=0&amp;src=http%3A%2F%2Fup.enterdesk.com%2Fedpic_source%2Fe9%2F3d%2Ffc%2Fe93dfc90c7406e68dd72afac6dda0357.jpg"</span></li><li class="L4"><span class="pln">        </span><span class="atn">alt</span><span class="pun">=</span><span class="atv">""</span><span class="tag">&gt;</span></li><li class="L5"><span class="pln">    </span><span class="tag">&lt;script&gt;</span></li><li class="L6"><span class="pln">        window.onload = function () {</span></li><li class="L7"><span class="pln">            let img = document.querySelector('#target');</span></li><li class="L8"><span class="pln">            // 监听事件 注意不同浏览器的兼容性问问题</span></li><li class="L9"><span class="pln">&nbsp;</span></li><li class="L0"><span class="pln">　　　　　　　// 错误事件为：fullscreenerror ， 同样注意前缀</span></li></ol></pre>
+          <pre class="prettyprint linenums prettyprinted" style=""><ol class="linenums"><li class="L0"><span class="pln">            document</span><span class="pun">.</span><span class="pln">addEventListener</span><span class="pun">(</span><span class="str">'fullscreenchange'</span><span class="pln"> </span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L1"><span class="pln">                console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'全屏切换！'</span><span class="pun">)</span></li><li class="L2"><span class="pln">            </span><span class="pun">})</span></li><li class="L3"><span class="pln">            document</span><span class="pun">.</span><span class="pln">addEventListener</span><span class="pun">(</span><span class="str">'webkitfullscreenchange'</span><span class="pln"> </span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L4"><span class="pln">                console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'全屏切换！'</span><span class="pun">)</span></li><li class="L5"><span class="pln">            </span><span class="pun">})</span></li><li class="L6"><span class="pln">            document</span><span class="pun">.</span><span class="pln">addEventListener</span><span class="pun">(</span><span class="str">'mozfullscreenchange'</span><span class="pln"> </span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L7"><span class="pln">                console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'全屏切换！'</span><span class="pun">)</span></li><li class="L8"><span class="pln">            </span><span class="pun">})</span></li><li class="L9"><span class="pln">            document</span><span class="pun">.</span><span class="pln">addEventListener</span><span class="pun">(</span><span class="str">'MSFullscreenChange'</span><span class="pln"> </span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L0"><span class="pln">                console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'全屏切换！'</span><span class="pun">)</span></li><li class="L1"><span class="pln">            </span><span class="pun">})</span></li><li class="L2"><span class="pln">　　　　　　　</span><span class="com">// 图片点击切换全屏</span></li><li class="L3"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">isFUllScreenEnabled</span><span class="pun">())</span><span class="pln"> </span><span class="pun">{</span></li><li class="L4"><span class="pln">                img</span><span class="pun">.</span><span class="pln">addEventListener</span><span class="pun">(</span><span class="str">'click'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pln"> </span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L5"><span class="pln">                    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">hasFullScreenElement</span><span class="pun">())</span><span class="pln"> </span><span class="pun">{</span></li><li class="L6"><span class="pln">                        exitFullScreen</span><span class="pun">();</span></li><li class="L7"><span class="pln">                    </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">else</span><span class="pln"> </span><span class="pun">{</span></li><li class="L8"><span class="pln">                        setFullScreen</span><span class="pun">(</span><span class="pln">img</span><span class="pun">);</span></li><li class="L9"><span class="pln">                    </span><span class="pun">}</span></li><li class="L0"><span class="pln">                </span><span class="pun">});</span></li><li class="L1"><span class="pln">            </span><span class="pun">}</span><span class="pln"> </span><span class="kwd">else</span><span class="pun">{</span></li><li class="L2"><span class="pln">                console</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="str">'此浏览器不支持全屏'</span><span class="pun">);</span></li><li class="L3"><span class="pln">            </span><span class="pun">}</span></li><li class="L4"><span class="pln">        </span><span class="pun">}</span></li><li class="L5"><span class="pln">&nbsp;</span></li><li class="L6"><span class="pln">        </span><span class="com">// 判断浏览器是否支持全屏</span></li><li class="L7"><span class="pln">        </span><span class="kwd">function</span><span class="pln"> isFUllScreenEnabled</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L8"><span class="pln">            </span><span class="kwd">return</span><span class="pln"> document</span><span class="pun">.</span><span class="pln">fullscreenEnabled </span><span class="pun">||</span><span class="pln"> document</span><span class="pun">.</span><span class="pln">webkitFullscreenEnabled </span><span class="pun">||</span><span class="pln"> document</span><span class="pun">.</span><span class="pln">mozFullScreenEnabled </span><span class="pun">||</span><span class="pln"> document</span><span class="pun">.</span><span class="pln">msFullscreenEnabled</span><span class="pun">;</span></li><li class="L9"><span class="pln">        </span><span class="pun">}</span></li><li class="L0"><span class="pln">&nbsp;</span></li><li class="L1"><span class="pln">        </span><span class="com">// 判断是否有已全屏的元素</span></li><li class="L2"><span class="pln">        </span><span class="kwd">function</span><span class="pln"> hasFullScreenElement</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L3"><span class="pln">            </span><span class="kwd">return</span><span class="pln"> document</span><span class="pun">.</span><span class="pln">fullscreenElement </span><span class="pun">||</span><span class="pln"> document</span><span class="pun">.</span><span class="pln">webkitFullscreenElement </span><span class="pun">||</span><span class="pln"> document</span><span class="pun">.</span><span class="pln">mozFullScreenElement </span><span class="pun">||</span><span class="pln"> document</span><span class="pun">.</span><span class="pln">msFullscreenElement</span></li><li class="L4"><span class="pln">        </span><span class="pun">}</span></li><li class="L5"><span class="pln">&nbsp;</span></li><li class="L6"><span class="pln">        </span><span class="com">// 将目标元素设置为全屏展示</span></li><li class="L7"><span class="pln">        </span><span class="kwd">function</span><span class="pln"> setFullScreen</span><span class="pun">(</span><span class="pln">target</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L8"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">target</span><span class="pun">.</span><span class="pln">requestFullscreen</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L9"><span class="pln">                target</span><span class="pun">.</span><span class="pln">requestFullscreen</span><span class="pun">();</span></li><li class="L0"><span class="pln">            </span><span class="pun">}</span></li><li class="L1"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">target</span><span class="pun">.</span><span class="pln">webkitRequestFullscreen</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L2"><span class="pln">                target</span><span class="pun">.</span><span class="pln">webkitRequestFullscreen</span><span class="pun">();</span></li><li class="L3"><span class="pln">            </span><span class="pun">}</span></li><li class="L4"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">target</span><span class="pun">.</span><span class="pln">mozRequestFullScreen</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L5"><span class="pln">                target</span><span class="pun">.</span><span class="pln">mozRequestFullScreen</span><span class="pun">();</span></li><li class="L6"><span class="pln">            </span><span class="pun">}</span></li><li class="L7"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">target</span><span class="pun">.</span><span class="pln">msRequestFullscreen</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L8"><span class="pln">                target</span><span class="pun">.</span><span class="pln">msRequestFullscreen</span><span class="pun">();</span></li><li class="L9"><span class="pln">            </span><span class="pun">}</span></li><li class="L0"><span class="pln">        </span><span class="pun">}</span></li><li class="L1"><span class="pln">&nbsp;</span></li><li class="L2"><span class="pln">        </span><span class="com">// 文档退出全屏</span></li><li class="L3"><span class="pln">        </span><span class="kwd">function</span><span class="pln"> exitFullScreen</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span></li><li class="L4"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">document</span><span class="pun">.</span><span class="pln">exitFullscreen</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L5"><span class="pln">                document</span><span class="pun">.</span><span class="pln">exitFullscreen</span><span class="pun">();</span></li><li class="L6"><span class="pln">            </span><span class="pun">}</span></li><li class="L7"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">document</span><span class="pun">.</span><span class="pln">webkitExitFullscreen</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L8"><span class="pln">                document</span><span class="pun">.</span><span class="pln">webkitExitFullscreen</span><span class="pun">();</span></li><li class="L9"><span class="pln">            </span><span class="pun">}</span></li><li class="L0"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">document</span><span class="pun">.</span><span class="pln">mozCancelFullScreen</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L1"><span class="pln">                document</span><span class="pun">.</span><span class="pln">mozCancelFullScreen</span><span class="pun">();</span></li><li class="L2"><span class="pln">            </span><span class="pun">}</span></li><li class="L3"><span class="pln">            </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">document</span><span class="pun">.</span><span class="pln">msExitFullscreen</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span></li><li class="L4"><span class="pln">                document</span><span class="pun">.</span><span class="pln">msExitFullscreen</span><span class="pun">();</span></li><li class="L5"><span class="pln">            </span><span class="pun">}</span></li><li class="L6"><span class="pln">        </span><span class="pun">}</span></li><li class="L7"><span class="pln">    </span><span class="pun">&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span></li><li class="L8"><span class="pun">&lt;/</span><span class="pln">body</span><span class="pun">&gt;</span></li><li class="L9"><span class="pln">&nbsp;</span></li><li class="L0"><span class="pun">&lt;/</span><span class="pln">html</span><span class="pun">&gt;</span></li></ol></pre>
+        </div>
+        <p>　　Api的使用都很简单，主要就是一个兼容性的问题，这个小demo，在Chrome，Firefox，Edge，IE 11 上测试过，都可以正常切换全屏，也可以正常监听事件。</p>
+        <p>　　要注意Firefox中方法的拼写，F为大写（囧 ， 报错了看了半天，原来是拼写错误），Chrome和IE的记得要加CSS伪类去设置样式。</p>												<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-format="fluid" data-ad-layout="in-article" data-ad-client="ca-pub-6527383233809815" data-ad-slot="2451787962"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        <h2><a href="/R/xl56kQ90dr/">JavaScript 全屏展示的更多相关文章</a></h2>
+        <ol>
+          <li><a href="https://www.bbsmax.com/A/Gkz1Rq1jJR/">js控制页面的全屏展示和退出全屏显示</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">&lt;!DOCTYPE html&gt; &lt;html&gt; &lt;meta http-equiv="Content-Type" content="text/h ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/A2dmG717Je/">JavaScript全屏显示</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">JavaScript全屏显示 需要引入的库 https://cdn.bootcss.com/jquery/1.9.0/jquery.min.js https://cdn.bootcss.com/scr ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/GBJrX0Q3d0/">requestFullscreen实现全屏展示</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">requestFullscreen实现全屏展示. var fullContainer = document.getElementById('fullScreenContainer'); //先把元素展 ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/KE5Q6RV4dL/">echarts图表自适应盒子的大小（盒子的大小是动态改变的），大到需要全屏展示</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">项目中用到了echarts,并且页面是自适应的,且页面中有一个[放大.缩小]功能,因此图表还需要根据盒子的大小来变化. 即:两个需求,如下: ① 图表根据窗口的大小自适应 ② 图表根据所在盒子的大小自 ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/GBJr6YEZJ0/">HTML5在手机端实现视频全屏展示</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">最近做项目,遇到一个问题,在手机上要实现视频的全屏播放功能.测试了很久,终于找到解决办法. 第一种:将视频放大来控制. 视频在播放的时候,全屏是根据高度来的,如果设置视频 video 标签的宽度是 1 ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/VGzlLpj1zb/">javascript全屏操作</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">&lt;!DOCTYPE html&gt; &lt;html lang="en"&gt; &lt;head&gt; &lt;meta charset="UTF-8&amp;quo ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/QV5ZlPV4zy/">h5的api dom全屏展示</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">下面是完整的例子,暂不做分析 &lt;!DOCTYPE html&gt; &lt;html&gt; &lt;head&gt; &lt;title&gt; FullScreen API 演示&lt;/t ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/ZOJPmn1a5v/">给echarts加个“全屏展示”</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">echarts的工具箱并没有提供放大/全屏的功能, 查找文档发现可自定义工具https://www.echartsjs.com/option.html#toolbox.feature show代码 t ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/kvJ3ZOygzg/">开机自动调用.bat文件且浏览器全屏展示</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">1,将 .bat文件放入到以下路径中 C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup 或 C:\Users\Administr ...</p>
+          </li>
+        </ol>
+
+
+        <h2>随机推荐</h2>
+        <ol>
+          <li><a href="https://www.bbsmax.com/A/nAJv0amdrk/">WebApi设置SessionState为Required</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">public override void Init() { //在注册管道事件中 require session state //只能在引发“HttpApplication.AcquireReques ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/pRdB8YR2Jn/">关于手机微网站ICP备案</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">今天终于拨通了陕西省通信管理局的电话,并告诉对方我们做的是一个化妆品的微网站,会涉及到使用使用支付宝支付. 询问"xxx微网站"网站经营类型,对方告知虽然使用支付宝,但是是微网站, ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/D8542wBWzE/">转：Java的各种类型转换汇总</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">java类型转换 Integer String Long Float Double Date 1如何将字串 String 转换成整数 int?&nbsp;A. 有两个方法:&nbsp;1). int i = Intege ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/ke5j9vYmJr/">Linux学习三部曲(之二)</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">新建Linux分区以及文件系统 今天,我们来聊聊在linux上建立分区和文件系统.windows系统建立分区可以借助分区工具,那么在linux分区以及文件系统又该如何操作呢? 打开secureCRT, ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/xl569QG4Jr/">jquery返回顶部特效</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">&lt;style&gt; p#back-to-top{position:fixed; bottom:100px;right:10px; display: none; } p#back-to-top  ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/D8543j4QJE/">Linux和Uboot下eMMC boot分区读写</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">关键词:eMMC boot.PARTITION_CONFIG.force_ro等. 1. eMMC的分区 大部分eMMC都有类似如下的分区,其中BOOT.RPMB和UDA一般是默认存在的,gpp分区需 ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/1O5Ev13bd7/">英语口语练习系列-C24-杂技-问候语-乡愁</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">1. 词汇-杂技 acrobatics noun [ U ] UK /ˌæk.rəˈbæt.ɪks/ US /ˌæk.rəˈbæt̬.ɪks/ the skills of an acrobat 杂技  ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/l1dyvl69ze/">php 对象数组互转</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">数组转对象 function array2object($array) { &nbsp;&nbsp;if (is_array($array)) { &nbsp;&nbsp;&nbsp;&nbsp;$obj = new StdClass(); &nbsp;&nbsp;&nbsp;&nbsp;forea ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/gGdXQ7Wvz4/">Light OJ 1406 Assassin`s Creed 状态压缩DP+强连通缩点+最小路径覆盖</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">题目来源:Light OJ 1406 Assassin`s Creed 题意:有向图 派出最少的人经过全部的城市 而且每一个人不能走别人走过的地方 思路:最少的的人能够走全然图 明显是最小路径覆盖问题 ...</p>
+          </li>
+          <li><a href="https://www.bbsmax.com/A/ZOJPQO2a5v/">Python（二）之对象类型</a>
+            <p style="color: rgba(0, 0, 0, 0.32);margin-bottom: 8px;">本篇记录Python对象类型 开始仍然是先掌握几个查看对象有用的函数,id,type,print 查看对象身份.类型.值:记住以下两个命令id,type 两个对象的比较 以上三个分别是 身份比较.对象 ...</p>
+          </li>
+        </ol>
+
+      </div>
+
+
+      <!--<div class="shareBox  clearfix">
+
+      </div>-->
+      <!--<div class="posts-cjtz content-cjtz clearfix"><img src="/images.grace/2865270162.png" alt="" /></div>	-->										<div class="next-prev-posts clearfix">
+    </div>
+
+    </div>
+
+    <div class="clear"></div>
+
+  </div></div>
+<script>
+  window.onload = function () {
+    let img = document.querySelector('#target');
+    let img1 = document.querySelector('.post-content');
+    // 监听事件 注意不同浏览器的兼容性问问题
+
+    // 错误事件为：fullscreenerror ， 同样注意前缀
+    document.addEventListener('fullscreenchange' , function() {
+      console.log('全屏切换1！')
+    })
+    document.addEventListener('webkitfullscreenchange' , function() {
+      console.log('全屏切换2！')
+    })
+    document.addEventListener('mozfullscreenchange' , function() {
+      console.log('全屏切换3！')
+    })
+    document.addEventListener('MSFullscreenChange' , function() {
+      console.log('全屏切换4！')
+    })
+    // 图片点击切换全屏
+    if (isFUllScreenEnabled()) {
+      img.addEventListener('click', function () {
+        if (hasFullScreenElement()) {
+          exitFullScreen();
+        } else {
+          setFullScreen(img1);
+        }
+      });
+    } else{
+      console.log('此浏览器不支持全屏');
+    }
+  }
+
+  // 判断浏览器是否支持全屏
+  function isFUllScreenEnabled() {
+    return document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled;
+  }
+
+  // 判断是否有已全屏的元素
+  function hasFullScreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement
+  }
+
+  // 将目标元素设置为全屏展示
+  function setFullScreen(target) {
+    if (target.requestFullscreen) {
+      target.requestFullscreen();
+    }
+    if (target.webkitRequestFullscreen) {
+      target.webkitRequestFullscreen();
+    }
+    if (target.mozRequestFullScreen) {
+      target.mozRequestFullScreen();
+    }
+    if (target.msRequestFullscreen) {
+      target.msRequestFullscreen();
+    }
+  }
+
+  // 文档退出全屏
+  function exitFullScreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+    if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+    if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    }
+    if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+</script>
+</body>
+
+</html>
