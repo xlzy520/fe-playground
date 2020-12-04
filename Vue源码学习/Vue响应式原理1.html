@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Vue响应式原理</title>
+</head>
+<body>
+<div>
+  text: <input id="text" value="" style="width: 400px;">
+  <button id="text-btn">使用JS修改text的值</button>
+</div>
+<div>
+  text2: <input id="text2" value="">
+</div>
+<script>
+  function observe(obj, cb) {
+    Object.keys(obj).forEach((key) => defineReactive(obj, key, obj[key] , cb))
+  }
+
+  function defineReactive (obj, key, val, cb) {
+    Object.defineProperty(obj, key, {
+      enumerable: true,
+      configurable: true,
+      get: ()=>{
+        /*....依赖收集等....*/
+        /*Github:https://github.com/answershuto*/
+        console.log('get依赖收集: 第一次初始化的时候，页面需要get数据从data里面，' +
+          '这时候会进入这里，就可以知道哪些地方依赖data里面的数据', val);
+        return val
+      },
+      set:newVal=> {
+        val = newVal;
+
+        console.log('触发更新，执行订阅的方法',newVal);
+        cb();/*订阅者收到消息的回调*/
+      }
+    })
+  }
+
+  function _proxy (data) {
+    const that = this;
+    Object.keys(data).forEach(key => {
+      Object.defineProperty(that, key, {
+        configurable: true,
+        enumerable: true,
+        get: function proxyGetter () {
+          return that._data[key];
+        },
+        set: function proxySetter (val) {
+          that._data[key] = val;
+        }
+      })
+    });
+  }
+
+  class Vue {
+    constructor(options) {
+      this._data = options.data;
+      // 通过app.text直接设置就能触发set对视图进行重绘。那么就需要用到代理。
+      // 我们可以在Vue的构造函数constructor中为data执行一个代理proxy。这样我们就把data上面的属性代理到了vm实例上。
+      _proxy.call(this, options.data)
+      observe(this._data, options.render)
+    }
+  }
+
+  let app = new Vue({
+    el: '#app',
+    data: {
+      text: '我是get的初始值，触发依赖收集',
+      text2: 'text2'
+    },
+    render(){
+      console.log("render", app);
+      document.querySelector('#text').value = app._data.text;
+    }
+  })
+
+  function init() {
+    document.querySelector('#text').value = app._data.text
+    document.querySelector('#text').addEventListener('input', (evt) => {
+      app.text = evt.target.value;
+    })
+    document.querySelector('#text-btn').addEventListener('click', (evt) => {
+      app.text = new Date().getTime();
+    })
+  }
+  init();
+</script>
+
+</body>
+</html>
