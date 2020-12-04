@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>实现一个简单的Vue双向绑定</title>
+</head>
+<body>
+<div id="app">
+  <input type="text" id="txt">
+  <p id="show-txt"></p>
+</div>
+<script>
+  let obj = {}
+  Object.defineProperty(window, 'vue', {
+    get() {
+      return obj
+    },
+    set(v) {
+      console.log(v);
+      document.getElementById('txt').value = v
+      document.getElementById('show-txt').innerHTML = v    }
+  })
+  document.querySelector('#txt').addEventListener('input', function (e) {
+    window.vue = e.target.value
+  })
+</script>
+</body>
+</html>
