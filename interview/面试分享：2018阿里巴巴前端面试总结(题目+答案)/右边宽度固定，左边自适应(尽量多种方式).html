@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>右边宽度固定，左边自适应</title>
+  <style lang="scss">
+    .left, .right{
+      height: 100px;
+    }
+    .left{
+      width: 200px;
+      background: #00ffd5;
+    }
+    .right{
+      width: 100%;
+      background: #20a0ff;
+    }
+
+    .clearfix:after{
+      content: "";
+      clear: both;
+      display: block;
+      height: 0;
+    }
+
+    .box1{
+      display: flex;
+    }
+    .box1 .right{
+      flex: 1;
+    }
+
+    .box2 .left{
+      float: left;
+    }
+
+    .box3{
+      display: flex;
+    }
+    .box3 .right{
+      width: calc(100% - 200px);
+    }
+
+    .box4{
+      display: grid;
+      grid-template-columns: 200px auto;
+    }
+    .box5{
+      width: 100%;
+      display: table-row;
+    }
+    .box5 .right{
+      display: table-cell;
+    }
+
+    .box6{
+      height: 100px;
+    }
+    .box6 .left{
+      position: absolute;
+    }
+    .box6 .right{
+      position: absolute;
+      left: 208px;
+      width: calc(100% - 216px);
+    }
+
+    .box7{
+      display: flex;
+      width: 100%;
+    }
+    .box7 .left{
+      display: inline-table;
+    }
+
+  </style>
+</head>
+<body>
+<h3>1. flex flex-grow</h3>
+<div class="box1">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+<h3>2. float</h3>
+<div class="box2 clearfix">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+<h3>3. flex calc</h3>
+<div class="box3">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+<h3>4. grid</h3>
+<div class="box4">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+<h3>5. display table</h3>
+<div class="box5">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+<h3>6. absolute calc</h3>
+<div class="box6">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+<h3>7. flex inline-table</h3>
+<div class="box7">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+<div hidden>
+  # 实现右边宽度固定，左边自适应
+  ### 方法一(flex flex-grow)
+  ### 方法二(float)
+  ### 方法三(flex calc)
+  ### 方法四(grid)
+  ### 方法五(display table)
+  ### 方法六(absolute calc)
+  ### 方法七(flex inline-table)
+
+</div>
+</body>
+</html>
