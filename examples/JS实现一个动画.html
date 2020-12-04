@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Title</title>
+  <style>
+    .box{
+      width: 10px;
+      height: 10px;
+      background: #59bcb7;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+<div class="box" id="e"></div>
+<script>
+  window.requestAnimFrame = (function(){
+    return  window.requestAnimationFrame       ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame    ||
+      function(callback){
+        window.setTimeout(callback, 1000 / 60);
+      };
+  })();
+
+  /**
+   * 浏览器可以优化并行的动画动作，更合理的重新排列动作序列，并把能够合并的动作放在一个渲染周期内完成，
+   * 从而呈现出更流畅的动画效果
+   解决毫秒的不精确性
+   避免过度渲染（渲染频率太高、tab 不可见暂停等等）
+   注：requestAnimFrame 和 定时器一样也头一个类似的清除方法 cancelAnimationFrame。
+   */
+  var e = document.getElementById("e");
+  var flag = true;
+  var left = 0;
+
+  function render() {
+    left === 0 ? flag = true : left === 100 ? flag = false : '';
+    flag ? e.style.left = ` ${left++}px` :
+      e.style.left = ` ${left--}px`;
+  }
+
+  (function animloop() {
+    render();
+    requestAnimFrame(animloop);
+  })();
+</script>
+</body>
+</html>
