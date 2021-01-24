@@ -24,6 +24,9 @@
           @touchmove.stop="touchMove" @touchend.stop="touchEnd"
           @mousedown.prevent="touchStart" @mousemove.prevent="touchMove"
           @mouseup.prevent="touchEnd"></canvas>
+  <button @click="getBase64Image">获取</button>
+  <button @click="reset">重置</button>
+  <img :src="img"/>
 
 </div>
 <script>
@@ -38,10 +41,20 @@
         },
         startX: 0,
         startY: 0,
-        isDown: false
+        isDown: false,
+        img: ''
       }
     },
     methods: {
+      reset(){
+        const canvas = this.$refs.canvas
+        this.canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+      },
+      getBase64Image(){
+        const base64 = this.$refs.canvas.toDataURL('image/jpg')
+        this.img = base64
+        console.log(base64);
+      },
       ctxDraw(m, l){
         const canvasCtx = this.canvasCtx;
         canvasCtx.beginPath();
