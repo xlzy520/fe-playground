@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="./printThis.js" ></script>
+  <title>Title</title>
+</head>
+<body>
+<div>
+  <div id="test" style="color: red">dasdsad</div>
+</div>
+<script>
+  function printPdf() {
+    // $('body').printThis({
+    $('#test').printThis({
+      importCSS: true,
+      // loadCSS: "https://img.t.sinajs.cn/t6/style/css/module/list/comb_WB_feed.css?version=40c445261b223d2b",
+    });
+  }
+  $('#test').click(() => {
+    printPdf()
+  })
+</script>
+</body>
+</html>
