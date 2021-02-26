@@ -4,5 +4,28 @@
   "main": "",
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "前端相关的demo",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "print-js": "^1.5.0",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.2.0"
+  },
+  "scripts": {
+    "start": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xlzy520/demo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xlzy520/demo/issues"
+  },
+  "homepage": "https://github.com/xlzy520/demo#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "^4.5.0"
+  }
 }
