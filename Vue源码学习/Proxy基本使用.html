@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+<button onclick="add()">dasd</button>
+<script>
+  let t = {
+    s: 2
+  }
+  const s = new Proxy(t, {
+    get(target, p, receiver) {
+      return Reflect.get(target, p)
+    },
+    set(target, p, value, receiver) {
+      console.log(target);
+    }
+  })
+
+  const add = function () {
+    t.s +=1
+    console.log(s);
+  }
+
+</script>
+</body>
+</html>
