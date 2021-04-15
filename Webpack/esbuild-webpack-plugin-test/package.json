@@ -1,0 +1,14 @@
+{
+  "name": "da",
+  "version": "1.0.0",
+  "description": "",
+  "main": "helloworld.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --progress",
+    "start:esbuild": "webpack --config webpack.esbuild.config.js --progress"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
