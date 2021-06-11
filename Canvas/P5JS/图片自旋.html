@@ -25,6 +25,7 @@
 
   function draw() {
     clear()
+    push()
     const _width = schnauzer.width * 1/2
     const _height = schnauzer.height * 1/2
     translate(400, 100);
@@ -32,6 +33,16 @@
     rotate(frameCount / -100.0);
     translate(-400, -100);
     image(schnauzer, 400-_width, 100-_height);
+    pop()
+
+
+    push()
+    translate(200, 100);
+    // rotate(radians(degrees));
+    rotate(frameCount / -100.0);
+    translate(-200, -100);
+    image(schnauzer, 200-_width, 100-_height);
+    pop()
 
   }
 
