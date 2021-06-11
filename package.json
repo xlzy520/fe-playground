@@ -9,6 +9,7 @@
     "example": "examples"
   },
   "dependencies": {
+    "p5js": "^1.2.15",
     "print-js": "^1.5.0",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.2.0"
