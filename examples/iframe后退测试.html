@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <script src="https://unpkg.com/petite-vue" init></script>
+  <title>Title</title>
+</head>
+<body>
+
+<!-- anywhere on the page -->
+<div v-scope="{ count: 0 }">
+  {{ count }}
+  <button @click="count++">inc</button>
+</div>
+<a href="#1">1</a>
+<a href="#2">2</a>
+<iframe src="https://xlzy520.cn/4class-jiali/#/home" width="900" height="600">
+
+</iframe>
+<button @click="back">Back</button>
+<script>
+  PetiteVue.createApp({
+    count: 0,
+    // methods
+    increment() {
+      this.count++
+    },
+    back() {
+      window.parent.history.back()
+    }
+  }).mount()
+</script>
+<script>
+
+</script>
+</body>
+</html>
