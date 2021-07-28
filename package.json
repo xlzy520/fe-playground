@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/xlzy520/demo#readme",
   "dependencies": {
-    "node-file-tree-md": "^0.1.0",
+    "md-file-tree-enhanced": "0.1.1",
     "p5js": "^1.2.15"
   },
   "devDependencies": {

@@ -1,12 +1,7 @@
-const fs = require('fs');
-const main = require('md-file-tree/main')
+const {generateMdTree} = require('md-file-tree-enhanced')
 
+generateMdTree('.', {
 
-const config = {
-  ignore: ['Webpack', 'PostCSS'],
-  prefix: '.html'
-}
-
-fs.writeFile('list.md', main(config), (err,data)=> {
-  console.log(err, data);
+}).then(({ output, files }) => {
+  // console.log(res);
 })
