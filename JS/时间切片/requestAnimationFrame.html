@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+<div id="app"></div>
+<script>
+  function request() {
+    let result = [];
+    for (let i = 0; i < 100000; i++) {
+      result.push({
+        index: i,
+        text: ~~(Math.random() * 100000000),
+      });
+    }
+    return Promise.resolve(result);
+  }
+
+  let ul = document.querySelector("#app");
+
+  request().then((res) => {
+    let total = res.length;
+    let once = 20;
+    let page = total / once;
+    let curIndex = 0;
+
+    function loop(curTotal, curIndex) {
+
+      let pageCount = Math.min(curTotal , once);
+
+      requestAnimationFrame(function () {
+        let fragement = document.createDocumentFragment();
+        for (let i = 0; i < pageCount; i++) {
+          let li = document.createElement("li");
+          li.innerText =
+            "index: " + res[curIndex + i].index + "; text: " + res[curIndex + i].text;
+          fragement.appendChild(li);
+        }
+
+        ul.appendChild(fragement);
+        loop(curTotal - pageCount, curIndex + pageCount);
+      });
+    }
+
+    loop(total, curIndex);
+  })
+</script>
+</body>
+</html>

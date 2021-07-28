@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+<div id="app"></div>
+<script>
+  function request() {
+    let result = [];
+    for (let i = 0; i < 100000; i++) {
+      result.push({
+        index: i,
+        text: ~~(Math.random() * 100000000),
+      });
+    }
+    return Promise.resolve(result);
+  }
+
+  let ul = document.querySelector("#app");
+
+  request().then((res) => {
+    function ts(gen) {
+      if (typeof gen === "function") gen = gen();
+      if (!gen || typeof gen.next !== "function") return;
+      return function next() {
+        const res = gen.next();
+        if (res.done) return;
+        requestAnimationFrame(next);
+      };
+    }
+
+    let total = res.length;
+    let once = 20;
+    let page = total / once;
+    let curIndex = 0;
+
+    ts(addDom(total))();
+
+    function* addDom(curTotal) {
+      while (curTotal > 0) {
+        let pageCount = Math.min(curTotal, once);
+
+        let fragement = document.createDocumentFragment();
+        for (let i = 0; i < pageCount; i++) {
+          let li = document.createElement("li");
+          li.innerText =
+            "index: " +
+            res[curIndex + i].index +
+            "; text: " +
+            res[curIndex + i].text;
+          fragement.appendChild(li);
+        }
+        ul.appendChild(fragement);
+        curIndex = curIndex + pageCount;
+        curTotal = curTotal - pageCount;
+        yield;
+      }
+    }
+  })
+</script>
+</body>
+</html>
