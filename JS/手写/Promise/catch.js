@@ -33,7 +33,7 @@ class MyPromise {
       for (const func of that.onResolvedCallback) {
         func(that.data)
       }
-      console.log('resolve方法:', value);
+      console.log('resolve方法:', value, that.onResolvedCallback);
     }
     function reject(reason) {
       that.status = REJECTED
@@ -41,7 +41,7 @@ class MyPromise {
       for (const func of that.onRejectedCallback) {
         func(that.data)
       }
-      console.log('reject方法:', reason);
+      console.log('reject方法:', reason, that.onRejectedCallback);
     }
     
     try {
@@ -54,7 +54,7 @@ class MyPromise {
   then(onResolved, onRejected){
     onResolved = typeof onResolved === 'function' ? onResolved: v=> v
     onRejected = typeof onRejected === 'function' ? onRejected: error => { throw error }
-    console.log('进入then方法', this.status);
+    console.log('开始进入then方法', this.status);
     
     let newPromise = null
     
@@ -173,7 +173,7 @@ class MyPromise {
   }
   
   catch(onRejected) {
-    console.log('进入catch')
+    console.log('开始进入catch')
     return this.then(null, onRejected);
   }
 }
