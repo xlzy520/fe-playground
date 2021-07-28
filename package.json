@@ -8,12 +8,6 @@
   "directories": {
     "example": "examples"
   },
-  "dependencies": {
-    "p5js": "^1.2.15",
-    "print-js": "^1.5.0",
-    "webpack": "^5.11.1",
-    "webpack-cli": "^4.2.0"
-  },
   "scripts": {
     "start": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,7 +20,10 @@
     "url": "https://github.com/xlzy520/demo/issues"
   },
   "homepage": "https://github.com/xlzy520/demo#readme",
+  "dependencies": {
+    "md-file-tree": "^0.2.0",
+    "p5js": "^1.2.15"
+  },
   "devDependencies": {
-    "html-webpack-plugin": "^4.5.0"
   }
 }
