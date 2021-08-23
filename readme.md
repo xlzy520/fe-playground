@@ -65,11 +65,23 @@
     - [index.html](Game/index.html)
 - __JS__
     - __ES6__
+    - __Generator__
+        - [demo1.html](JS/Generator/demo1.html)
     - __Promise__
         - [实现Promise.allSettled.html](JS/Promise/实现Promise.allSettled.html)
     - __utils__
+    - __原型到原型链__
+        - [构造函数创建对象.html](JS/原型到原型链/构造函数创建对象.html)
     - __手写__
+        - [手写一个call和apply.html](JS/手写/手写一个call和apply.html)
+        - [手写一个new操作符.html](JS/手写/手写一个new操作符.html)
+        - __继承__
+            - [1.原型链继承.html](JS/手写/继承/1.原型链继承.html)
+            - [2.借用构造函数(经典继承).html](JS/手写/继承/2.借用构造函数(经典继承).html)
+            - [3.组合继承.html](JS/手写/继承/3.组合继承.html)
+            - [4.原型式继承.html](JS/手写/继承/4.原型式继承.html)
     - __时间切片__
+        - [demo.html](JS/时间切片/demo.html)
         - [invalidExample.html](JS/时间切片/invalidExample.html)
         - [requestAnimationFrame.html](JS/时间切片/requestAnimationFrame.html)
         - [setTimeout+Generator.html](JS/时间切片/setTimeout+Generator.html)
@@ -108,6 +120,7 @@
 - __compatible__
     - __videoIE8Above__
         - [video.html](compatible/videoIE8Above/video.html)
+- [demo.html](demo.html)
 - __examples__
     - __D3__
         - __Chart__
@@ -179,4 +192,3 @@
             - __sagiri__
                 - __motions__
         - [纱雾.html](live2d/纱雾/纱雾.html)
-- __node_modules__
