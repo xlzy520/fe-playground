@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+<img src="https://github.com/mqyqingfeng/Blog/raw/master/Images/prototype5.png">
+<script>
+  function Person() {
+
+  }
+  // 虽然写在注释里，但是你要注意：
+  // prototype是函数才会有的属性
+  Person.prototype.name = 'Kevin';
+  var person = new Person();
+  var person1 = new Person();
+  var person2 = new Person();
+  console.log(person1.name) // Kevin
+  console.log(person2.name) // Kevin
+
+  console.log(person.__proto__ === Person.prototype) // true
+  console.log(Person.prototype.constructor === Person) // true
+  // 顺便学习一个ES5的方法,可以获得对象的原型
+  console.log(Object.getPrototypeOf(person) === Person.prototype) // true
+  console.log(Person.prototype);
+  console.log(Object.prototype.__proto__ === null) // true
+
+  console.log(person.constructor === Person); // true
+
+  // 当获取 person.constructor 时，其实 person 中并没有 constructor 属性,当不能读取到constructor 属性时，
+  // 会从 person 的原型也就是 Person.prototype 中读取，正好原型中有该属性，所以：
+
+  console.log(person.constructor === Person.prototype.constructor)
+
+
+</script>
+</body>
+</html>
