@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://xlzy520.cn/img/favicon.png">
+  <title>4.原型式继承</title>
+</head>
+<body>
+就是 ES5 Object.create 的模拟实现，将传入的对象作为创建的对象的原型。
+<script>
+  function createObj(o) {
+    function F(){}
+    F.prototype = o;
+    return new F();
+  }
+  var person = {
+    name: 'kevin',
+    friends: ['daisy', 'kelly']
+  }
+
+  var person1 = Object.create(person);
+  console.log(person1);
+  var person2 = Object.create(person);
+
+  person1.name = 'person1';
+  console.log(person2.name); // kevin
+
+  person1.friends.push('taylor');
+  console.log(person2.friends); // ["daisy", "kelly", "taylor"]
+
+</script>
+</body>
+</html>
