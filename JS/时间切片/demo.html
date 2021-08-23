@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  function ts (gen) {
+    if (typeof gen === 'function') gen = gen()
+    if (!gen || typeof gen.next !== 'function') return
+    return function next() {
+      const start = performance.now()
+      let res = null
+      do {
+        res = gen.next()
+      } while(!res.done && performance.now() - start < 25);
+
+      if (res.done) return
+      setTimeout(next)
+    }
+  }
+  ts(function* () {
+    const start = performance.now()
+    while (performance.now() - start < 1000) {
+      console.log(11)
+      yield
+    }
+    console.log('done!')
+  })();
+
+</script>
+</body>
+</html>
