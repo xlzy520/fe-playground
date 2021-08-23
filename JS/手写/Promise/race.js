@@ -232,7 +232,7 @@ class MyPromise {
       try {
         const len = promises.length
         for (let i = 0; i < len; i++) {
-          promises[i].then(value => {
+          Promise.resolve(promises[i]).then(value => {
             resolve(value)
           }, reject)
         }

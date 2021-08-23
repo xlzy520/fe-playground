@@ -180,11 +180,13 @@ class MyPromise {
     return new MyPromise((resolve, reject)=>{
       try {
         const result = []
+        let count = 0
         const length = promises.length
         for(let i = 0;i<length;i++){
-          promises[i].then(data=>{
-            result.push(data)
-            if(result.length === length){
+          Promise.resolve(promises[i]).then(data=>{
+            result[i] = data
+            count++
+            if(count === length){
               resolve(result)
             }
           },reject)
