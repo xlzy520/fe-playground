@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  function* helloWorldGenerator() {
+    yield 'hello';
+    yield 'world';
+    return 'ending';
+  }
+
+  var hw = helloWorldGenerator();
+  let next = hw.next()
+  while (next.value){
+    console.log(next.value);
+    next = hw.next()
+  }
+  // 输出结果如下
+  // hw.next()
+  // {value: "hello", done: false}
+  // hw.next()
+  // {value: "world", done: false}
+  // hw.next()
+  // {value: "ending", done: true}
+</script>
+</body>
+</html>
