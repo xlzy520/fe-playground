@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://xlzy520.cn/img/favicon.png">
+  <title>一个好看得css动态背景</title>
+  <style>
+    dl, ol, ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .home-page .title-wrap {
+      padding: 90px 30px;
+      text-align: center;
+      position: relative;
+      background: transparent;
+    }
+    .home-page .title-wrap .title {
+      margin-bottom: 20px;
+      font-size: 40px;
+      letter-spacing: 0;
+      font-weight: 600;
+      line-height: 46px;
+      color: hsla(0,0%,100%,.9294117647058824);
+      position: relative;
+      z-index: 1;
+    }
+    .home-page .title-wrap .subtitle {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 32px;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 0;
+    }
+    .home-page .title-wrap .circles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #676eec;
+      background: linear-gradient(270deg,#676eec,#b52fa6,#676eec);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .home-page .title-wrap .circles li {
+      position: absolute;
+      display: block;
+      list-style: none;
+      width: 20px;
+      height: 20px;
+      background: hsla(0,0%,100%,.2);
+      animation: animate 25s linear infinite;
+      bottom: -150px;
+    }
+    .home-page .title-wrap .circles li:first-child {
+      left: 25%;
+      width: 80px;
+      height: 80px;
+      animation-delay: 0s;
+    }
+
+    .home-page .title-wrap .circles li:nth-child(2) {
+      left: 10%;
+      width: 20px;
+      height: 20px;
+      animation-delay: 2s;
+      animation-duration: 12s
+    }
+
+    .home-page .title-wrap .circles li:nth-child(3) {
+      left: 70%;
+      width: 20px;
+      height: 20px;
+      animation-delay: 4s
+    }
+
+    .home-page .title-wrap .circles li:nth-child(4) {
+      left: 40%;
+      width: 60px;
+      height: 60px;
+      animation-delay: 0s;
+      animation-duration: 18s
+    }
+
+    .home-page .title-wrap .circles li:nth-child(5) {
+      left: 65%;
+      width: 20px;
+      height: 20px;
+      animation-delay: 0s
+    }
+
+    .home-page .title-wrap .circles li:nth-child(6) {
+      left: 75%;
+      width: 110px;
+      height: 110px;
+      animation-delay: 3s
+    }
+
+    .home-page .title-wrap .circles li:nth-child(7) {
+      left: 35%;
+      width: 150px;
+      height: 150px;
+      animation-delay: 7s
+    }
+
+    .home-page .title-wrap .circles li:nth-child(8) {
+      left: 50%;
+      width: 25px;
+      height: 25px;
+      animation-delay: 15s;
+      animation-duration: 45s
+    }
+
+    .home-page .title-wrap .circles li:nth-child(9) {
+      left: 20%;
+      width: 15px;
+      height: 15px;
+      animation-delay: 2s;
+      animation-duration: 35s
+    }
+
+    .home-page .title-wrap .circles li:nth-child(10) {
+      left: 85%;
+      width: 150px;
+      height: 150px;
+      animation-delay: 0s;
+      animation-duration: 11s
+    }
+    @keyframes animate {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0
+      }
+
+      to {
+        transform: translateY(-1000px) rotate(2turn);
+        opacity: 0;
+        border-radius: 50%
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="home-page">
+  <div class="title-wrap">
+    <ul class="circles">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    <h1 class="title">免费图片处理工具</h1>
+    <h2 class="subtitle">图片压缩，图片大小调整，图片裁剪，图片格式转换.</h2></div>
+
+</div>
+<script>
+
+</script>
+</body>
+</html>
