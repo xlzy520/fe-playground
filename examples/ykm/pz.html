@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://xlzy520.cn/img/favicon.png">
+  <script src="https://cdn.bootcdn.net/ajax/libs/dayjs/1.11.0/dayjs.min.js"></script>
+  <title>gxy</title>
+  <style>
+    .left-top {
+      position: absolute;
+      z-index: 2;
+      left: 54px;
+      top: 38px;
+      color: #c3ddfb;
+      font-size: 34px;
+      font-weight: 500;
+      line-height: 47px;
+      background: #3b89ff;
+    }
+
+    .center-time {
+      width: 200px;
+      position: absolute;
+      z-index: 2;
+      color: #a3a3a3;
+      top: 655px;
+      font-size: 38px;
+      line-height: 53px;
+      left: 656px;
+      display: inline-block;
+      white-space: nowrap;
+      background: #fff;
+    }
+
+    .bottom-date {
+      position: absolute;
+      z-index: 2;
+      left: 355px;
+      top: 1541px;
+      color: #ebe3ef;
+      font-size: 33px;
+      font-family: sans-serif;
+      background: #7b4ad9;
+      height: 36px;
+    }
+  </style>
+</head>
+<body>
+<div class="">
+  <img src="./931648570583_.pic.jpg" alt="">
+  <div class="left-top"></div>
+  <div class="center-time"></div>
+  <div class="center-date"></div>
+  <div class="bottom-date"></div>
+</div>
+
+<script>
+  const $ = path => document.querySelector(path)
+
+  const handle = () => {
+    const time = dayjs().format('HH:mm')
+    const date = dayjs().format('DD')
+    const bottomDate = 9
+    const leftTopDom = $('.left-top')
+    const centerTimeDom = $('.center-time')
+    const centerDateDom = $('.center-date')
+    const bottomDateDom = $('.bottom-date')
+    leftTopDom.innerText = time
+    centerTimeDom.innerText = time
+    centerDateDom.innerText = date
+    bottomDateDom.innerText = bottomDate
+  }
+  handle()
+  const interval = setInterval(() => {
+    handle()
+  }, 60 * 1000)
+
+</script>
+</body>
+</html>
