@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="https://xlzy520.cn/img/favicon.png">
+  <title>Via插件列表</title>
+</head>
+<body>
+
+<button class="" id="saveToFavorite">saveToFavorite</button>
+<script>
+  const $ = path => {
+    return document.querySelector(path)
+  }
+
+  let source = ``
+
+  fetch('./fav.js').then(res => {
+    return res.text()
+  }).then(res => {
+    source = res
+  })
+
+
+  const saveToFavorite  = $('#saveToFavorite')
+  saveToFavorite.addEventListener('click', (evt) => {
+    const result = {
+      id: 927,
+      name: 'fav',
+      author: 'xlzy',
+      url: '*',
+      code: source
+    }
+    const resultStr = JSON.stringify(result)
+    try {
+      window.via.addon(resultStr)
+    } catch (t) {
+      alert('安装失败')
+    }
+  })
+
+</script>
+</body>
+</html>
