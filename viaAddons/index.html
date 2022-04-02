@@ -24,13 +24,14 @@
 
 
   const saveToFavorite  = $('#saveToFavorite')
+  const base64Instance = new Base64()
   saveToFavorite.addEventListener('click', (evt) => {
     const result = {
       id: 927,
       name: 'fav',
       author: 'xlzy',
       url: '*',
-      code: source
+      code: base64Instance.encode(JSON.stringify(source))
     }
     const resultStr = JSON.stringify(result)
     const encodeResult = new Base64().encode(resultStr)
