@@ -31,7 +31,7 @@
       name: 'fav',
       author: 'xlzy',
       url: '*',
-      code: base64Instance.encode(JSON.stringify(source))
+      code: base64Instance.encode(source)
     }
     const resultStr = JSON.stringify(result)
     const encodeResult = new Base64().encode(resultStr)
