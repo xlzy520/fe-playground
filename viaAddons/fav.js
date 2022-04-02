@@ -1,3 +1,5 @@
+let currentEvt = {};
+
 (function(w,d) {
   
   "use strict";
@@ -71,7 +73,6 @@
         }
       },
       tap: function(){
-        console.log(33333);
         var e = new CustomEvent('tap');
         this.o.dispatchEvent(e);
         if ('function' === typeof this.fn.tap){
@@ -80,6 +81,7 @@
       },
       dbltap: function (){
         var e = new CustomEvent('dbltap');
+        currentEvt = this.e
         this.o.dispatchEvent(e);
         if ('function' === typeof this.fn.dbltap){
           this.fn.dbltap(this.o);
@@ -100,20 +102,16 @@
     
     if (null !== t.o) {
       t.o.addEventListener('touchstart', function(e){
-        console.log(1, '===========打印的 ------ ');
-        e.preventDefault();
         t.e = e;
         t.reset();
       }, false);
       
       t.o.addEventListener('touchmove', function(e){
-        e.preventDefault();
         t.e = e;
         t.update();
       }, false);
       
       t.o.addEventListener('touchend', function(e){
-        e.preventDefault();
         t.e = e;
         t.p2.t = e.timeStamp;
         var d, dd = t.distance(), tt = t.time();
@@ -134,7 +132,6 @@
       }, false);
       
       t.o.addEventListener('gesturestart', function(e){
-        e.preventDefault();
         t.e = e;
         var i,j,s = [], style = w.getComputedStyle(t.o, null);
         for(i = 0, j = style.length; i < j; i++){
@@ -144,13 +141,11 @@
       }, false);
       
       t.o.addEventListener('gesturechange', function(e){
-        e.preventDefault();
         t.e = e;
         t.pinch();
       }, false);
       
       t.o.addEventListener('gestureend', function(e){
-        e.preventDefault();
         t.p1.t = e.timeStamp - (t.tt + 1);
         t.p2.t = e.timeStamp;
       }, false);
@@ -351,6 +346,7 @@ if (isBili) {
 
 
 document.addEventListener('dblclick', evt=> {
+  console.log('double click', evt, currentEvt)
   handleDblClick(evt)
 })
 
@@ -358,6 +354,6 @@ document.addEventListener('dblclick', evt=> {
 new Touch(document);
 
 document.addEventListener('dbltap',evt=>{
-  console.log('double tap')
-  handleDblClick(evt)
+  console.log('double tap', evt, currentEvt)
+  handleDblClick(currentEvt)
 });
