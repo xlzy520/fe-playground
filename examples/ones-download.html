@@ -21,7 +21,7 @@
     </style>
   </head>
   <body>
-  <svg class="bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="279" height="152" viewBox="0 0 279 152">
+  <svg class="bg hidden" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="279" height="152" viewBox="0 0 279 152">
     <defs>
       <path id="a" d="M.666.734h103v129h-103z"/>
     </defs>
@@ -83,7 +83,7 @@
 
   if (isWeiXinWork || isWeiXin) {
     const bg = document.querySelector('.bg');
-    bg.classList.toggle('hidden');
+    bg.classList.remove('hidden');
   } else {
     downloadAPP();
   }
