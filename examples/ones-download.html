@@ -15,10 +15,13 @@
         height: 100vh;
         text-align: center;
       }
+      .hidden{
+        display: none;
+      }
     </style>
   </head>
   <body>
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="279" height="152" viewBox="0 0 279 152">
+  <svg class="bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="279" height="152" viewBox="0 0 279 152">
     <defs>
       <path id="a" d="M.666.734h103v129h-103z"/>
     </defs>
@@ -34,10 +37,10 @@
       </g>
       <g fill="#303030" font-family="PingFangSC-Medium, PingFang SC" font-size="15" font-weight="400">
         <text transform="translate(0 101)">
-          <tspan x="0" y="16">1，请先点击右上角更多“…”</tspan>
+          <tspan x="0" y="16">1. 请先点击右上角更多“…”</tspan>
         </text>
         <text transform="translate(0 133)">
-          <tspan x="0" y="16">2，选择使用“官方浏览器”打开</tspan>
+          <tspan x="0" y="16">2. 选择使用“官方浏览器”打开</tspan>
         </text>
       </g>
     </g>
@@ -58,16 +61,32 @@
     elem.click();
     document.body.removeChild(elem);
   }
+
+
   const ua = navigator.userAgent.toLowerCase();
   const isAndroid = ua.includes('android')
   const isIOS = ua.includes('iphone');
-  if (isAndroid) {
-    download(
-      '万事ONES.apk',
-      'https://k8s.myones.net/ones_release_v2.27.3_build5099_yingyongbao.apk'
-    );
-  } else if (isIOS) {
-    window.open('https://apps.apple.com/cn/app/%E4%B8%87%E4%BA%8Bones/id1282904571', '_self');
+  const isWeiXin = ua.includes('micromessenger');
+  /** 企业微信环境判断 */
+  const isWeiXinWork = ua.includes('wxwork');
+
+  function downloadAPP() {
+    if (isAndroid) {
+      download(
+        '万事ONES.apk',
+        'https://k8s.myones.net/ones_release_v2.27.3_build5099_yingyongbao.apk'
+      );
+    } else if (isIOS) {
+      window.open('https://apps.apple.com/cn/app/%E4%B8%87%E4%BA%8Bones/id1282904571', '_self');
+    }
   }
+
+  if (isWeiXinWork || isWeiXin) {
+    const bg = document.querySelector('.bg');
+    bg.classList.toggle('hidden');
+  } else {
+    downloadAPP();
+  }
+
 </script>
 </html>
