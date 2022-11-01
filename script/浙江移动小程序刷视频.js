@@ -1,5 +1,4 @@
 const axios = require('axios');
-// const https = require('https');
 const Queue = require("queue-promise")
 
 const queue = new Queue({
@@ -8,19 +7,14 @@ const queue = new Queue({
     start: true,
 });
 
-axios.default.defaults.baseURL = 'https://wap.zj.10086.cn';
-// axios.default.defaults.httpsAgent = new https.Agent({
-//   rejectUnauthorized: false,
-// });
-
-
-axios.default.defaults.headers = {
-    // Cookie: Users.xlz.Cookie,
+const service = axios.create({
+  baseURL: 'https://wap.zj.10086.cn',
+  headers: {
     Host: 'wap.zj.10086.cn',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat',
     Referer: 'https://servicewechat.com/wxea7759afc7853c05/203/page-frame.html'
-}
-
+  }
+})
 
 let viewVideoCount = 0
 let likeCount = 0
@@ -32,14 +26,14 @@ const maxLikeNum = 50
 //   head: { errorCode: '000', errorMsg: '查询成功' }
 // }
 const getConfigure = (id) => {
-    axios.get('/weixin/shortVideo/getConfigure?toPage=0&').then(res => {
+    service.get('/weixin/shortVideo/getConfigure?toPage=0&').then(res => {
         console.log(res.data);
     })
 }
 
 const videoData = (user, videoId) => {
     console.log('videoId: ', videoId);
-    axios.get(`/weixin/shortVideo/videoData?${user.paramsString}&type=1&videoId=${videoId}&videoShareId=`).then(res => {
+    service.get(`/weixin/shortVideo/videoData?${user.paramsString}&type=1&videoId=${videoId}&videoShareId=`).then(res => {
         viewVideoCount += 1
         const data = res.data
         setTimeout(() => {
@@ -60,8 +54,8 @@ const setVideoOpera = async (user, playId, needLike = true) => {
     }
   }
   if (needLike) {
-    await axios.get(`/weixin/shortVideo/setVideoOpera?toPage=0&${user.paramsString}&state=N&type=1&playId=${playId}`)
-    axios.get(`/weixin/shortVideo/setVideoOpera?toPage=0&${user.paramsString}&state=Y&type=1&playId=${playId}`).then(res => {
+    await service.get(`/weixin/shortVideo/setVideoOpera?toPage=0&${user.paramsString}&state=N&type=1&playId=${playId}`)
+    service.get(`/weixin/shortVideo/setVideoOpera?toPage=0&${user.paramsString}&state=Y&type=1&playId=${playId}`).then(res => {
       const data = res.data
       console.log('点赞成功', JSON.stringify(data));
       action()
@@ -77,7 +71,7 @@ const setVideoOpera = async (user, playId, needLike = true) => {
 // 进程已结束,退出代码0
 const getVideoList = (user, num) => {
     const paramsString = user.paramsString
-    axios.get(`/weixin/shortVideo/getVideoList?toPage=8&${paramsString}&queryType=2&num=${num}&sortType=3`).then(res => {
+    service.get(`/weixin/shortVideo/getVideoList?toPage=8&${paramsString}&queryType=2&num=${num}&sortType=3`).then(res => {
         const data = res.data
         if (data.errorCode === '901') {
             console.log(data.errorMsg);
@@ -94,14 +88,14 @@ const getVideoList = (user, num) => {
 }
 
 const newLogin = (user) => {
-    axios.get(`/ssoauth/NewLogin?code=031cAd000bsLZN1UhW300O29le4cAd0G&sc=11&spid=949a91f46a4d1da7016a90ea14e00002`).then(res => {
+    service.get(`/ssoauth/NewLogin?code=031cAd000bsLZN1UhW300O29le4cAd0G&sc=11&spid=949a91f46a4d1da7016a90ea14e00002`).then(res => {
         console.log(res);
         console.log(JSON.stringify(res.headers));
     })
 }
 
 const miniAppManager = (user) => {
-    axios.get(`/mobileStore/miniappsNew/miniAppManager.do?${user.paramsString}&version=2&businessIds=wx_bt00001%2Cwx_bt00002`).then(res => {
+    service.get(`/mobileStore/miniappsNew/miniAppManager.do?${user.paramsString}&version=2&businessIds=wx_bt00001%2Cwx_bt00002`).then(res => {
         console.log(res);
         console.log(JSON.stringify(res.headers));
     })
@@ -114,7 +108,7 @@ const miniAppManager = (user) => {
 
 const Users = {
     lzy: {
-        paramsString: 'nonce=qRb6SUwM7NLB6Izq&encpn=32dc9272ebc2d99c62ef783700fda12c&cf=10113&session=DKN0VKMUEVOB22N1FEXM197G'
+        paramsString: 'nonce=0982zQJH3JtZvfR8&encpn=4f2c21a1bfcda132bfdcbb31825e56b0&cf=10113&session=DKN0VKMUEVOB22N1FEXM197G'
     },
     xlz: {
         paramsString: 'nonce=57Z8Onb7IrVR38Vk&encpn=29371a899ef6e659eebc1afdbe8ea774&cf=10113&session=NM4QDV9EVP98BDZD4UCWRDYJ'
